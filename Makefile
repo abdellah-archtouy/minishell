@@ -13,9 +13,11 @@ OBJB = $(SRCB:%.c=%.o)
 
 CFALGS =  -Wall -Wextra -Werror
 
-CPPFLAGS="-I/goinfre/aarchtou/homebrew/opt/readline/include"
+USER := $(shell id -un)
 
-LDFLAGS="-L/goinfre/aarchtou/homebrew/opt/readline/lib" -lreadline
+CPPFLAGS="-I/goinfre/$(USER)/homebrew/opt/readline/include"
+
+LDFLAGS="-L/goinfre/$(USER)/homebrew/opt/readline/lib" -lreadline
 
 VAR= $(CPPFLAGS) $(LDFLAGS)
 
