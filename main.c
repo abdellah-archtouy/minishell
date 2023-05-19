@@ -48,15 +48,9 @@ void	ft_parc(char *input)
 		i++;
 	}
 	if (a % 2 != 0)
-	{
-		printf("Error: \"\n");
-		// exit(1);
-	}
-	if (b % 2 != 0)
-	{
-		printf("Error: \'\n");
-		// exit(1);
-	}
+		printf("Error: \n");
+	else if (b % 2 != 0)
+		printf("Error: \n");
 }
 
 void	ft_parcing(char *input)
@@ -70,7 +64,7 @@ void	ft_parcing(char *input)
 	{
 		if (input[i] == '<' || input[i] == '>' || input[i] == '|'
 			|| input[i] == '$' || input[i] == '"' || input[i] == '\'')
-			printf("input[%d] = %c\n", i, input[i]);
+			// printf("input[%d] = %c\n", i, input[i]);
 		i++;
 	}
 }
@@ -104,9 +98,13 @@ int	ft_history(char *str)
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
+	int		in;
+	int		out;
 
 	(void)av;
 	(void)env;
+	in = 0;
+	out = 1;
 	if (ac != 1)
 		exit(1);
 	signal(SIGINT, ft_readline);
