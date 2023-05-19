@@ -97,6 +97,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		input = readline("minishell$ ");
+		if (input == NULL)
+			exit(0);
 		add_history(input);
 		ft_parcing(input);
 	}
