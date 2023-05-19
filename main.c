@@ -84,6 +84,11 @@ void	ft_readline(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	else if (sig == 3)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 int	main(int ac, char **av, char **env)
@@ -94,6 +99,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 	signal(SIGINT, &ft_readline);
+	signal(SIGQUIT, &ft_readline);
 	while (1)
 	{
 		input = readline("minishell$ ");
