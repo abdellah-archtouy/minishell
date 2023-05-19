@@ -50,12 +50,12 @@ void	ft_parc(char *input)
 	if (a % 2 != 0)
 	{
 		printf("Error: \"\n");
-		exit(1);
+		// exit(1);
 	}
 	if (b % 2 != 0)
 	{
 		printf("Error: \'\n");
-		exit(1);
+		// exit(1);
 	}
 }
 
@@ -64,7 +64,7 @@ void	ft_parcing(char *input)
 	int	i;
 
 	i = 0;
-	printf("input = %s\n", input);
+	// printf("input = %s\n", input);
 	ft_parc(input);
 	while (input[i])
 	{
@@ -77,35 +77,48 @@ void	ft_parcing(char *input)
 
 void	ft_readline(int sig)
 {
-	if (sig == 2)
+	if (sig == SIGINT)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (sig == 3)
+}
+
+int	ft_history(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
 	{
-		rl_on_new_line();
-		rl_redisplay();
+		if ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+			i++;
+		else
+			return (1);
 	}
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 
-	(void)ac;
 	(void)av;
 	(void)env;
-	signal(SIGINT, &ft_readline);
-	signal(SIGQUIT, &ft_readline);
+	if (ac != 1)
+		exit(1);
+	signal(SIGINT, ft_readline);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
 			exit(0);
-		add_history(input);
+		if (ft_history(input))
+			add_history(input);
 		ft_parcing(input);
+		free(input);
 	}
 }
