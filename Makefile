@@ -1,7 +1,7 @@
 NAME = main
 NAMEB = checker
 
-SRC = main.c
+SRC = main.c libf.c
 
 SRCB = 
  
@@ -23,18 +23,14 @@ VAR= $(CPPFLAGS) $(LDFLAGS)
 
 CC = cc
 
-INCLUDE =
+INCLUDE = mini.h
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(INCLUDE)
+	$(CC)  $(VAR) $(OBJ) -o $(NAME)
 
-bonus : $(NAMEB)
-
-$(NAMEB): $(OBJB)
-	$(CC)  $(VAR) $(OBJB) -o $(NAMEB)
-
-%.o : %.c $(INCLUDEB)
+%.o : %.c $(INCLUDE)
 	$(CC)  $(CFALGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
