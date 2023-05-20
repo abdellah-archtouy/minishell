@@ -24,41 +24,6 @@ int	ft_getfile(char *input, int i)
 	return (fd);
 }
 
-void	ft_parc(char *input)
-{
-	int	i;
-	int	a;
-	int	b;
-
-	i = 0;
-	a = 0;
-	b = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-			a++;
-		if (input[i] == '\'')
-			b++;
-		i++;
-	}
-	if (a % 2 != 0)
-		printf("Error: \n");
-	else if (b % 2 != 0)
-		printf("Error: \n");
-}
-
-void	ft_parcing(char *input)
-{
-	int	i;
-
-	i = 0;
-	ft_parc(input);
-	while (input[i])
-	{
-		i++;
-	}
-}
-
 void	ft_readline(int sig)
 {
 	if (sig == SIGINT)
@@ -85,9 +50,83 @@ int	ft_history(char *str)
 	return (0);
 }
 
+int	syntaxe_quotes(char *input)
+{
+	int	a;
+	int	b;
+
+	a = 0;
+	b = 0;
+	while (*input)
+	{
+		if (*input == 34 || *input == 39)
+		{
+			if (*input == 34)
+				a++;
+			if (*input == 39)
+				b++;
+		}
+		input++;
+	}
+	if (a % 2 != 0 || b % 2 != 0 )
+	{
+		printf("Error: \n");
+		return (1);
+	}
+	return (0);
+}
+
+void    rev_char(char *input)
+{
+    int    i;
+
+    i = 0;
+    while (input[i])
+    {
+        if (input[i] == '\'' || input[i] == '"')
+        {
+			while (input[i] && (input[i] == '\'' || input[i] == '"'))
+            	i++;
+            while (input[i] && (input[i] != '\'' && input[i] != '"'))
+                input[i++] *= -1;
+        }
+        i++;
+    }
+}
+
+int	tokenizer(char *input, char ***str)
+{
+	int	i;
+	char **str1;
+
+	i = 0;
+	if (syntaxe_quotes(input))
+		return (1);
+	rev_char(input);
+	*str = ft_split(input);
+	str1 = *str;
+	while (str1[i])
+		rev_char(str1[i++]);
+
+	// if (rev_char(input))
+	// 	return (1);
+	return (0);
+}
+
+int	ft_parcing(char *input, char ***str)
+{
+	int	i;
+
+	i = 0;
+	if (tokenizer(input, str))
+		return (1);
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
+	char	**str = NULL;
 	int		in;
 	int		out;
 
@@ -107,7 +146,13 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		ft_parcing(input);
+		if (ft_parcing(input, &str) == 0)
+		{
+			// execution
+			printf("%s\n", str[0]);
+			printf("%s\n", str[1]);
+			printf("%s\n", str[2]);
+		}
 		free(input);
 	}
 }

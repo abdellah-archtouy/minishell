@@ -11,7 +11,8 @@
 
 typedef struct s_list
 {
-	void			*content;
+	char			*content;
+	int				type;
 	struct s_list	*next;
 }				t_list;
 
@@ -20,6 +21,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
+char	**ft_split(char const *s);
 
 
 #endif

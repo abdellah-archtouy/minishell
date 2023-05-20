@@ -1,7 +1,7 @@
 NAME = main
 NAMEB = checker
 
-SRC = main.c libf.c
+SRC = main.c libf.c split.c
 
 SRCB = 
  
