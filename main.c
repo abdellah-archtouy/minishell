@@ -62,8 +62,8 @@ void	ft_parcing(char *input)
 	ft_parc(input);
 	while (input[i])
 	{
-		if (input[i] == '<' || input[i] == '>' || input[i] == '|'
-			|| input[i] == '$' || input[i] == '"' || input[i] == '\'')
+		// if (input[i] == '<' || input[i] == '>' || input[i] == '|'
+		// 	|| input[i] == '$' || input[i] == '"' || input[i] == '\'')
 			// printf("input[%d] = %c\n", i, input[i]);
 		i++;
 	}
@@ -107,8 +107,9 @@ int	main(int ac, char **av, char **env)
 	out = 1;
 	if (ac != 1)
 		exit(1);
-	signal(SIGINT, ft_readline);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_readline);
+	rl_catch_signals = 0;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -116,7 +117,7 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		ft_parcing(input);
+		// ft_parcing(input);
 		free(input);
 	}
 }
