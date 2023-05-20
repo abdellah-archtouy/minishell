@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "mini.h"
 
 int	ft_getfile(char *input, int i)
 {
@@ -58,13 +52,9 @@ void	ft_parcing(char *input)
 	int	i;
 
 	i = 0;
-	// printf("input = %s\n", input);
 	ft_parc(input);
 	while (input[i])
 	{
-		// if (input[i] == '<' || input[i] == '>' || input[i] == '|'
-		// 	|| input[i] == '$' || input[i] == '"' || input[i] == '\'')
-			// printf("input[%d] = %c\n", i, input[i]);
 		i++;
 	}
 }
@@ -117,7 +107,7 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		// ft_parcing(input);
+		ft_parcing(input);
 		free(input);
 	}
 }
