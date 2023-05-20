@@ -76,22 +76,101 @@ int	syntaxe_quotes(char *input)
 	return (0);
 }
 
-void    rev_char(char *input)
+void	rev_char(char *input)
 {
-    int    i;
+	int	i;
 
-    i = 0;
-    while (input[i])
-    {
-        if (input[i] == '\'' || input[i] == '"')
-        {
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
 			while (input[i] && (input[i] == '\'' || input[i] == '"'))
-            	i++;
-            while (input[i] && (input[i] != '\'' && input[i] != '"'))
-                input[i++] *= -1;
-        }
-        i++;
-    }
+				i++;
+			while (input[i] && (input[i] != '\'' && input[i] != '"'))
+				input[i++] *= -1;
+		}
+		i++;
+	}
+}
+
+int	ft_check_helper1(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '|' || input[i] == '<' || input[i] == '>'
+			|| (input[i] == '<' && input[i + 1] == '<')
+			|| (input[i] == '>' && input[i + 1] == '>'))
+		{
+			i++;
+			while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+			{
+				i++;
+			}
+			if (input[i] == '\0')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	ft_check_helper(char *input, int i)
+{
+	while (input[i])
+	{
+		if (input[i] == '|')
+		{
+			i++;
+			while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+				i++;
+			if (input[i] == '|')
+				return (1);
+		}
+		else if (input[i] == '<')
+		{
+			i++;
+			while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+				i++;
+			if (input[i] == '>')
+				return (1);
+		}
+		else if (input[i] == '>')
+		{
+			i++;
+			while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+				i++;
+			if (input[i] == '<')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+int	check_syntaxe(char	*input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+		i++;
+	if (input[i] == '<')
+	{
+		if (input[i + 1] != '<')
+			return (1);
+	}
+	else if (input[i] == '>')
+		return (1);
+	else if (input[i] == '|')
+		return (1);
+	if (ft_check_helper(input, i))
+		return (1);
+	if (ft_check_helper1(input))
+		return (1);
+	return (0);
 }
 
 int	tokenizer(char *input, char ***str)
@@ -100,6 +179,8 @@ int	tokenizer(char *input, char ***str)
 	char **str1;
 
 	i = 0;
+	if (check_syntaxe(input))
+		return(printf("syntx dsgd\n"), 1);
 	if (syntaxe_quotes(input))
 		return (1);
 	rev_char(input);
@@ -149,9 +230,9 @@ int	main(int ac, char **av, char **env)
 		if (ft_parcing(input, &str) == 0)
 		{
 			// execution
-			printf("%s\n", str[0]);
-			printf("%s\n", str[1]);
-			printf("%s\n", str[2]);
+			// printf("%s\n", str[0]);
+			// printf("%s\n", str[1]);
+			// printf("%s\n", str[2]);
 		}
 		free(input);
 	}
