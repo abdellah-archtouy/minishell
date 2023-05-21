@@ -150,6 +150,7 @@ int	ft_check_helper(char *input, int i)
 	}
 	return (0);
 }
+
 int	check_syntaxe(char	*input)
 {
 	int	i;
@@ -157,9 +158,16 @@ int	check_syntaxe(char	*input)
 	i = 0;
 	while (input[i] && (input[i] == ' ' || input[i] == '\t'))
 		i++;
-	if (input[i] == '<')
+	if (input[i++] == '<')
 	{
-		if (input[i + 1] != '<')
+		if (input[i++] == '<')
+		{
+			while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+				i++;
+			if (input[i--] == '\0')
+				return (1);
+		}
+		else
 			return (1);
 	}
 	else if (input[i] == '>')
@@ -173,14 +181,37 @@ int	check_syntaxe(char	*input)
 	return (0);
 }
 
-int	tokenizer(char *input, char ***str)
+void	lexer(char	**str, t_list	**ptr)
 {
 	int	i;
-	char **str1;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_strcmp(str[i], "<") == 0)
+			ft_lstadd_back(ptr, ft_lstnew(str[i], RINPUT));
+		else if (ft_strcmp(str[i], ">") == 0 )
+			ft_lstadd_back(ptr, ft_lstnew(str[i], ROUTPUT));
+		else if (ft_strcmp(str[i], ">>") == 0)
+			ft_lstadd_back(ptr, ft_lstnew(str[i], APAND));
+		else if (ft_strcmp(str[i], "<<") == 0)
+			ft_lstadd_back(ptr, ft_lstnew(str[i], HEREDOC));
+		else if (ft_strcmp(str[i], "|") == 0)
+			ft_lstadd_back(ptr, ft_lstnew(str[i], PIPE));
+		else
+			ft_lstadd_back(ptr, ft_lstnew(str[i], WORD));
+		i++;
+	}
+}
+
+int	tokenizer(char *input, char ***str)
+{
+	int		i;
+	char	**str1;
 
 	i = 0;
 	if (check_syntaxe(input))
-		return(printf("syntx dsgd\n"), 1);
+		return (printf("syntx dsgd\n"), 1);
 	if (syntaxe_quotes(input))
 		return (1);
 	rev_char(input);
