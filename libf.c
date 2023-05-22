@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libf.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 13:31:44 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/05/21 17:06:49 by aarchtou         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:11:58 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,14 @@ int	ft_strcmp(const char *a, const char *b)
 		return (1);
 	else
 		return (-1);
+}
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }

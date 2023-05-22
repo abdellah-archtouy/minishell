@@ -37,7 +37,9 @@ t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 char	**ft_split(char const *s);
 t_list	*ft_lstnew(char *content, int type);
-int	ft_strcmp(const char *a, const char *b);
+int		ft_strcmp(const char *a, const char *b);
 void	lexer(char	**str, t_list	**ptr);
+int		ft_strlen(char *str);
+char	*add_space(char *input);
 
 #endif

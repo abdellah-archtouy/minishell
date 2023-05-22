@@ -50,30 +50,32 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	syntaxe_quotes(char *input)
+int    syntaxe_quotes(char *input) // hadi khassha " ' " '
 {
-	int	a;
-	int	b;
+    int    i;
 
-	a = 0;
-	b = 0;
-	while (*input)
-	{
-		if (*input == 34 || *input == 39)
-		{
-			if (*input == 34)
-				a++;
-			if (*input == 39)
-				b++;
-		}
-		input++;
-	}
-	if (a % 2 != 0 || b % 2 != 0 )
-	{
-		printf("Error: \n");
-		return (1);
-	}
-	return (0);
+    i = 0;
+    while (input[i])
+    {
+        if (input[i] == '\"' && input[i])
+        {
+            i++;
+            while (input[i] != '\"' && input[i])
+                i++;
+            if (input[i] == '\0')
+                return (1);
+        }
+        else if (input[i] == '\'' && input[i])
+        {
+            i++;
+            while (input[i] != '\'' && input[i])
+                i++;
+            if (input[i] == '\0')
+                return (1);
+        }
+        i++;
+    }
+    return (0);
 }
 
 void	rev_char(char *input)
@@ -210,33 +212,44 @@ int	tokenizer(char *input, char ***str)
 	char	**str1;
 
 	i = 0;
-	if (check_syntaxe(input))
-		return (printf("syntx dsgd\n"), 1);
-	if (syntaxe_quotes(input))
+	input = add_space(input);
+	if (syntaxe_quotes(input)) // talal zyr krk
 		return (1);
 	rev_char(input);
 	*str = ft_split(input);
 	str1 = *str;
 	while (str1[i])
 		rev_char(str1[i++]);
-
-	// if (rev_char(input))
-	// 	return (1);
+	free(input);
 	return (0);
 }
 
 int	ft_parcing(char *input, char ***str)
 {
 	int	i;
+	t_list	*head = NULL;
 
 	i = 0;
 	if (tokenizer(input, str))
 		return (1);
+	lexer(*str, &head);
+	while (head)
+	{
+		printf("str %s --- type %d\n", head->content, head->type);
+		head = head->next;
+	}
+	printf("=============================================\n");
 	return (0);
+}
+
+void fun()
+{
+	system("leaks main");
 }
 
 int	main(int ac, char **av, char **env)
 {
+	atexit(fun);
 	char	*input;
 	char	**str = NULL;
 	int		in;
@@ -261,10 +274,7 @@ int	main(int ac, char **av, char **env)
 		if (ft_parcing(input, &str) == 0)
 		{
 			// execution
-			// printf("%s\n", str[0]);
-			// printf("%s\n", str[1]);
-			// printf("%s\n", str[2]);
 		}
-		free(input);
+		else printf("syntax error\n");
 	}
 }
