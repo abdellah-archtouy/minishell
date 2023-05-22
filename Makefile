@@ -1,7 +1,7 @@
 NAME = main
 NAMEB = checker
 
-SRC = main.c libf.c split.c utils.c
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c
 
 SRCB = 
  

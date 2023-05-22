@@ -14,6 +14,30 @@
 //     return 0;
 // }
 
+// int	ft_getfile(char *input, int i)
+// {
+// 	int	j = 0;
+// 	char	*file = NULL;
+
+// 	i++;
+// 	while (input[i] == ' ')
+// 		i++;
+// 	while (input[i] != ' ')
+// 	{
+// 		file[j] = input[i];
+// 		i++;
+// 		j++;
+// 	}
+// 	file[j] = '\0';
+// 	int fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 	{
+// 		printf("Error: open\n");
+// 		exit(1);
+// 	}
+// 	return (fd);
+// }
+
 void	rev_char(char *input) // mokhawarton
 {
 	int	i;
