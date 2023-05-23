@@ -46,5 +46,6 @@ int		syntaxe_quotes(char *input);
 void	rev_char(char *input);
 int		tokenizer(char *input, char ***str);
 int		is_special(char c);
+int		syntaxe_error(char *input);
 
 #endif

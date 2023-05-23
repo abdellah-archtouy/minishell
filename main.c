@@ -33,7 +33,7 @@ int	ft_parcing(char *input, char ***str)
 
 	i = 0;
 	head = NULL;
-	if (check_syntaxe(input))
+	if (syntaxe_error(input))
 		return (1);
 	if (tokenizer(input, str))
 		return (1);
