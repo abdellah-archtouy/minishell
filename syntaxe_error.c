@@ -70,7 +70,7 @@ int	rout_syntaxe(char *input)
 	return (0);
 }
 
-int	start_and_end(char *input)
+int	start_and_end(char *input) // ( )
 {
 	int	i;
 	int	j;
@@ -81,9 +81,10 @@ int	start_and_end(char *input)
 		j--;
 	while ((input[i] >= 9 && input[i] <= 13) || input[i] == 32)
 		i++;
-	if (is_special(input[j]))
+	if (is_special(input[j]) || input[j] == ')' || input[j] == '(')
 		return (1);
-	if (is_special(input[i]) && input[i] != '<')
+	if (is_special(input[i]) && input[i] != '<' && input[i] != '>'
+		|| input[i] == ')' || input[i] == '(')
 		return (1);
 	return (0);
 }

@@ -18,6 +18,8 @@ void	lexer(char	**str, t_list	**ptr)
 			ft_lstadd_back(ptr, ft_lstnew(str[i], HEREDOC));
 		else if (ft_strcmp(str[i], "|") == 0)
 			ft_lstadd_back(ptr, ft_lstnew(str[i], PIPE));
+		// else if (ft_strcmp(str[0], "$") == 0)
+		// 	ft_lstadd_back(ptr, ft_lstnew(str[i], VARIA));
 		else
 			ft_lstadd_back(ptr, ft_lstnew(str[i], WORD));
 		i++;

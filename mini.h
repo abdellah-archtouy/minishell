@@ -15,6 +15,7 @@
 # define APAND 3
 # define HEREDOC 4
 # define WORD 5
+# define VARIA 6
 
 typedef struct s_list
 {
@@ -23,12 +24,18 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
-typedef struct s_lex
+typedef struct s_parc
 {
-	char			*content;
-	int				type;
+	char			**content;
+	int				in;
+	int				out;
 	struct s_list	*next;
-}				t_lex;
+}				t_parc;
+
+typedef struct s_mini
+{
+	
+}				t_mini;
 
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstclear(t_list **lst, void (*del)(void *));
@@ -36,7 +43,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 char	**ft_split(char const *s);
-int		check_syntaxe(char	*input);
 t_list	*ft_lstnew(char *content, int type);
 int		ft_strcmp(const char *a, const char *b);
 void	lexer(char	**str, t_list	**ptr);

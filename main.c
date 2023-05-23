@@ -53,6 +53,7 @@ int	main(int ac, char **av, char **env)
 	char	**str;
 	int		in;
 	int		out;
+	// t_mini	mini;
 
 	(void)av;
 	(void)env;
