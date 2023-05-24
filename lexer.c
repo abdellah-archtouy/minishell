@@ -38,8 +38,8 @@ int	tokenizer(char *input, char ***str)
 	rev_char(input);
 	*str = ft_split(input);
 	str1 = *str;
-	while (str1[i])
-		rev_char(str1[i++]);
+	// while (str1[i])
+	// 	rev_char(str1[i++]);
 	free(input);
 	return (0);
 }

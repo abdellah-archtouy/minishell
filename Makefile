@@ -1,15 +1,9 @@
 NAME = main
 NAMEB = checker
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c
-
-SRCB = 
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c ft_strdup.c ft_strjoin.c libf2.c
  
-
 OBJ = $(SRC:%.c=%.o)
-
-OBJB = $(SRCB:%.c=%.o)
-
 
 CFALGS =  -Wall -Wextra -Werror
 

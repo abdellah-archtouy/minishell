@@ -30,6 +30,7 @@ int	ft_parcing(char *input, char ***str)
 {
 	int		i;
 	t_list	*head;
+	t_parc	*parc;
 
 	i = 0;
 	head = NULL;
@@ -38,12 +39,13 @@ int	ft_parcing(char *input, char ***str)
 	if (tokenizer(input, str))
 		return (1);
 	lexer(*str, &head);
-	while (head)
-	{
-		printf("str %s --- type %d\n", head->content, head->type);
-		head = head->next;
-	}
-	printf("=============================================\n");
+	parc = ft_parc(head);
+	// while (head)
+	// {
+	// 	printf("str %s --- type %d\n", head->content, head->type);
+	// 	head = head->next;
+	// }
+	// printf("=============================================\n");
 	return (0);
 }
 

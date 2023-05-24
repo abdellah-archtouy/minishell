@@ -46,12 +46,18 @@ char	**ft_split(char const *s);
 t_list	*ft_lstnew(char *content, int type);
 int		ft_strcmp(const char *a, const char *b);
 void	lexer(char	**str, t_list	**ptr);
+t_parc	*ft_parcnew(char **content, int in, int out);
+t_parc	*ft_parclast (t_parc *lst);
+void	ft_parcadd_back(t_parc **lst, t_parc *new);
 int		ft_strlen(char *str);
 char	*add_space(char *input);
 int		syntaxe_quotes(char *input);
 void	rev_char(char *input);
 int		tokenizer(char *input, char ***str);
 int		is_special(char c);
+t_parc	*ft_parc(t_list *ptr);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *s1);
 int		syntaxe_error(char *input);
 
 #endif
