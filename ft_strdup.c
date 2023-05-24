@@ -21,7 +21,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (d);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*s2;
 

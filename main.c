@@ -39,13 +39,14 @@ int	ft_parcing(char *input, char ***str)
 	if (tokenizer(input, str))
 		return (1);
 	lexer(*str, &head);
-	parc = ft_parc(head);
-	// while (head)
-	// {
-	// 	printf("str %s --- type %d\n", head->content, head->type);
-	// 	head = head->next;
-	// }
-	// printf("=============================================\n");
+	t_list	*pop = head;
+	while (pop)
+	{
+		printf("str %s --- type %d\n", pop->content, pop->type);
+		pop = pop->next;
+	}
+	printf("=============================================\n");
+	parc = ft_parc(&head);
 	return (0);
 }
 
