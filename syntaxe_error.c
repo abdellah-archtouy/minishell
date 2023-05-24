@@ -83,7 +83,7 @@ int	start_and_end(char *input) // ( )
 		i++;
 	if (is_special(input[j]) || input[j] == ')' || input[j] == '(')
 		return (1);
-	if (is_special(input[i]) && input[i] != '<' && input[i] != '>'
+	if ((is_special(input[i]) && input[i] != '<' && input[i] != '>')
 		|| input[i] == ')' || input[i] == '(')
 		return (1);
 	return (0);
