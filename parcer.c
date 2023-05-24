@@ -11,7 +11,34 @@ int	ft_get_fd_out(char *str, int t)
 	else if (t == 2)
 		fd = open(str , O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (fd == -1)
-		return (perror("open"), 1);
+		return (perror("open"), fd);
+	return (fd);
+}
+
+int	ft_get_fd_doc(char *content)
+{
+	int 	fd;
+	int 	i;
+	char	*input;
+
+	fd = 0;
+	i = 0;
+	fd = open("/tmp/heredoc" , O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
+		return (perror("open"), fd);
+	while (1)
+	{
+		input = readline(">");
+		if (ft_strcmp(input, content) == 0)
+		{
+			free(input);
+			break ;
+		}
+		while (input[i])
+			write(fd, &input[i++], 1);
+		write(fd, "\n", 1);
+		free(input);
+	}
 	return (fd);
 }
 
@@ -51,11 +78,12 @@ t_parc *ft_parc(t_list **ptr)
 			}
 			else if ((*ptr)->type == HEREDOC)
 			{
-				// out = ft_get_fd_doc((*ptr)->next->content);
+				in = ft_get_fd_doc((*ptr)->next->content);
 				(*ptr) = (*ptr)->next;
 			}
 			(*ptr) = (*ptr)->next;
 		}
+		printf("fd = %d\n"  , in);
 		ft_parcadd_back(&parc, ft_parcnew(ft_split(str), in, out));
 		if ((*ptr) != NULL)
 			(*ptr) = (*ptr)->next;
