@@ -46,7 +46,7 @@ int	ft_ft_get_fd_in(char *content)
 {
 	int	fd;
 
-	fd = open(content, O_RDWR | O_TRUNC, 0644);
+	fd = open(content, O_RDONLY, 0644);
 	if (fd == -1)
 		return (perror(content), fd);
 	return (fd);

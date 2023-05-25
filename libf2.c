@@ -21,11 +21,12 @@ t_parc	*ft_parclast (t_parc *lst)
 t_parc	*ft_parcnew(char **content, int in, int out)
 {
 	t_parc	*a;
+	int		i;
 
+	i = 0;
 	a = (void *)malloc(sizeof(t_parc));
 	if (a == 0)
 		return (0);
-	int i = 0;
 	while (content[i])
 		rev_char(content[i++]);
 	a->content = content;

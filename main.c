@@ -47,20 +47,21 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc)
 	printf("=============================================\n");
 	if (ft_parc(&head, parc))
 		return (1);
+	int a = 0;
+	while ((*parc))
+	{
+		a = 0;
+		while((*parc)->content[a])
+		{
+			printf("%s\n",(*parc)->content[a++]);
+			printf("%d\n",(*parc)->out);
+			printf("%d\n",(*parc)->in);
+		}
+		printf("==============\n");
+		(*parc) = (*parc)->next;
+	}
 	return (0);
 }
-	// int a = 0;
-	// while ((*parc))
-	// {
-	// 	a = 0;
-	// 	printf("abd");
-	// 	while((*parc)->content[a])
-	// 	{
-	// 		printf("%s\n",(*parc)->content[a++]);
-	// 	}
-	// 	printf("==============\n");
-	// 	(*parc) = (*parc)->next;
-	// }
 
 int	main(int ac, char **av, char **env)
 {
