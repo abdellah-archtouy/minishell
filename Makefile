@@ -1,7 +1,7 @@
 NAME = main
 NAMEB = checker
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c
 
 SRCB = 
  
@@ -37,6 +37,6 @@ clean:
 	@rm -rf $(OBJ) $(OBJB)
 
 fclean: clean
-	@rm -rf $(NAME) $(NAMEB)
+	rm -rf $(NAME) $(NAMEB)
 
 re: fclean all

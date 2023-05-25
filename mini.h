@@ -24,12 +24,19 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
+typedef struct s_exp
+{
+	char			*key;
+	char			*content;
+	struct s_exp	*next;
+}				t_exp;
+
 typedef struct s_parc
 {
 	char			**content;
 	int				in;
 	int				out;
-	struct s_list	*next;
+	struct s_parc	*next;
 }				t_parc;
 
 typedef struct s_mini
@@ -53,5 +60,6 @@ void	rev_char(char *input);
 int		tokenizer(char *input, char ***str);
 int		is_special(char c);
 int		syntaxe_error(char *input);
+void	envi(char **env, t_exp **head);
 
 #endif

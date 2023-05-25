@@ -4,7 +4,7 @@ void	ft_readline(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -40,11 +40,31 @@ int	ft_parcing(char *input, char ***str)
 	lexer(*str, &head);
 	while (head)
 	{
-		printf("str %s --- type %d\n", head->content, head->type);
+		if (head->type == PIPE)
+			printf("str\t%s\tPIPE\n", head->content);
+		else if (head->type == HEREDOC)
+			printf("str\t%s\tHEREDOC\n", head->content);
+		else if (head->type == RINPUT)
+			printf("str\t%s\tRINPUT\n", head->content);
+		else if (head->type == ROUTPUT)
+			printf("str\t%s\tROUTPUT\n", head->content);
+		else if (head->type == APAND)
+			printf("str\t%s\tAPAND\n", head->content);
+		else if (head->type == WORD)
+			printf("str\t%s\tWORD\n", head->content);
 		head = head->next;
 	}
 	printf("=============================================\n");
 	return (0);
+}
+
+void	ft_error(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -52,6 +72,7 @@ int	main(int ac, char **av, char **env)
 	char	*input;
 	char	**str;
 	int		in;
+	t_exp	*head;
 	int		out;
 	// t_mini	mini;
 
@@ -74,8 +95,14 @@ int	main(int ac, char **av, char **env)
 			add_history(input);
 		if (ft_parcing(input, &str) == 0)
 		{
+			envi(env, &head);
+			while (head != NULL)
+			{
+				printf("%s=%s\n", head->key, head->content);
+				head = head->next;
+			}
 			// execution
 		}
-		else printf("syntax error\n");
+		else ft_error("syntax error\n");
 	}
 }
