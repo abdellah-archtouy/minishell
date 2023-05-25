@@ -1,7 +1,6 @@
 NAME = main
-NAMEB = checker
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c ft_strdup.c ft_strjoin.c libf2.c parcer.c
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c ft_strjoin.c ft_strdup.c
  
 OBJ = $(SRC:%.c=%.o)
 
@@ -28,9 +27,9 @@ $(NAME): $(OBJ) $(INCLUDE)
 	$(CC)  $(CFALGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	@rm -rf $(OBJ) $(OBJB)
+	rm -rf $(OBJ)
 
 fclean: clean
-	@rm -rf $(NAME) $(NAMEB)
+	rm -rf $(NAME) 
 
 re: fclean all

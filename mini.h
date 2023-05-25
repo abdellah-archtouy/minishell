@@ -23,6 +23,14 @@ typedef struct s_list
 	int				type;
 	struct s_list	*next;
 }				t_list;
+
+typedef struct s_exp
+{
+	char			*key;
+	char			*content;
+	struct s_exp	*next;
+}				t_exp;
+
 typedef struct s_parc
 {
 	char			**content;
@@ -60,5 +68,6 @@ int		ft_parcing(char *input, char ***str, t_parc	**parc);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strdup(char *s1);
 int		syntaxe_error(char *input);
+void	envi(char **env, t_exp **head);
 
 #endif

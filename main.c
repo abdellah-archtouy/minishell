@@ -4,7 +4,7 @@ void	ft_readline(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -51,7 +51,7 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc)
 	while ((*parc))
 	{
 		a = 0;
-		while((*parc)->content[a])
+		while ((*parc)->content[a])
 		{
 			printf("%s\n",(*parc)->content[a++]);
 			printf("%d\n",(*parc)->out);
@@ -63,11 +63,21 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc)
 	return (0);
 }
 
+void	ft_error(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	char	**str;
 	t_parc	*parc;
+	// t_exp	*head;
 
 	(void)av;
 	(void)env;
@@ -87,10 +97,15 @@ int	main(int ac, char **av, char **env)
 			add_history(input);
 		if (ft_parcing(input, &str, &parc) == 0)
 		{
+			// envi(env, &head);
+			// while (head != NULL)
+			// {
+			// 	printf("%s=%s\n", head->key, head->content);
+			// 	head = head->next;
+			// }
 			// execution
 		}
-		else
-			printf("syntax error\n");
+		else printf("syntax error\n");
 	}
 	return (0);
 }
