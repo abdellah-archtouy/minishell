@@ -18,8 +18,6 @@ void	lexer(char	**str, t_list	**ptr)
 			ft_lstadd_back(ptr, ft_lstnew(str[i], HEREDOC));
 		else if (ft_strcmp(str[i], "|") == 0)
 			ft_lstadd_back(ptr, ft_lstnew(str[i], PIPE));
-		// else if (ft_strcmp(str[0], "$") == 0)
-		// 	ft_lstadd_back(ptr, ft_lstnew(str[i], VARIA));
 		else
 			ft_lstadd_back(ptr, ft_lstnew(str[i], WORD));
 		i++;
@@ -29,7 +27,6 @@ void	lexer(char	**str, t_list	**ptr)
 int	tokenizer(char *input, char ***str)
 {
 	int		i;
-	char	**str1;
 
 	i = 0;
 	input = add_space(input);
@@ -37,9 +34,6 @@ int	tokenizer(char *input, char ***str)
 		return (1);
 	rev_char(input);
 	*str = ft_split(input);
-	str1 = *str;
-	while (str1[i])
-		rev_char(str1[i++]);
 	free(input);
 	return (0);
 }

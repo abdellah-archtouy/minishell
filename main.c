@@ -26,7 +26,7 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	ft_parcing(char *input, char ***str)
+int	ft_parcing(char *input, char ***str, t_parc	**parc)
 {
 	int		i;
 	t_list	*head;
@@ -38,23 +38,8 @@ int	ft_parcing(char *input, char ***str)
 	if (tokenizer(input, str))
 		return (1);
 	lexer(*str, &head);
-	while (head)
-	{
-		if (head->type == PIPE)
-			printf("str\t%s\tPIPE\n", head->content);
-		else if (head->type == HEREDOC)
-			printf("str\t%s\tHEREDOC\n", head->content);
-		else if (head->type == RINPUT)
-			printf("str\t%s\tRINPUT\n", head->content);
-		else if (head->type == ROUTPUT)
-			printf("str\t%s\tROUTPUT\n", head->content);
-		else if (head->type == APAND)
-			printf("str\t%s\tAPAND\n", head->content);
-		else if (head->type == WORD)
-			printf("str\t%s\tWORD\n", head->content);
-		head = head->next;
-	}
-	printf("=============================================\n");
+	if (ft_parc(&head, parc))
+		return (1);
 	return (0);
 }
 
@@ -67,25 +52,45 @@ void	ft_error(char *str)
 		write(2, &str[i++], 1);
 }
 
+void	ft_lstclear_par(t_parc **lst)
+{
+	t_parc	*h;
+	int		i;
+
+	i = 0;
+	if (!lst)
+		return ;
+	while (*lst != NULL)
+	{
+		h = (*lst)->next;
+		while ((*lst)->content[i])
+			free((*lst)->content[i++]);
+		free ((*lst)->content);
+		free((*lst));
+		*lst = h;
+	}
+	*lst = NULL;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	char	**str;
-	int		in;
-	t_exp	*head;
-	int		out;
-	// t_mini	mini;
+	t_env	*envir;
+	t_parc	*parc;
+	// t_parc	*h;
 
 	(void)av;
 	(void)env;
-	in = 0;
-	out = 1;
 	str = NULL;
+	parc = NULL;
+	envir = NULL;
 	if (ac != 1)
 		exit(1);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
+	envi(env, &envir);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -93,16 +98,15 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		if (ft_parcing(input, &str) == 0)
+		if (ft_parcing(input, &str, &parc) == 0 && parc != NULL)
+			builting(parc, envir);
+		else
+			printf("syntax error\n");
+		if (parc)
 		{
-			envi(env, &head);
-			while (head != NULL)
-			{
-				printf("%s=%s\n", head->key, head->content);
-				head = head->next;
-			}
-			// execution
+			ft_lstclear_par(&parc);
+			parc = NULL;
 		}
-		else ft_error("syntax error\n");
 	}
+	return (0);
 }

@@ -1,11 +1,11 @@
 #include "mini.h"
 #include <string.h>
 
-t_exp	*ft_lstnew_exp(char *key, char *content)
+t_env	*ft_lstnew_exp(char *key, char *content)
 {
-	t_exp	*a;
+	t_env	*a;
 
-	a = (void *)malloc(sizeof(t_exp));
+	a = (void *)malloc(sizeof(t_env));
 	if (!a)
 		return (0);
 	a->content = content;
@@ -88,24 +88,24 @@ char* get_chars(char* string, int index)
 	return (returned);
 }
 
-t_exp	*ft_lstlast_exp(t_exp *lst)
+t_env	*ft_lstlast_env(t_env *lst)
 {
 	while (lst && lst->next)
 		lst = lst->next;
 	return (lst);
 }
 
-void	lstadd_back_exp(t_exp **lst, t_exp *new)
+void	lstadd_back_exp(t_env **lst, t_env *new)
 {
 	if (*lst == 0)
 	{
 		*lst = new;
 		return ;
 	}
-	ft_lstlast_exp(*lst)->next = new;
+	ft_lstlast_env(*lst)->next = new;
 }
 
-void	envi(char **env, t_exp **head)
+void	envi(char **env, t_env **head)
 {
 	int		i;
 	char	*key = NULL;
@@ -119,4 +119,38 @@ void	envi(char **env, t_exp **head)
 		lstadd_back_exp(head, ft_lstnew_exp(key, content));
 		i++;
 	}
+
 }
+
+void	env(t_env *head)
+{
+	while (head != NULL)
+	{
+		printf("%s=%s\n", head->key, head->content);
+		head = head->next;
+	}
+}
+
+void	builting(t_parc *parc, t_env *l_env)
+{
+	if (ft_strcmp(parc->content[0], "env") == 0 || ft_strcmp(parc->content[0], "export") == 0)
+		env(l_env);
+	// else if (ft_strcmp(parc->content[0], "export") == 0)
+
+}
+
+void	export(t_env **envi, t_parc	*parc)
+{
+	int		i = 0;
+	// t_parc	*h = parc;
+	char	*str = ft_strdup("");
+	while (parc->content[1])
+	{
+		if (str)
+			free(str);
+		str = ft_strjoin(str, parc->content[i]);
+		i++;
+	}
+	var_parse(str);
+}
+
