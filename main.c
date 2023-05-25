@@ -26,11 +26,10 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	ft_parcing(char *input, char ***str)
+int	ft_parcing(char *input, char ***str, t_parc	**parc)
 {
 	int		i;
 	t_list	*head;
-	t_parc	*parc;
 
 	i = 0;
 	head = NULL;
@@ -46,23 +45,33 @@ int	ft_parcing(char *input, char ***str)
 		pop = pop->next;
 	}
 	printf("=============================================\n");
-	parc = ft_parc(&head);
+	if (ft_parc(&head, parc))
+		return (1);
 	return (0);
 }
+	// int a = 0;
+	// while ((*parc))
+	// {
+	// 	a = 0;
+	// 	printf("abd");
+	// 	while((*parc)->content[a])
+	// 	{
+	// 		printf("%s\n",(*parc)->content[a++]);
+	// 	}
+	// 	printf("==============\n");
+	// 	(*parc) = (*parc)->next;
+	// }
 
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	char	**str;
-	int		in;
-	int		out;
-	// t_mini	mini;
+	t_parc	*parc;
 
 	(void)av;
 	(void)env;
-	in = 0;
-	out = 1;
 	str = NULL;
+	parc = NULL;
 	if (ac != 1)
 		exit(1);
 	signal(SIGQUIT, SIG_IGN);
@@ -75,10 +84,12 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		if (ft_parcing(input, &str) == 0)
+		if (ft_parcing(input, &str, &parc) == 0)
 		{
 			// execution
 		}
-		else printf("syntax error\n");
+		else
+			printf("syntax error\n");
 	}
+	return (0);
 }
