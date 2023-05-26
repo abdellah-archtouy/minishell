@@ -26,7 +26,7 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	ft_parcing(char *input, char ***str, t_parc	**parc)
+int	ft_parcing(char *input, char ***str, t_parc	**parc, char **env)
 {
 	int		i;
 	t_list	*head;
@@ -45,23 +45,23 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc)
 		pop = pop->next;
 	}
 	printf("=============================================\n");
-	if (ft_parc(&head, parc))
+	if (ft_parc(&head, parc, env))
 		return (1);
-	int a = 0;
-	while ((*parc))
-	{
-		a = 0;
-		while ((*parc)->content[a])
-		{
-			printf("%s\n",(*parc)->content[a++]);
-			printf("%d\n",(*parc)->out);
-			printf("%d\n",(*parc)->in);
-		}
-		printf("==============\n");
-		(*parc) = (*parc)->next;
-	}
 	return (0);
 }
+	// int a = 0;
+	// while ((*parc))
+	// {
+	// 	a = 0;
+	// 	while ((*parc)->content[a])
+	// 	{
+	// 		printf("%s\n",(*parc)->content[a++]);
+	// 		printf("%d\n",(*parc)->out);
+	// 		printf("%d\n",(*parc)->in);
+	// 	}
+	// 	printf("==============\n");
+	// 	(*parc) = (*parc)->next;
+	// }
 
 void	ft_error(char *str)
 {
@@ -77,7 +77,7 @@ int	main(int ac, char **av, char **env)
 	char	*input;
 	char	**str;
 	t_parc	*parc;
-	// t_exp	*head;
+	t_exp	*head;
 
 	(void)av;
 	(void)env;
@@ -95,17 +95,18 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		if (ft_parcing(input, &str, &parc) == 0)
+		envi(env, &head);
+		if (ft_parcing(input, &str, &parc, env) == 0)
 		{
-			// envi(env, &head);
-			// while (head != NULL)
-			// {
-			// 	printf("%s=%s\n", head->key, head->content);
-			// 	head = head->next;
-			// }
 			// execution
 		}
 		else printf("syntax error\n");
 	}
 	return (0);
 }
+
+			// while (head != NULL)
+			// {
+			// 	printf("%s=%s\n", head->key, head->content);
+			// 	head = head->next;
+			// }

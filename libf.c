@@ -85,7 +85,7 @@ int	ft_strcmp(const char *a, const char *b)
 		return (-1);
 }
 
-int	ft_strlen(char *str)
+size_t	ft_strlen(char *str)
 {
 	int	i;
 
