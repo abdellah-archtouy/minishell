@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "__locale": "c",
-        "ios": "c"
+        "ios": "c",
+        "sstream": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

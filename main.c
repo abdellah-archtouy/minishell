@@ -72,13 +72,18 @@ void	ft_lstclear_par(t_parc **lst)
 	*lst = NULL;
 }
 
+void fun()
+{
+	system("leaks main");
+}
+
 int	main(int ac, char **av, char **env)
 {
+	atexit(fun);
 	char	*input;
 	char	**str;
 	t_env	*envir;
 	t_parc	*parc;
-	// t_parc	*h;
 
 	(void)av;
 	(void)env;

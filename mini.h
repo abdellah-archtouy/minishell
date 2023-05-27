@@ -70,5 +70,6 @@ int		syntaxe_error(char *input);
 void	envi(char **env, t_env **head);
 void	export(t_env **envi, t_parc	*parc);
 void	builting(t_parc *parc, t_env *l_env);
+void	lst_clear_env(t_env **env);
 
 #endif
