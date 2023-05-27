@@ -3,5 +3,10 @@
         "__locale": "c",
         "ios": "c",
         "sstream": "c"
+<<<<<<< HEAD
     }
+=======
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+>>>>>>> origin/talal
 }

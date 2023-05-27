@@ -26,7 +26,7 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	ft_parcing(char *input, char ***str, t_parc	**parc, char **env)
+int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 {
 	int		i;
 	t_list	*head;
@@ -47,8 +47,6 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, char **env)
 	printf("=============================================\n");
 	if (ft_parc(&head, parc, env))
 		return (1);
-	return (0);
-}
 	// int a = 0;
 	// while ((*parc))
 	// {
@@ -56,12 +54,14 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, char **env)
 	// 	while ((*parc)->content[a])
 	// 	{
 	// 		printf("%s\n",(*parc)->content[a++]);
-	// 		printf("%d\n",(*parc)->out);
-	// 		printf("%d\n",(*parc)->in);
 	// 	}
+	// 		// printf("%d\n",(*parc)->out);
+	// 		// printf("%d\n",(*parc)->in);
 	// 	printf("==============\n");
 	// 	(*parc) = (*parc)->next;
 	// }
+	return (0);
+}
 
 void	ft_error(char *str)
 {
@@ -72,12 +72,32 @@ void	ft_error(char *str)
 		write(2, &str[i++], 1);
 }
 
+void	ft_lstclear_par(t_parc **lst)
+{
+	t_parc	*h;
+	int		i;
+
+	i = 0;
+	if (!lst)
+		return ;
+	while (*lst != NULL)
+	{
+		h = (*lst)->next;
+		// while ((*lst)->content[i])
+		// 	free((*lst)->content[i++]);
+		free ((*lst)->content);
+		free((*lst));
+		*lst = h;
+	}
+	*lst = NULL;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	char	**str;
 	t_parc	*parc;
-	t_exp	*head;
+	t_env	*head;
 
 	(void)av;
 	(void)env;
@@ -96,11 +116,24 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		if (ft_parcing(input, &str, &parc, env) == 0)
+		if (ft_parcing(input, &str, &parc, &head) == 0)
 		{
 			// execution
 		}
 		else printf("syntax error\n");
+		t_parc *ppp=parc;
+		while (ppp)
+		{
+			int i = 0;
+			while (ppp->content[i])
+			{
+				printf("%s\n", ppp->content[i]);
+				i++;
+			}
+			ppp = ppp->next;
+		}
+		if (parc != NULL)
+			ft_lstclear_par(&parc);
 	}
 	return (0);
 }

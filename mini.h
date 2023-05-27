@@ -24,12 +24,12 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
-typedef struct s_exp
+typedef struct s_env
 {
 	char			*key;
 	char			*content;
-	struct s_exp	*next;
-}				t_exp;
+	struct s_env	*next;
+}				t_env;
 
 typedef struct s_parc
 {
@@ -45,7 +45,7 @@ typedef struct s_mini
 	
 }				t_mini;
 
-t_parc	*ft_parcnew(char **content, int in, int out, char **env);
+t_parc	*ft_parcnew(char **content, int in, int out, t_env *env);
 t_parc	*ft_parclast(t_parc *lst);
 void	ft_parcadd_back(t_parc **lst, t_parc *new);
 void	ft_lstadd_back(t_list **lst, t_list *new);
@@ -54,6 +54,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 t_list	*ft_lstlast(t_list *lst);
 int		ft_lstsize(t_list *lst);
 char	**ft_split(char const *s);
+char	**ft_split1(char const *s, char c);
 t_list	*ft_lstnew(char *content, int type);
 int		ft_strcmp(const char *a, const char *b);
 void	lexer(char	**str, t_list	**ptr);
@@ -63,13 +64,13 @@ int		syntaxe_quotes(char *input);
 void	rev_char(char *input);
 int		tokenizer(char *input, char ***str);
 int		is_special(char c);
-int		ft_parc(t_list **ptr, t_parc **parc, char **env);
-int		ft_parcing(char *input, char ***str, t_parc	**parc, char **env);
+int		ft_parc(t_list **ptr, t_parc **parc, t_env **env);
+int		ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strdup(char *s1);
 int		syntaxe_error(char *input);
 int		ft_strncmp( char *a, char *b, size_t n);
 char	*ft_substr(char *s, size_t start, size_t len);
-void	envi(char **env, t_exp **head);
+void	envi(char **env, t_env **head);
 
 #endif
