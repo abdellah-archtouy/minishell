@@ -63,7 +63,7 @@ char* get_chars(char* string, int index)
 	{
 		size = found - string;
 		returned = malloc(size + 1);
-		while(string[i] && string[i] != '=')
+		while (string[i] && string[i] != '=')
 		{
 			returned[i] = string[i];
 			i++;
@@ -77,7 +77,7 @@ char* get_chars(char* string, int index)
 		if (string[j] == '=')
 			j++;
 		returned = malloc(size + 1);
-		while(string[j])
+		while (string[j])
 		{
 			returned[i] = string[j];
 			i++;

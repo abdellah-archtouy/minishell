@@ -88,6 +88,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
+	envi(env, &head);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -95,7 +96,6 @@ int	main(int ac, char **av, char **env)
 			exit(0);
 		if (ft_history(input))
 			add_history(input);
-		envi(env, &head);
 		if (ft_parcing(input, &str, &parc, env) == 0)
 		{
 			// execution
