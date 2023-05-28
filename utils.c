@@ -42,6 +42,6 @@ char	*add_space(char *input)
 		i++;
 	}
 	str[j] = 0;
-	free(input);
+	// free(input);
 	return (str);
 }

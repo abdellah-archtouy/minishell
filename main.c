@@ -30,23 +30,27 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 {
 	int		i;
 	t_list	*head;
+	char	**str1;
 
 	i = 0;
 	head = NULL;
+	(void)str;
 	if (syntaxe_error(input))
 		return (1);
-	if (tokenizer(input, str))
+	if (tokenizer(input, &str1))
 		return (1);
-	lexer(*str, &head);
-	t_list	*pop = head;
-	while (pop)
-	{
-		printf("str %s --- type %d\n", pop->content, pop->type);
-		pop = pop->next;
-	}
-	printf("=============================================\n");
+	lexer(str1, &head);
 	if (ft_parc(&head, parc, env))
 		return (1);
+	return (0);
+}
+	// t_list	*pop = head;
+	// while (pop)
+	// {
+	// 	printf("str %s --- type %d\n", pop->content, pop->type);
+	// 	pop = pop->next;
+	// }
+	// printf("=============================================\n");
 	// int a = 0;
 	// while ((*parc))
 	// {
@@ -60,8 +64,6 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	// 	printf("==============\n");
 	// 	(*parc) = (*parc)->next;
 	// }
-	return (0);
-}
 
 void	ft_error(char *str)
 {
@@ -83,13 +85,18 @@ void	ft_lstclear_par(t_parc **lst)
 	while (*lst != NULL)
 	{
 		h = (*lst)->next;
-		// while ((*lst)->content[i])
-		// 	free((*lst)->content[i++]);
-		free ((*lst)->content);
+		while ((*lst)->content[i])
+			free((*lst)->content[i++]);
+		free((*lst)->content);
 		free((*lst));
 		*lst = h;
 	}
 	*lst = NULL;
+}
+
+void	my()
+{
+	system("leaks main");
 }
 
 int	main(int ac, char **av, char **env)
@@ -97,7 +104,7 @@ int	main(int ac, char **av, char **env)
 	char	*input;
 	char	**str;
 	t_parc	*parc;
-	t_env	*head;
+	t_env	*envir;
 
 	(void)av;
 	(void)env;
@@ -105,38 +112,44 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		exit(1);
+	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	envi(env, &head);
+	envi(env, &envir);
 	while (1)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
 			exit(0);
 		if (ft_history(input))
+		{
 			add_history(input);
-		if (ft_parcing(input, &str, &parc, &head) == 0)
-		{
-			// execution
-		}
-		else printf("syntax error\n");
-		t_parc *ppp=parc;
-		while (ppp)
-		{
-			int i = 0;
-			while (ppp->content[i])
+			if (ft_parcing(input, &str, &parc, &envir) == 0)
+				builting(parc, envir);
+			else
+				printf("syntax error\n");
+			if (parc != NULL)
 			{
-				printf("%s\n", ppp->content[i]);
-				i++;
+				ft_lstclear_par(&parc);
+				parc = NULL;
 			}
-			ppp = ppp->next;
 		}
-		if (parc != NULL)
-			ft_lstclear_par(&parc);
+		free(input);
 	}
 	return (0);
 }
+			// t_parc *ppp=parc;
+			// while (ppp)
+			// {
+			// 	int i = 0;
+			// 	while (ppp->content[i])
+			// 	{
+			// 		printf("%s\n", ppp->content[i]);
+			// 		i++;
+			// 	}
+			// 	ppp = ppp->next;
+			// }
 
 			// while (head != NULL)
 			// {

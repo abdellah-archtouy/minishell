@@ -82,6 +82,7 @@ int	ft_parc_helper(t_list **ptr, int *in, int *out)
 int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
 	char	*str;
+	char	**str1;
 	int		in;
 	int		out;
 
@@ -99,9 +100,13 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 			}
 			else if (ft_parc_helper(ptr, &in, &out))
 				return (free(str), 1);
+			free((*ptr)->content);
+			free((*ptr));
 			(*ptr) = (*ptr)->next;
 		}
-		ft_parcadd_back(parc, ft_parcnew(ft_split(str), in, out, *env));
+		str1 = ft_split(str);
+		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
+		free(str);
 		if ((*ptr) != NULL)
 			(*ptr) = (*ptr)->next;
 	}

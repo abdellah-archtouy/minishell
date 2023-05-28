@@ -28,6 +28,7 @@ void	ft_free_all(char	**strings, int a)
 		free(strings[a]);
 		a--;
 	}
+	free(strings);
 	return ;
 }
 
