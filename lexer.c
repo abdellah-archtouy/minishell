@@ -26,15 +26,28 @@ void	lexer(char	**str, t_list	**ptr)
 
 int	tokenizer(char *input, char ***str)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
+	(void)str;
 	input = add_space(input);
 	if (syntaxe_quotes(input))
 		return (1);
-	rev_char(input);
-	*str = ft_split(input);
-	free(input);
+	while (input[i])
+	{
+		if (input[i] != '\"' && input[i + 1] == '\"')
+		{
+			input[i + 1] = input[i];
+			input[i] = '\"';
+		}
+		i++;
+	}
+	printf("%s\n", input);
+	// rev_char(input);
+	// *str = ft_split(input);
+	// free(input);
 	return (0);
 }
 

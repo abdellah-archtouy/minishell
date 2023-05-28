@@ -79,7 +79,7 @@ void fun()
 
 int	main(int ac, char **av, char **env)
 {
-	atexit(fun);
+	// atexit(fun);
 	char	*input;
 	char	**str;
 	t_env	*envir;
@@ -100,11 +100,17 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
+		{
+			free(input);
 			exit(0);
+		}
 		if (ft_history(input))
 			add_history(input);
 		if (ft_parcing(input, &str, &parc) == 0 && parc != NULL)
-			builting(parc, envir);
+		{
+			if (builting(parc, envir))
+				printf ("command not found:\n");
+		}
 		else
 			printf("syntax error\n");
 		if (parc)
@@ -112,6 +118,7 @@ int	main(int ac, char **av, char **env)
 			ft_lstclear_par(&parc);
 			parc = NULL;
 		}
+		// free(input);
 	}
 	return (0);
 }

@@ -1,7 +1,7 @@
 #include "mini.h"
 #include <string.h>
 
-t_env	*ft_lstnew_exp(char *key, char *content)
+t_env	*ft_lstnew_env(char *key, char *content)
 {
 	t_env	*a;
 
@@ -61,8 +61,13 @@ char* get_chars(char* string, int index)
 	found = ft_strchr(string, '=');
 	if (index == 0)
 	{
-		size = found - string;
-		returned = malloc(size + 1);
+		if (found != NULL)
+		{
+			size = found - string;
+			returned = malloc(size + 1);
+		}
+		else
+			return (ft_strdup(string));
 		while(string[i] && string[i] != '=')
 		{
 			returned[i] = string[i];
@@ -70,7 +75,7 @@ char* get_chars(char* string, int index)
 		}
 		returned[i] = 0;
 	}
-	else if (index == 1)
+	else if (index == 1 && found != NULL)
 	{
 		size = &string[ft_strlen(string) - 1] - found;
 		j = ft_strlen(string) - size;
@@ -90,8 +95,10 @@ char* get_chars(char* string, int index)
 
 t_env	*ft_lstlast_env(t_env *lst)
 {
-	while (lst && lst->next)
-		lst = lst->next;
+	if (!lst)
+		return (NULL);
+	while (lst -> next)
+		lst = lst -> next;
 	return (lst);
 }
 
@@ -116,10 +123,9 @@ void	envi(char **env, t_env **head)
 	{
 		key = get_chars(env[i], 0);
 		content = get_chars(env[i], 1);
-		lstadd_back_env(head, ft_lstnew_exp(key, content));
+		lstadd_back_env(head, ft_lstnew_env(key, content));
 		i++;
 	}
-
 }
 
 int	ft_lstsize_env(t_env *lst)
@@ -156,8 +162,11 @@ t_env	*sorted_env(t_env *exp)
 	while (exp != NULL)
 	{
 		a = ft_strdup(exp->key);
-		b = ft_strdup(exp->content);
-		lstadd_back_env(&tmp, ft_lstnew_exp(a, b));
+		if (exp->content != NULL)
+			b = ft_strdup(exp->content);
+		else
+			b = NULL;
+		lstadd_back_env(&tmp, ft_lstnew_env(a, b));
 		exp = exp->next;
 	}
 	save = tmp;
@@ -194,7 +203,6 @@ void	lst_clear_env(t_env **env)
 		free((*env)->content);
 		free(*env);
 		*env = head;
-		// env = env->next;
 	}
 }
 
@@ -206,35 +214,105 @@ void	env(t_env *head , char *str)
 	if (ft_strcmp(str, "env") == 0)
 		while (head != NULL)
 		{
-			if (head->content[0] != 0)
+			if (head->content != NULL)
 				printf("%s=%s\n", head->key, head->content);
 			head = head->next;
 		}
-	else if (ft_strcmp(str, "export") == 0)
+	if (ft_strcmp(str, "export") == 0)
 	{
 		exp = sorted_env(head);
 		while (exp != NULL)
 		{
-			printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
+			if (exp->content != NULL)
+				printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
+			else if (exp->content == NULL)
+				printf("declare -x %s\n", exp->key);
 			exp = exp->next;
 		}
-		// lst_clear_env(&exp);
+		lst_clear_env(&exp);
 	}
 }
 
-// void	add_var(t_env *env, char *key, char *content)
+// int	is_existe(t_env *env, char *key)
 // {
-
+// 	while (env != NULL)
+// 	{
+// 		if (ft_strcmp(env->key, key) == 0)
+// 			return (0);
+// 		env = env->next;
+// 	}
+// 	return (1);
 // }
 
-void	builting(t_parc *parc, t_env *l_env)
+// int	check_the_first_char(char *str)
+// {
+	// if ((str[0] >= 'A' && str[0] <= 'Z')
+	// 	|| (str[0] >= 'a' && str[0] <= 'z')
+	// 		|| str[0] == '_')
+	// 	return(0);
+	// else
+	// 	return (1);
+// }
+
+// int	add_var(t_env *env, char *str)
+// {
+// 	char	*key;
+// 	char	*content;
+// 	if (check_the_first_char(str))
+// 		return (1);
+// 	key = get_chars(str, 0);
+// 	content = get_chars(str, 1);
+// 	printf ("%s\n", key);
+// 	printf ("%s\n", content);
+// 	if (is_existe(env, key))
+// 		lstadd_back_env(&env, ft_lstnew_env(key, content));
+// 	return (0);
+// }
+
+int	parsing(char *input)
+{
+	int i;
+
+	i = 0;
+	if ((input[i] >= 'A' && input[i] <= 'Z')
+	|| (input[i] >= 'a' && input[i] <= 'z')
+		|| input[i] == '_')
+		i++;
+	else
+		return (1);
+	return (0);
+}
+
+int	add_var(t_env *env, char **str)
+{
+	char	*key;
+	char	*content;
+	int		i;
+
+	i = 1;
+	key = ft_strdup("");
+	(void)env;
+	while (str[i])
+	{
+		content = key;
+		key = ft_strjoin_wspace(key ,str[i]);
+		if (content)
+			free(content);
+		i++;
+	}
+	// printf("%s\n", key);
+	return (0);
+}
+
+int	builting(t_parc *parc, t_env *l_env)
 {
 	if (ft_strcmp(parc->content[0], "env") == 0
 		|| (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1] == NULL))
 		env(l_env, parc->content[0]);
-	// else if (ft_strcmp(parc->content[0], "export") == 0 && ft_strcmp(parc->content[1], "+"))
-		// add_var()
-	// lst_clear_env(&l_env);
+	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1] != NULL)
+	{
+		if (add_var(l_env, parc->content))
+			return (1);
+	}
+	return (0);
 }
-
-
