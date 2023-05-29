@@ -218,7 +218,7 @@ void	env(t_env *head , char *str)
 			printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
 			exp = exp->next;
 		}
-		// lst_clear_env(&exp);
+		lst_clear_env(&exp);
 	}
 }
 
