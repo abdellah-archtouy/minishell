@@ -9,19 +9,21 @@ void	lexer(char	**str, t_list	**ptr)
 	while (str[i])
 	{
 		if (ft_strcmp(str[i], "<") == 0)
-			ft_lstadd_back(ptr, ft_lstnew(str[i], RINPUT));
-		else if (ft_strcmp(str[i], ">") == 0 )
-			ft_lstadd_back(ptr, ft_lstnew(str[i], ROUTPUT));
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), RINPUT));
+		else if (ft_strcmp(str[i], ">") == 0)
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), ROUTPUT));
 		else if (ft_strcmp(str[i], ">>") == 0)
-			ft_lstadd_back(ptr, ft_lstnew(str[i], APAND));
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), APAND));
 		else if (ft_strcmp(str[i], "<<") == 0)
-			ft_lstadd_back(ptr, ft_lstnew(str[i], HEREDOC));
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), HEREDOC));
 		else if (ft_strcmp(str[i], "|") == 0)
-			ft_lstadd_back(ptr, ft_lstnew(str[i], PIPE));
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), PIPE));
 		else
-			ft_lstadd_back(ptr, ft_lstnew(str[i], WORD));
+			ft_lstadd_back(ptr, ft_lstnew(ft_strdup(str[i]), WORD));
+		free(str[i]);
 		i++;
 	}
+	free(str);
 }
 
 int	tokenizer(char *input, char ***str)
