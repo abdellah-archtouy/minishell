@@ -35,19 +35,9 @@ int	tokenizer(char *input, char ***str)
 	input = add_space(input);
 	if (syntaxe_quotes(input))
 		return (1);
-	while (input[i])
-	{
-		if (input[i] != '\"' && input[i + 1] == '\"')
-		{
-			input[i + 1] = input[i];
-			input[i] = '\"';
-		}
-		i++;
-	}
-	printf("%s\n", input);
-	// rev_char(input);
-	// *str = ft_split(input);
-	// free(input);
+	rev_char(input);
+	*str = ft_split(input);
+	free(input);
 	return (0);
 }
 

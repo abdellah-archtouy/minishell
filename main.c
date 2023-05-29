@@ -26,7 +26,7 @@ int	ft_history(char *str)
 	return (0);
 }
 
-int	ft_parcing(char *input, char ***str, t_parc	**parc)
+int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 {
 	int		i;
 	t_list	*head;
@@ -38,7 +38,7 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc)
 	if (tokenizer(input, str))
 		return (1);
 	lexer(*str, &head);
-	if (ft_parc(&head, parc))
+	if (ft_parc(&head, parc, env))
 		return (1);
 	return (0);
 }
@@ -65,60 +65,61 @@ void	ft_lstclear_par(t_parc **lst)
 		h = (*lst)->next;
 		while ((*lst)->content[i])
 			free((*lst)->content[i++]);
-		free ((*lst)->content);
+		free((*lst)->content);
 		free((*lst));
 		*lst = h;
 	}
 	*lst = NULL;
 }
 
-void fun()
+void	fun()
 {
 	system("leaks main");
 }
 
 int	main(int ac, char **av, char **env)
 {
-	// atexit(fun);
+	atexit(fun);
 	char	*input;
 	char	**str;
-	t_env	*envir;
 	t_parc	*parc;
+	t_env	*head;
 
 	(void)av;
 	(void)env;
 	str = NULL;
 	parc = NULL;
-	envir = NULL;
 	if (ac != 1)
 		exit(1);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	envi(env, &envir);
+	envi(env, &head);
 	while (1)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
 		{
-			free(input);
+			// if (parc)
+			// 	ft_lstclear_par(&parc);
+			// free(input);
 			exit(0);
 		}
 		if (ft_history(input))
+		{
 			add_history(input);
-		if (ft_parcing(input, &str, &parc) == 0 && parc != NULL)
-		{
-			if (builting(parc, envir))
-				printf ("command not found:\n");
+			if (ft_parcing(input, &str, &parc, &head) == 0 && parc)
+			{
+				printf("%s\n", parc->content[0]);
+				// printf("%s\n", parc->content[1]);
+				builting(parc, head);
+			}
+			else
+				printf("syntax error\n");
+			if (parc)
+				ft_lstclear_par(&parc);
 		}
-		else
-			printf("syntax error\n");
-		if (parc)
-		{
-			ft_lstclear_par(&parc);
-			parc = NULL;
-		}
-		// free(input);
+		free(input);
 	}
 	return (0);
 }

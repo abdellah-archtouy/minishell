@@ -1,11 +1,10 @@
 NAME = main
-NAMEB = checker
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c ft_strdup.c ft_strjoin.c libf2.c parcer.c export.c
-
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c ft_strjoin.c ft_strdup.c ft_split1.c
+ 
 OBJ = $(SRC:%.c=%.o)
 
-CFALGS =  -Wall -Wextra -Werror
+CFALGS =  -Wall -Wextra -Werror 
 
 USER := $(shell id -un)
 
@@ -15,22 +14,22 @@ LDFLAGS="-L/goinfre/$(USER)/homebrew/opt/readline/lib" -lreadline
 
 VAR= $(CPPFLAGS) $(LDFLAGS)
 
-CC = cc
+CC = cc 
 
 INCLUDE = mini.h
 
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCLUDE)
-	$(CC)  $(VAR) $(OBJ) -o $(NAME)
+	$(CC) $(VAR) $(OBJ) -o $(NAME)
 
 %.o : %.c $(INCLUDE)
-	$(CC)  $(CFALGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CFALGS) $(CPPFLAGS)  -c $< -o $@
 
 clean:
-	@rm -rf $(OBJ) $(OBJB)
+	rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME) $(NAMEB)
+	rm -rf $(NAME) 
 
 re: fclean all

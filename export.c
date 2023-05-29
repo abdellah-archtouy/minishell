@@ -1,5 +1,5 @@
 #include "mini.h"
-#include <string.h>
+// #include <string.h>
 
 t_env	*ft_lstnew_env(char *key, char *content)
 {
@@ -82,7 +82,7 @@ char* get_chars(char* string, int index)
 		if (string[j] == '=')
 			j++;
 		returned = malloc(size + 1);
-		while(string[j])
+		while (string[j])
 		{
 			returned[i] = string[j];
 			i++;
@@ -152,58 +152,66 @@ int	is_sorted(t_env *exp)
 	return (1);
 }
 
-t_env	*sorted_env(t_env *exp)
+t_env	*copy_list(t_env *env)
 {
-	t_env	*tmp = NULL;
-	t_env	*save;
 	char	*a;
 	char	*b;
+	t_env	*exp;
 
-	while (exp != NULL)
+	exp = NULL;
+	while (env != NULL)
 	{
-		a = ft_strdup(exp->key);
-		if (exp->content != NULL)
-			b = ft_strdup(exp->content);
-		else
-			b = NULL;
-		lstadd_back_env(&tmp, ft_lstnew_env(a, b));
-		exp = exp->next;
+		a = env->key;
+		b = env->content;
+		lstadd_back_env(&exp, ft_lstnew_env(a, b));
+		env = env->next;
 	}
-	save = tmp;
-	while (is_sorted(tmp) == 0)
-	{
-		save = tmp;
-		while (save->next != NULL)
-		{
-			if (ft_strcmp(save->key, save->next->key) > 0)
-			{
-				a = ft_strdup(save->key);
-				b = ft_strdup(save->content);
-				free(save->key);
-				free(save->content);
-				save->key = save->next->key;
-				save->content = save->next->content;
-				save->next->key = a;
-				save->next->content = b;
-			}
-			save = save->next;
-		}
-	}
-	return (tmp);
+	return (exp);
 }
 
-void	lst_clear_env(t_env **env)
+t_env	*sorted_env(t_env *exp)
+{
+	char	*a;
+	char	*b;
+	t_env	*tmp;
+	t_env	*save;
+
+	tmp = copy_list(exp);
+	// tmp = exp;
+	save = tmp;
+	while (is_sorted(save) == 0)
+	{
+		tmp = save;
+		while (tmp->next != NULL)
+		{
+			if ((ft_strcmp(tmp->key, tmp->next->key) > 0))
+			{
+				a = tmp->key;
+				b = tmp->content;
+				tmp->key = tmp->next->key;
+				tmp->content = tmp->next->content;
+				tmp->next->key = a;
+				tmp->next->content = b;
+			}
+			tmp = tmp->next;
+		}
+	}
+	return (save);
+}
+
+void	lst_clear_env(t_env *env)
 {
 	t_env	*head;
 
-	while (*env != NULL)
+	while (env != NULL)
 	{
-		head = (*env)->next;
-		free((*env)->key);
-		free((*env)->content);
-		free(*env);
-		*env = head;
+		head = env->next;
+		// free(env->key);
+		// free(env->content);
+		free(env);
+		env = head;
 	}
+	env = NULL;
 }
 
 void	env(t_env *head , char *str)
@@ -218,7 +226,7 @@ void	env(t_env *head , char *str)
 				printf("%s=%s\n", head->key, head->content);
 			head = head->next;
 		}
-	if (ft_strcmp(str, "export") == 0)
+	else if (ft_strcmp(str, "export") == 0)
 	{
 		exp = sorted_env(head);
 		while (exp != NULL)
@@ -229,10 +237,36 @@ void	env(t_env *head , char *str)
 				printf("declare -x %s\n", exp->key);
 			exp = exp->next;
 		}
-		lst_clear_env(&exp);
+		lst_clear_env(exp);
 	}
 }
 
+int	parsing(char *input)
+{
+	int i;
+
+	i = 0;
+	if ((input[i] >= 'A' && input[i] <= 'Z')
+	|| (input[i] >= 'a' && input[i] <= 'z')
+		|| input[i] == '_')
+		i++;
+	else
+		return (1);
+	return (0);
+}
+
+void	builting(t_parc *parc, t_env *l_env)
+{
+	if ((ft_strcmp(parc->content[0], "env") == 0
+		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
+		env(l_env, parc->content[0]);
+	// else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
+	// {
+	// 	printf ("hhhhhhhhhhh\n");
+	// 	// if (add_var(l_env, parc->content))
+	// 	// 	return (1);
+	// }
+}
 // int	is_existe(t_env *env, char *key)
 // {
 // 	while (env != NULL)
@@ -269,50 +303,24 @@ void	env(t_env *head , char *str)
 // 	return (0);
 // }
 
-int	parsing(char *input)
-{
-	int i;
+// int	add_var(t_env *env, char **str)
+// {
+// 	char	*key;
+// 	char	*content;
+// 	int		i;
 
-	i = 0;
-	if ((input[i] >= 'A' && input[i] <= 'Z')
-	|| (input[i] >= 'a' && input[i] <= 'z')
-		|| input[i] == '_')
-		i++;
-	else
-		return (1);
-	return (0);
-}
+// 	i = 1;
+// 	key = ft_strdup("");
+// 	(void)env;
+// 	while (str[i])
+// 	{
+// 		content = key;
+// 		printf("%s\n", key);
+// 		key = ft_strjoin_wspace(key ,str[i]);
+// 		if (content)
+// 			free(content);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
-int	add_var(t_env *env, char **str)
-{
-	char	*key;
-	char	*content;
-	int		i;
-
-	i = 1;
-	key = ft_strdup("");
-	(void)env;
-	while (str[i])
-	{
-		content = key;
-		key = ft_strjoin_wspace(key ,str[i]);
-		if (content)
-			free(content);
-		i++;
-	}
-	// printf("%s\n", key);
-	return (0);
-}
-
-int	builting(t_parc *parc, t_env *l_env)
-{
-	if (ft_strcmp(parc->content[0], "env") == 0
-		|| (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1] == NULL))
-		env(l_env, parc->content[0]);
-	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1] != NULL)
-	{
-		if (add_var(l_env, parc->content))
-			return (1);
-	}
-	return (0);
-}
