@@ -39,12 +39,6 @@ typedef struct s_parc
 	struct s_parc	*next;
 }				t_parc;
 
-
-typedef struct s_mini
-{
-	
-}				t_mini;
-
 t_parc	*ft_parcnew(char **content, int in, int out, t_env *env);
 t_parc	*ft_parclast(t_parc *lst);
 void	ft_parcadd_back(t_parc **lst, t_parc *new);
@@ -75,6 +69,8 @@ void	envi(char **env, t_env **head);
 void	export(t_env **envi, t_parc	*parc);
 void	builting(t_parc *parc, t_env *l_env);
 void	lst_clear_env(t_env *env);
+int		ft_lstsize_env(t_env *lst);
 char	*ft_strjoin_wspace(char *s1, char *s2);
+void	execute_cmd(t_parc *parcer);
 
 #endif

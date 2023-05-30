@@ -257,70 +257,18 @@ int	parsing(char *input)
 
 void	builting(t_parc *parc, t_env *l_env)
 {
-	if ((ft_strcmp(parc->content[0], "env") == 0
-		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
-		env(l_env, parc->content[0]);
-	// else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-	// {
-	// 	printf ("hhhhhhhhhhh\n");
-	// 	// if (add_var(l_env, parc->content))
-	// 	// 	return (1);
-	// }
+	if (parc->content[0])
+	{
+		if ((ft_strcmp(parc->content[0], "env") == 0
+			|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
+			env(l_env, parc->content[0]);
+		// else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
+		// {
+		// 	printf ("hhhhhhhhhhh\n");
+		// 	// if (add_var(l_env, parc->content))
+		// 	// 	return (1);
+		// }
+		else
+			execute_cmd(parc);
+	}
 }
-// int	is_existe(t_env *env, char *key)
-// {
-// 	while (env != NULL)
-// 	{
-// 		if (ft_strcmp(env->key, key) == 0)
-// 			return (0);
-// 		env = env->next;
-// 	}
-// 	return (1);
-// }
-
-// int	check_the_first_char(char *str)
-// {
-	// if ((str[0] >= 'A' && str[0] <= 'Z')
-	// 	|| (str[0] >= 'a' && str[0] <= 'z')
-	// 		|| str[0] == '_')
-	// 	return(0);
-	// else
-	// 	return (1);
-// }
-
-// int	add_var(t_env *env, char *str)
-// {
-// 	char	*key;
-// 	char	*content;
-// 	if (check_the_first_char(str))
-// 		return (1);
-// 	key = get_chars(str, 0);
-// 	content = get_chars(str, 1);
-// 	printf ("%s\n", key);
-// 	printf ("%s\n", content);
-// 	if (is_existe(env, key))
-// 		lstadd_back_env(&env, ft_lstnew_env(key, content));
-// 	return (0);
-// }
-
-// int	add_var(t_env *env, char **str)
-// {
-// 	char	*key;
-// 	char	*content;
-// 	int		i;
-
-// 	i = 1;
-// 	key = ft_strdup("");
-// 	(void)env;
-// 	while (str[i])
-// 	{
-// 		content = key;
-// 		printf("%s\n", key);
-// 		key = ft_strjoin_wspace(key ,str[i]);
-// 		if (content)
-// 			free(content);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-

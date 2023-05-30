@@ -127,7 +127,12 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-				builting(parc, envir);
+			{
+				if (parc->next == NULL)
+					builting(parc, envir);
+				// else
+				// 	execut multipel cmd
+			}
 			else
 				printf("syntax error\n");
 			if (parc != NULL)

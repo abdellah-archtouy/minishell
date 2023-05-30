@@ -15,6 +15,12 @@ int	ft_get_fd_out(char *str, int t)
 	return (fd);
 }
 
+void	*ft_close(void)
+{
+	close(0);
+	return (0);
+}
+
 int	ft_get_fd_doc(char *content)
 {
 	int		fd;
@@ -29,7 +35,7 @@ int	ft_get_fd_doc(char *content)
 	while (1)
 	{
 		input = readline(">");
-		if (ft_strcmp(input, content) == 0)
+		if (input == NULL || ft_strcmp(input, content) == 0)
 		{
 			free(input);
 			break ;
@@ -57,21 +63,29 @@ int	ft_parc_helper(t_list **ptr, int *in, int *out)
 	if ((*ptr)->type == RINPUT)
 	{
 		*in = ft_ft_get_fd_in((*ptr)->next->content);
+		free((*ptr)->content);
+		free((*ptr));
 		(*ptr) = (*ptr)->next;
 	}
 	else if ((*ptr)->type == ROUTPUT)
 	{
 		*out = ft_get_fd_out((*ptr)->next->content, 1);
+		free((*ptr)->content);
+		free((*ptr));
 		(*ptr) = (*ptr)->next;
 	}
 	else if ((*ptr)->type == APAND)
 	{
 		*out = ft_get_fd_out((*ptr)->next->content, 2);
+		free((*ptr)->content);
+		free((*ptr));
 		(*ptr) = (*ptr)->next;
 	}
 	else if ((*ptr)->type == HEREDOC)
 	{
 		*in = ft_get_fd_doc((*ptr)->next->content);
+		free((*ptr)->content);
+		free((*ptr));
 		(*ptr) = (*ptr)->next;
 	}
 	if (*in == -1 || *out == -1)

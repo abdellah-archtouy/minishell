@@ -1,6 +1,6 @@
 NAME = main
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c ft_strjoin.c ft_strdup.c ft_split1.c
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c ft_strjoin.c ft_strdup.c ft_split1.c execution.c
  
 OBJ = $(SRC:%.c=%.o)
 
