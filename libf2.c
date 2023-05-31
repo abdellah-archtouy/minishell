@@ -165,8 +165,6 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 		i++;
 	}
 	i = 0;
-	// while(content[i])
-	// 	printf("%s\n", content[i++]);
 	a->content = content;
 	i = 0;
 	a->in = in;

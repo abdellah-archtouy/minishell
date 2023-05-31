@@ -1,14 +1,24 @@
 #include "mini.h"
 
+t_globa glob;
+
 void	ft_readline(int sig)
 {
-	if (sig == SIGINT)
+	(void)sig;
+	if (g_flag == 1)
+	{
+		close(STDIN_FILENO);
+		g_flag = 0;
+	}
+	else if (waitpid(-1, NULL, WNOHANG) != 0)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	else
+		write(1, "\n", 1);
 }
 
 int	ft_history(char *str)
@@ -36,34 +46,15 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	head = NULL;
 	(void)str;
 	if (syntaxe_error(input))
-		return (1);
+		return (printf("syntax error\n"), 1);
 	if (tokenizer(input, &str1))
-		return (1);
+		return (printf("syntax error\n"), 1);
 	lexer(str1, &head);
 	if (ft_parc(&head, parc, env))
 		return (1);
 	return (0);
 }
-	// t_list	*pop = head;
-	// while (pop)
-	// {
-	// 	printf("str %s --- type %d\n", pop->content, pop->type);
-	// 	pop = pop->next;
-	// }
-	// printf("=============================================\n");
-	// int a = 0;
-	// while ((*parc))
-	// {
-	// 	a = 0;
-	// 	while ((*parc)->content[a])
-	// 	{
-	// 		printf("%s\n",(*parc)->content[a++]);
-	// 	}
-	// 		// printf("%d\n",(*parc)->out);
-	// 		// printf("%d\n",(*parc)->in);
-	// 	printf("==============\n");
-	// 	(*parc) = (*parc)->next;
-	// }
+
 
 void	ft_error(char *str)
 {
@@ -113,6 +104,7 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		exit(1);
+	g_flag = 0;
 	atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
@@ -133,8 +125,6 @@ int	main(int ac, char **av, char **env)
 				// else
 				// 	execut multipel cmd
 			}
-			else
-				printf("syntax error\n");
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);
@@ -145,20 +135,3 @@ int	main(int ac, char **av, char **env)
 	}
 	return (0);
 }
-			// t_parc *ppp=parc;
-			// while (ppp)
-			// {
-			// 	int i = 0;
-			// 	while (ppp->content[i])
-			// 	{
-			// 		printf("%s\n", ppp->content[i]);
-			// 		i++;
-			// 	}
-			// 	ppp = ppp->next;
-			// }
-
-			// while (head != NULL)
-			// {
-			// 	printf("%s=%s\n", head->key, head->content);
-			// 	head = head->next;
-			// }

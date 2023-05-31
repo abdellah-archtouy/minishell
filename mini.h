@@ -6,6 +6,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <signal.h>
+#include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -16,6 +17,14 @@
 # define HEREDOC 4
 # define WORD 5
 # define VARIA 6
+
+int	g_flag;
+
+typedef struct s_global
+{
+	int	dup;
+	int	flag;
+}		t_globa;
 
 typedef struct s_list
 {
@@ -71,6 +80,8 @@ void	builting(t_parc *parc, t_env *l_env);
 void	lst_clear_env(t_env *env);
 int		ft_lstsize_env(t_env *lst);
 char	*ft_strjoin_wspace(char *s1, char *s2);
-void	execute_cmd(t_parc *parcer);
+void	ft_readline(int sig);
+char	*ft_strchr(char *s, int c);
+void	execute_cmd(t_parc *parcer, t_env *env);
 
 #endif

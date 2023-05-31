@@ -269,6 +269,6 @@ void	builting(t_parc *parc, t_env *l_env)
 		// 	// 	return (1);
 		// }
 		else
-			execute_cmd(parc);
+			execute_cmd(parc, l_env);
 	}
 }
