@@ -105,7 +105,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		exit(1);
 	g_flag = 0;
-	atexit(my);
+	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;

@@ -57,8 +57,6 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 			dup2(parcer->out, 1);
 		if (parcer->in != 0)
 			dup2(parcer->in, 0);
-		printf("%d\n", parcer->in);
-		printf("%d\n", parcer->out);
 		path1 = ft_get_path(env);
 		while (path1[i])
 		{
@@ -74,7 +72,7 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 			return (printf("commende not found\n"), exit(127));
 		else if (execve(str, parcer->content, NULL) < 0)
 			perror("execve");
+		exit(0);
 	}
-	else
-		waitpid(id, &i, 0);
+	waitpid(id, &i, 0);
 }

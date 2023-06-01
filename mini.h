@@ -6,7 +6,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <signal.h>
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 

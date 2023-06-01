@@ -38,19 +38,21 @@ int	ft_get_fd_doc(char *content)
 		signal(SIGINT, ft_readline);
 		input = readline(">");
 		if (isatty(STDIN_FILENO) == 0)
-		{
 			dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
-		}
 		if (input == NULL || ft_strcmp(input, content) == 0)
 		{
 			free(input);
 			break ;
 		}
+		i = 0;
 		while (input[i])
 			write(fd, &input[i++], 1);
 		write(fd, "\n", 1);
 		free(input);
 	}
+	close(fd);
+	fd = open("/tmp/heredoc", O_RDONLY);
+	g_flag = 0;
 	return (fd);
 }
 
