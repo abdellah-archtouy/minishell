@@ -85,7 +85,6 @@ void	ft_lstclear_par(t_parc **lst)
 	*lst = NULL;
 }
 
-
 void	my()
 {
 	system("leaks main");

@@ -31,6 +31,31 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ptr);
 }
 
+char	*ft_strjoin_ex(char *s1, char *s2)
+{
+	int		i;
+	int		l;
+	char	*ptr;
+
+	i = 0;
+	l = 0;
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s2)
+		s2 = ft_strdup("");
+	ptr = (char *)malloc(1 * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (ptr == NULL)
+		return (NULL);
+	while (s1[i])
+		ptr[l++] = s1[i++];
+	i = 0;
+	while (s2[i])
+		ptr[l++] = s2[i++];
+	ptr[l] = '\0';
+	free(s1);
+	return (ptr);
+}
+
 char	*ft_strjoin_wspace(char *s1, char *s2)
 {
 	int		a;

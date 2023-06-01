@@ -83,5 +83,7 @@ char	*ft_strjoin_wspace(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	execute_cmd(t_parc *parcer, t_env *env);
+void	ft_error(char *str);
+char	*ft_strjoin_ex(char *s1, char *s2);
 
 #endif
