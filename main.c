@@ -94,7 +94,6 @@ void	ft_lstclear_par(t_parc **lst)
 	*lst = NULL;
 }
 
-
 void	my()
 {
 	system("leaks main");
@@ -112,7 +111,7 @@ int	main(int ac, char **av, char **env)
 	str = NULL;
 	parc = NULL;
 	if (ac != 1)
-		exit(1);
+		return (1);
 	atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
@@ -140,20 +139,3 @@ int	main(int ac, char **av, char **env)
 	}
 	return (0);
 }
-			// t_parc *ppp=parc;
-			// while (ppp)
-			// {
-			// 	int i = 0;
-			// 	while (ppp->content[i])
-			// 	{
-			// 		printf("%s\n", ppp->content[i]);
-			// 		i++;
-			// 	}
-			// 	ppp = ppp->next;
-			// }
-
-			// while (head != NULL)
-			// {
-			// 	printf("%s=%s\n", head->key, head->content);
-			// 	head = head->next;
-			// }

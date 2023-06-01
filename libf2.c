@@ -70,7 +70,7 @@ int	ft_get_$(char *ptr)
 	b = 0;
 	while (ptr[i])
 	{	
-		if(ptr[i] == '$')
+		if(ptr[i] == '$' && ptr[i + 1])
 			b++;
 		i++;
 	}
@@ -109,6 +109,7 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 		}
 		i++;
 	}
+	i = 0;
 	if (b != 0)
 	{
 		// free(str);
@@ -127,7 +128,6 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 			i++;
 		}
 	}
-	i = 0;
 	while(a-- > 0)
 	{
 		while (ptr[i])
@@ -151,6 +151,8 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 	t_parc	*a;
 	int		i;
 
+
+	(void)env;
 	i = 0;
 	a = (void *)malloc(sizeof(t_parc));
 	if (a == 0)
@@ -160,11 +162,12 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 	i = 0;
 	while (content[i])
 	{
+		puts(content[i]);
 		if (ft_get_$(content[i]) > 0)
 			content[i] = ft_check_variabel(content[i], env, ft_get_$(content[i]));
 		i++;
 	}
-	i = 0;
+	// i = 0;
 	// while(content[i])
 	// 	printf("%s\n", content[i++]);
 	a->content = content;

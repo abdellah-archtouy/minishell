@@ -76,5 +76,7 @@ void	export(t_env **envi, t_parc	*parc);
 void	builting(t_parc *parc, t_env *l_env);
 void	lst_clear_env(t_env *env);
 char	*ft_strjoin_wspace(char *s1, char *s2);
+void	ft_error(char *str);
+char	*ft_strjoin_ex(char *s1, char *s2);
 
 #endif

@@ -1,4 +1,4 @@
-// #include "mini.h"
+#include "mini.h"
 
 // // char	*add_space(char *input)
 // // {
@@ -284,7 +284,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int	main(int ac, char **av, char	**env)
+int	main()
 {
 	char *str = NULL;
 
