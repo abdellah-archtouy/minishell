@@ -48,7 +48,7 @@ char	*ft_replace_variyabel(char *content, t_env *env)
 	i = 0;
 	str = NULL;
 	if (ft_help_variabel(content, &i, &str, i))
-		return (free(str), ft_strdup(""));
+		return (free(str), ft_substr(content, i, ft_strlen(content) - i));
 	while (env)
 	{
 		if (ft_strcmp(env->key, str) == 0)
@@ -59,7 +59,7 @@ char	*ft_replace_variyabel(char *content, t_env *env)
 		}
 		env = env->next;
 	}
-	return (free(str), ft_strdup(""));
+	return (free(str), ft_substr(content, i, ft_strlen(content) - i));
 }
 
 int	ft_get_dolar(char *ptr)
