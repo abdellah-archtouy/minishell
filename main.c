@@ -47,7 +47,7 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	(void)str;
 	if (syntaxe_error(input))
 		return (printf("syntax error\n"), 1);
-	if (tokenizer(input, &str1))
+	if (tokenizer(input, &str1, env))
 		return (printf("syntax error\n"), 1);
 	lexer(str1, &head);
 	if (ft_parc(&head, parc, env))
@@ -122,7 +122,7 @@ int	main(int ac, char **av, char **env)
 				if (parc->next == NULL)
 					builting(parc, envir);
 				// else
-				// 	execut multipel cmd
+				// 	builting_m_cmd(parc, envir);
 			}
 			if (parc != NULL)
 			{

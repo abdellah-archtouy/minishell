@@ -53,7 +53,8 @@ char	*ft_replace_variyabel(char *content, t_env *env)
 	{
 		if (ft_strcmp(env->key, str) == 0)
 		{
-			str2 = ft_strjoin(ft_strdup(env->content), &content[ft_strlen(str)]);
+			str2 = ft_strjoin(ft_strdup(env->content),
+					&content[ft_strlen(str)]);
 			return (free(str), str2);
 		}
 		env = env->next;
@@ -61,16 +62,16 @@ char	*ft_replace_variyabel(char *content, t_env *env)
 	return (free(str), ft_strdup(""));
 }
 
-int	ft_get_$(char *ptr)
+int	ft_get_dolar(char *ptr)
 {
-	int i;
-	int b;
+	int	i;
+	int	b;
 
 	i = 0;
 	b = 0;
 	while (ptr[i])
 	{	
-		if(ptr[i] == '$' && ptr[i + 1])
+		if (ptr[i] == '$' && ptr[i + 1])
 			b++;
 		i++;
 	}
@@ -92,18 +93,18 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	str = ft_strdup("");
 	while (content[i])
 	{
-		if(content[i] == '\'')
+		if (content[i] == '\'')
 		{
 			i++;
 			if (i > 1)
-            {
-                free(str);
-                str = ft_substr(content, 0, i - 1);
-                if (ft_get_$(str) > 0)
-               		str = ft_check_variabel(str, env, ft_get_$(str));
-            }
+			{
+				free(str);
+				str = ft_substr(content, 0, i - 1);
+				if (ft_get_dolar(str) > 0)
+					str = ft_check_variabel(str, env, ft_get_dolar(str));
+			}
 			l = i -1;
-			while(content[i] && content[i] != '\'')
+			while (content[i] && content[i] != '\'')
 				i++;
 			b = i + 1;
 		}
@@ -112,11 +113,10 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	i = 0;
 	if (b != 0)
 	{
-		// free(str);
-		str1 =  ft_substr(content, l, b - l);
+		str1 = ft_substr(content, l, b - l);
 		str = ft_strjoin(str, str1);
 		free(str1);
-		ptr	= ft_split1(&content[b], '$');
+		ptr = ft_split1(&content[b], '$');
 	}
 	else
 	{
@@ -128,7 +128,7 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 			i++;
 		}
 	}
-	while(a-- > 0)
+	while (a-- > 0)
 	{
 		while (ptr[i])
 		{
@@ -157,18 +157,9 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 	a = (void *)malloc(sizeof(t_parc));
 	if (a == 0)
 		return (0);
-	while (content[i])
-		rev_char(content[i++]);
 	i = 0;
 	while (content[i])
-	{
-		if (ft_get_$(content[i]) > 0)
-			content[i] = ft_check_variabel(content[i], env, ft_get_$(content[i]));
-		i++;
-	}
-	// i = 0;
-	// while(content[i])
-	// 	printf("%s\n", content[i++]);
+		printf("%s\n", content[i++]);
 	a->content = content;
 	i = 0;
 	a->in = in;

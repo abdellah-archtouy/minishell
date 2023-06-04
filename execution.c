@@ -1,35 +1,6 @@
 
 #include "mini.h"
 
-char	*ft_strjoin_path(char *s1, char *s2)
-{
-	int		a;
-	int		i;
-	int		l;
-	char	*ptr;
-
-	i = 0;
-	l = 0;
-	if (s1 == 0 || s2 == 0)
-		return (0);
-	a = ft_strlen(s1) + ft_strlen(s2) + 2;
-	ptr = (char *)malloc(sizeof(char) * a);
-	if (ptr == NULL)
-		return (NULL);
-	while (s1[i])
-	{
-		ptr[l++] = s1[i++];
-	}
-	ptr[l++] = '/';
-	i = 0;
-	while (s2[i])
-	{
-		ptr[l++] = s2[i++];
-	}
-	ptr[l] = '\0';
-	return (ptr);
-}
-
 char	**ft_get_path(t_env *env)
 {
 	while (env)
@@ -69,10 +40,20 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 			i++;
 		}
 		if (str == NULL)
-			return (printf("commende not found\n"), exit(127));
+			return (printf("commende not found : %s\n",
+					parcer->content[0]), exit(127));
 		else if (execve(str, parcer->content, NULL) < 0)
 			perror("execve");
 		exit(0);
 	}
 	waitpid(id, &i, 0);
 }
+
+// void	builting_m_cmd(t_parc *parc, t_env 	*env)
+// {
+// 	while (parc)
+// 	{
+		
+// 		parc = parc->next;
+// 	}
+// }
