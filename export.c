@@ -415,10 +415,15 @@ void	ft_error(char *str)
 void	echo(char **str)
 {
 	int	i;
+	int	j;
 
 	i = 1;
-	if (str[i] && ft_strcmp(str[i], "-n") == 0)
+	j = 1;
+	while (str[i][j] && str[i] == '-')
+	{
+
 		i++;
+	}
 	while (str[i])
 	{
 		printf("%s", str[i++]);
@@ -439,7 +444,7 @@ void	cd(char **str)
 
 void	builting(t_parc *parc, t_env *l_env)
 {
-	if (l_env == NULL)
+	if (l_env == NULL || parc->content[0] == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)

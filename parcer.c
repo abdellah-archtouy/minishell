@@ -127,7 +127,6 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 			(*ptr) = (*ptr)->next;
 		}
 		str1 = ft_split(str);
-		// puts(str);
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
 		free(str);
 		if ((*ptr) != NULL)

@@ -26,19 +26,32 @@ void	lexer(char	**str, t_list	**ptr)
 	free(str);
 }
 
-int	tokenizer(char *input, char ***str)
+int	tokenizer(char *input, char ***str, t_env **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	**content;
 
 	i = 0;
 	j = 0;
-	(void)str;
 	input = add_space(input);
 	if (syntaxe_quotes(input))
 		return (1);
 	rev_char(input);
 	*str = ft_split(input);
+	content = *str;
+	while (content[i])
+		rev_char(content[i++]);
+	i = 0;
+	while (content[i])
+	{
+		if (ft_get_dolar(content[i]) > 0)
+			content[i] = ft_check_variabel(content[i],
+					*env, ft_get_dolar(content[i]));
+		if (content[i][0] == '\'')
+			content[i] = ft_substr(content[i], 1, ft_strlen(content[i]) - 2);
+		i++;
+	}
 	free(input);
 	return (0);
 }
