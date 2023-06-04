@@ -243,7 +243,7 @@ int	node_existences(t_env *env, char *key)
 {
 	while (env != NULL)
 	{
-		if (ft_strcmp(env->key, key/*, ft_strlen(env->key)*/) == 0)
+		if (ft_strncmp(env->key, key, ft_strlen(env->key)) == 0)
 			return (0);
 		env = env->next;
 	}
@@ -313,9 +313,13 @@ void	add_var(t_env *env, char **str)
 	{
 		key = get_chars(str[i], 0);
 		content = get_chars(str[i], 1);
-		if (node_existences(env, key) && ft_strchr(key, '+') == 0)
+		if (node_existences(env, key))
+		{
+			if (ft_strchr(key, '+'))
+				key[ft_strlen(key) - 1] = '\0';
 			lstadd_back_env(&env, ft_lstnew_env(key, content));
-		else if (node_existences(env, key) == 0 || ft_strchr(key, '+'))
+		}
+		else if (node_existences(env, key) == 0)
 		{
 			if (ft_strchr(key, '+') == 0)
 			{
@@ -370,7 +374,7 @@ void	unset(t_env *env, char **str)
 		i++;
 	}
 	i = 1;
-	while (str[i])
+	while (str[i] && node_existences(env, str[i]) == 0)
 	{
 		head = env;
 		head0 = env;
@@ -399,8 +403,44 @@ void	unset(t_env *env, char **str)
 	}
 }
 
+void	ft_error(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
+}
+
+void	echo(char **str)
+{
+	int	i;
+
+	i = 1;
+	if (str[i] && ft_strcmp(str[i], "-n") == 0)
+		i++;
+	while (str[i])
+	{
+		printf("%s", str[i++]);
+		if (str[i] != NULL)
+			printf(" ");
+	}
+	if (ft_strcmp(str[1] , "-n"))
+		printf("\n");
+}
+
+void	cd(char **str)
+{
+	if (str[2] != NULL)
+		return ;
+	if (chdir(str[1]) == -1)
+		return ;
+}
+
 void	builting(t_parc *parc, t_env *l_env)
 {
+	if (l_env == NULL)
+		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
 		env(l_env, parc->content[0]);
@@ -408,4 +448,10 @@ void	builting(t_parc *parc, t_env *l_env)
 		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
+	else if (ft_strcmp(parc->content[0], "echo") == 0)
+		echo(parc->content);
+	else if (ft_strcmp(parc->content[0], "cd") == 0)
+		cd(parc->content);
+	else
+		execute_cmd(parc, l_env);
 }

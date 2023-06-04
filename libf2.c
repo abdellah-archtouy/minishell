@@ -70,7 +70,7 @@ int	ft_get_$(char *ptr)
 	b = 0;
 	while (ptr[i])
 	{	
-		if(ptr[i] == '$' && ptr[i + 1])
+		if(ptr[i] == '$' && ptr[i + 1] && ptr[i + 1] != '\"' && ptr[i + 1] != '\'')
 			b++;
 		i++;
 	}
@@ -146,34 +146,35 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	return (str);
 }
 
-t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
+t_parc    *ft_parcnew(char **content, int in, int out, t_env *env)
 {
-	t_parc	*a;
-	int		i;
+    t_parc    *a;
+    int        i;
 
 
-	(void)env;
-	i = 0;
-	a = (void *)malloc(sizeof(t_parc));
-	if (a == 0)
-		return (0);
-	while (content[i])
-		rev_char(content[i++]);
-	i = 0;
-	while (content[i])
-	{
-		puts(content[i]);
-		if (ft_get_$(content[i]) > 0)
-			content[i] = ft_check_variabel(content[i], env, ft_get_$(content[i]));
-		i++;
-	}
-	// i = 0;
-	// while(content[i])
-	// 	printf("%s\n", content[i++]);
-	a->content = content;
-	i = 0;
-	a->in = in;
-	a->out = out;
-	a->next = 0;
-	return (a);
+    (void)env;
+    i = 0;
+    a = (void *)malloc(sizeof(t_parc));
+    if (a == 0)
+        return (0);
+    while (content[i])
+        rev_char(content[i++]);
+    i = 0;
+    while (content[i])
+    {
+        if (ft_get_$(content[i]) > 0)
+            content[i] = ft_check_variabel(content[i], env, ft_get_$(content[i]));
+        if (content[i][0] == '\'')
+            content[i] = ft_substr(content[i], 1, ft_strlen(content[i]) - 2);
+        i++;
+    }
+    // i = 0;
+    // while(content[i])
+    //     printf("%s\n", content[i++]);
+    a->content = content;
+    i = 0;
+    a->in = in;
+    a->out = out;
+    a->next = 0;
+    return (a);
 }
