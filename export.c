@@ -284,11 +284,12 @@ int	parsing(char **input)
 		j = 0;
 		if (equal_num(input[i]))
 			return (1);
+		if (ft_isalpha(input[i][0]) == 0)
+			return (1);
 		while (input[i][j] && input[i][j] != '=')
 		{
-			if ((input[i][j] >= 'A' && input[i][j] <= 'Z')
-			|| (input[i][j] >= 'a' && input[i][j] <= 'z')
-				|| input[i][j] == '_' || input[i][j] == '+')
+			if (ft_isalpha(input[i][j]) || input[i][j] == '+' 
+					|| (input[i][j] >= '0' && input[i][j] <= '9'))
 				j++;
 			else
 				return (1);
@@ -319,7 +320,7 @@ void	add_var(t_env *env, char **str)
 				key[ft_strlen(key) - 1] = '\0';
 			lstadd_back_env(&env, ft_lstnew_env(key, content));
 		}
-		else if (node_existences(env, key) == 0)
+		else if (node_existences(env, key) == 0 && content != NULL)
 		{
 			if (ft_strchr(key, '+') == 0)
 			{
@@ -415,15 +416,10 @@ void	ft_error(char *str)
 void	echo(char **str)
 {
 	int	i;
-	int	j;
 
 	i = 1;
-	j = 1;
-	while (str[i][j] && str[i] == '-')
-	{
-
+	if (str[i] && ft_strcmp(str[i], "-n") == 0)
 		i++;
-	}
 	while (str[i])
 	{
 		printf("%s", str[i++]);
@@ -453,7 +449,7 @@ void	builting(t_parc *parc, t_env *l_env)
 		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
-	else if (ft_strcmp(parc->content[0], "echo") == 0)
+	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
 		echo(parc->content);
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
 		cd(parc->content);

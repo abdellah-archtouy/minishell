@@ -36,13 +36,27 @@ int	ft_history(char *str)
 	return (0);
 }
 
+void    ft_joine_word(t_list *tmp)
+{
+    char    *str;
+
+    while (tmp)
+    {
+        if (tmp->type == WORD)
+        {
+            str = tmp->content;
+            tmp->content = quotes_remover(tmp->content);
+            free(str);
+        }
+        tmp = tmp->next;
+    }
+}
+
 int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 {
-	int		i;
 	t_list	*head;
 	char	**str1;
 
-	i = 0;
 	head = NULL;
 	(void)str;
 	if (syntaxe_error(input))
@@ -50,9 +64,9 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	if (tokenizer(input, &str1, env))
 		return (printf("syntax error\n"), 1);
 	lexer(str1, &head);
+	ft_joine_word(head);
 	if (ft_parc(&head, parc, env))
 		return (1);
-	d_s_q_remover(*parc);
 	return (0);
 }
 
@@ -110,6 +124,7 @@ int	main(int ac, char **av, char **env)
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
 			{
+				// printf("%s\n", parc->content[1]);
 				if (parc->next == NULL)
 					builting(parc, envir);
 				// else

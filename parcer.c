@@ -105,9 +105,11 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
 	char	*str;
 	char	**str1;
+	int		i;
 	int		in;
 	int		out;
 
+	i = 0;
 	while ((*ptr) != NULL)
 	{
 		in = 0;
@@ -117,6 +119,7 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		{
 			if ((*ptr)->type == WORD)
 			{
+				rev_char((*ptr)->content);
 				str = ft_strjoin(str, (*ptr)->content);
 				str = ft_strjoin(str, " ");
 			}
@@ -127,6 +130,8 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 			(*ptr) = (*ptr)->next;
 		}
 		str1 = ft_split(str);
+		while (str1[i])
+			rev_char(str1[i++]);
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
 		free(str);
 		if ((*ptr) != NULL)

@@ -88,11 +88,13 @@ char	*ft_strjoin_ex(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	execute_cmd(t_parc *parcer, t_env *env);
-void	d_s_q_remover(t_parc   *parc);
+// void	d_s_q_remover(t_list   **head);
+char    *quotes_remover(char *input);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	execute_cmd(t_parc *parcer, t_env *env);
 void	ft_error(char *str);
 char	*ft_strjoin_ex(char *s1, char *s2);
+int		ft_isalpha(int c);
 
 #endif
