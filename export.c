@@ -399,7 +399,7 @@ void	unset(t_env *env, char **str)
 	}
 }
 
-void	builting(t_parc *parc, t_env *l_env)
+void	builting(t_parc *parc, t_env *l_env, char	**tenv)
 {
 	if (parc->content[0])
 	{
@@ -412,6 +412,23 @@ void	builting(t_parc *parc, t_env *l_env)
 		else if (ft_strcmp(parc->content[0], "unset") == 0)
 			unset(l_env, parc->content);
 		else
-			execute_cmd(parc, l_env);
+			execute_cmd(parc, l_env, tenv);
+	}
+}
+
+void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
+{
+	if (parc->content[0])
+	{
+		if ((ft_strcmp(parc->content[0], "env") == 0
+				|| ft_strcmp(parc->content[0], "export") == 0)
+			&& parc->content[1] == NULL)
+			env(l_env, parc->content[0]);
+		else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
+			add_var(l_env, parc->content);
+		else if (ft_strcmp(parc->content[0], "unset") == 0)
+			unset(l_env, parc->content);
+		else
+			execute_m_cmd(parc, l_env, tenv);
 	}
 }
