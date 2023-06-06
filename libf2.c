@@ -157,9 +157,6 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 	a = (void *)malloc(sizeof(t_parc));
 	if (a == 0)
 		return (0);
-	// i = 0;
-	// while (content[i])
-	// 	printf("%s\n", content[i++]);
 	a->content = content;
 	i = 0;
 	a->in = in;

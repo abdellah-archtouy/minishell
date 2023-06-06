@@ -97,33 +97,39 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 	{
 		builting(parc, env, tenv);
 	}
-	while (parc)
+	else
 	{
-		old = fd[0];
-		if (pipe(fd) == -1)
-			return (printf("error here\n"), exit(1));
-		pid = fork();
-		g_flag = 1;
-		if (pid == 0)
+		while (parc)
 		{
-			close(fd[0]);
-			if (old != -1)
-				dup2(old, 0);
-			if (parc->next)
-				dup2(fd[1], 1);
+			old = fd[0];
+			if (pipe(fd) == -1)
+				return (printf("error here\n"), exit(1));
+			pid = fork();
+			g_flag = 1;
+			if (pid == 0)
+			{
+				close(fd[0]);
+				if (old != -1)
+					dup2(old, 0);
+				if (parc->next)
+					dup2(fd[1], 1);
+				close(fd[1]);
+				if (parc->in > 2)
+					dup2(parc->in, 0);
+				if (parc->out > 2)
+					dup2(parc->out, 1);
+				builting1(parc, env, tenv);
+				exit(0);
+			}
+			g_flag = 0;
+			if (!parc->next)
+				waitpid(pid, &old, 0);
+			parc = parc->next;
 			close(fd[1]);
-			if (parc->in > 2)
-				dup2(parc->in, 0);
-			if (parc->out > 2)
-				dup2(parc->out, 1);
-			builting1(parc, env, tenv);
+			close(old);
 		}
-		g_flag = 0;
-		parc = parc->next;
-		close(fd[1]);
-		close(old);
+		close(fd[0]);
+		while (wait(NULL) != -1)
+			;
 	}
-	close(fd[0]);
-	while (wait(NULL) != -1)
-		;
 }
