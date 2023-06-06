@@ -89,25 +89,41 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 {
 	int	fd[2];
 	int	pid;
+	int	old;
 
-	while (parc && parc->next)
+	fd[0] = -1;
+	fd[1] = -1;
+	if (!parc->next)
 	{
+		builting(parc, env, tenv);
+	}
+	while (parc)
+	{
+		old = fd[0];
 		if (pipe(fd) == -1)
 			return (printf("error here\n"), exit(1));
 		pid = fork();
 		g_flag = 1;
 		if (pid == 0)
 		{
-			// cloce(fd[1]);
-			dup2(fd[1], 1);
+			close(fd[0]);
+			if (old != -1)
+				dup2(old, 0);
+			if (parc->next)
+				dup2(fd[1], 1);
+			close(fd[1]);
+			if (parc->in > 2)
+				dup2(parc->in, 0);
+			if (parc->out > 2)
+				dup2(parc->out, 1);
 			builting1(parc, env, tenv);
 		}
 		g_flag = 0;
 		parc = parc->next;
+		close(fd[1]);
+		close(old);
 	}
-	if (parc)
-	{
-		builting(parc, env, tenv);
-	}
-	while (wait(NULL) != -1);
+	close(fd[0]);
+	while (wait(NULL) != -1)
+		;
 }
