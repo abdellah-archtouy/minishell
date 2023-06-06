@@ -122,13 +122,12 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 				exit(0);
 			}
 			g_flag = 0;
-			if (!parc->next)
-				waitpid(pid, &old, 0);
 			parc = parc->next;
 			close(fd[1]);
 			close(old);
 		}
-		// close(fd[0]);
+		close(fd[0]);
+		waitpid(pid, NULL, 0);
 		while (wait(NULL) != -1)
 			;
 	}
