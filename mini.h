@@ -89,12 +89,12 @@ void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	ft_readline(int sig);
 void	builting1(t_parc *parc, t_env	*env, char	**tenv);
-char	*ft_strchr(char *s, int c);
 void	execute_m_cmd(t_parc *parcer, t_env *env, char	**tenv);
 char	*quotes_remover(char *input);
 void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv);
 void	ft_error(char *str);
 char	*ft_strjoin_ex(char *s1, char *s2);
 int		ft_isalpha(int c);
+void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv);
 
 #endif
