@@ -128,7 +128,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			close(fd[1]);
 			close(old);
 		}
-		close(fd[0]);
+		// close(fd[0]);
 		while (wait(NULL) != -1)
 			;
 	}

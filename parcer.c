@@ -156,9 +156,9 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 	int		in;
 	int		out;
 
-	i = 0;
 	while ((*ptr) != NULL)
 	{
+		i = 0;
 		in = 0;
 		out = 1;
 		str = ft_strdup("");
