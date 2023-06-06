@@ -413,21 +413,51 @@ void	ft_error(char *str)
 		write(2, &str[i++], 1);
 }
 
-void	echo(char **str)
+int	fun(char *input, char c)
 {
 	int	i;
 
-	i = 1;
-	if (str[i] && ft_strcmp(str[i], "-n") == 0)
-		i++;
-	while (str[i])
+	i = 0;
+	while (input[i])
 	{
-		printf("%s", str[i++]);
-		if (str[i] != NULL)
-			printf(" ");
+		if (input[i] != c)
+			return (1);
+		i++;
 	}
-	if (ft_strcmp(str[1] , "-n"))
-		printf("\n");
+	return (0);
+}
+
+void    echo(char **str)
+{
+    int    i;
+    int    j;
+    int r;
+
+    i = 1;
+    j = 0;
+    r = 0;
+    while (str[i])
+    {
+        j = 0;
+        if (str[i][j] == '-')
+        {
+            j++;
+            if (fun(&str[i][j], 'n'))
+                break ;
+            r++;
+        }
+        else
+            break ;
+        i++;
+    }
+    while (str[i])
+    {
+        printf("%s", str[i++]);
+        if (str[i] != NULL)
+            printf(" ");
+    }
+    if (r == 0)
+        printf("\n");
 }
 
 void	cd(char **str, t_env *env)
@@ -450,11 +480,12 @@ void	cd(char **str, t_env *env)
 void	pwd(char **str)
 {
 	char	buff[1024];
-	int		i;
 
-	i = 0;
 	if (str[1] != NULL)
-		return (write(2, "pwd: too many arguments\n", 24), (void)i);
+	{
+		write(2, "pwd: too many arguments\n", 24);
+		return ;
+	}
 	getcwd(buff, 1024);
 	printf("%s\n", buff);
 }
