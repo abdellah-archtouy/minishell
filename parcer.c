@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 int	ft_get_fd_out(char *str, int t)
@@ -21,34 +20,65 @@ void	ft_close(int i)
 	close(i);
 }
 
+char	*ft_get_doc(void)
+{
+	char	*str;
+	char	tmp[1];
+	int		i;
+
+	i = 0;
+	str = ft_strdup("/tmp/her_doc");
+	while (1)
+	{
+		if (access(str, F_OK) != 0)
+			break ;
+		else
+		{
+			tmp[0] = 'a' + i;
+			str = ft_strjoin(str, tmp);
+		}
+		i++;
+	}
+	return (str);
+}
+
+int	ft_open_doc(char *input, int fd, char *content)
+{
+	int	i;
+
+	i = 0;
+	signal(SIGINT, ft_readline);
+	input = readline(">");
+	if (isatty(STDIN_FILENO) == 0)
+		dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
+	if (input == NULL || ft_strcmp(input, content) == 0)
+	{
+		free(input);
+		return (1);
+	}
+	i = 0;
+	while (input[i])
+		write(fd, &input[i++], 1);
+	write(fd, "\n", 1);
+	free(input);
+	return (0);
+}
+
 int	ft_get_fd_doc(char *content)
 {
 	int		fd;
-	int		i;
 	char	*input;
 
 	fd = 0;
-	i = 0;
+	input = NULL;
 	fd = open("/tmp/heredoc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("open"), fd);
 	g_flag = 1;
 	while (1)
 	{
-		signal(SIGINT, ft_readline);
-		input = readline(">");
-		if (isatty(STDIN_FILENO) == 0)
-			dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
-		if (input == NULL || ft_strcmp(input, content) == 0)
-		{
-			free(input);
+		if (ft_open_doc(input, fd, content) == 1)
 			break ;
-		}
-		i = 0;
-		while (input[i])
-			write(fd, &input[i++], 1);
-		write(fd, "\n", 1);
-		free(input);
 	}
 	close(fd);
 	fd = open("/tmp/heredoc", O_RDONLY);

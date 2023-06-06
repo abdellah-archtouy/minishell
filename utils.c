@@ -3,7 +3,7 @@
 
 int	is_special(char c)
 {
-	return(c == '|' || c == '>' || c == '<');
+	return (c == '|' || c == '>' || c == '<');
 }
 
 char	*add_space(char *input)
@@ -42,11 +42,10 @@ char	*add_space(char *input)
 		i++;
 	}
 	str[j] = 0;
-	// free(input);
 	return (str);
 }
 
-int strlen_q(char *input)
+int	strlen_q(char *input)
 {
 	int i = 0;
 	int j = 0;

@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 static int	word_count(const char *s)

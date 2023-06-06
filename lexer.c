@@ -29,11 +29,9 @@ void	lexer(char	**str, t_list	**ptr)
 int	tokenizer(char *input, char ***str, t_env **env)
 {
 	int		i;
-	int		j;
 	char	**content;
 
 	i = 0;
-	j = 0;
 	input = add_space(input);
 	if (syntaxe_quotes(input))
 		return (1);

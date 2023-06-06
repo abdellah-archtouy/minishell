@@ -70,7 +70,7 @@ int	rout_syntaxe(char *input)
 	return (0);
 }
 
-int	start_and_end(char *input) // ( )
+int	start_and_end(char *input)
 {
 	int	i;
 	int	j;

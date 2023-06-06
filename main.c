@@ -1,7 +1,5 @@
 #include "mini.h"
 
-t_globa glob;
-
 void	ft_readline(int sig)
 {
 	(void)sig;
@@ -66,7 +64,6 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	return (0);
 }
 
-
 void	ft_error(char *str)
 {
 	int	i;
@@ -124,17 +121,12 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
-			exit(0);
+			return (printf("exit"), 0);
 		if (ft_history(input))
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-			{
-				// if (parc->next == NULL)
-				// 	builting(parc, envir, env);
-				// else
-					builting_m_cmd(parc, envir, env);
-			}
+				builting_m_cmd(parc, envir, env);
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);
