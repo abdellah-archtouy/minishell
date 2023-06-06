@@ -101,6 +101,23 @@ int	ft_parc_helper(t_list **ptr, int *in, int *out)
 	return (0);
 }
 
+void	rev_char1(char *input, int r)
+{
+	int	i;
+
+	i = 0;
+	if (r == 0)
+		while (input[i])
+		{
+			if (input[i] < 0)
+				input[i] *= -1;
+			i++;
+		}
+	if (r == 1)
+		while (input[i])
+			input[i++] *= -1;
+}
+
 int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
 	char	*str;
@@ -119,7 +136,7 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		{
 			if ((*ptr)->type == WORD)
 			{
-				rev_char((*ptr)->content);
+				rev_char1((*ptr)->content, 1);
 				str = ft_strjoin(str, (*ptr)->content);
 				str = ft_strjoin(str, " ");
 			}
@@ -131,7 +148,7 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		}
 		str1 = ft_split(str);
 		while (str1[i])
-			rev_char(str1[i++]);
+			rev_char1(str1[i++], 0);
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
 		free(str);
 		if ((*ptr) != NULL)

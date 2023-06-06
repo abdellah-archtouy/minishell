@@ -430,15 +430,36 @@ void	echo(char **str)
 		printf("\n");
 }
 
-void	cd(char **str)
+void	cd(char **str, t_env *env)
 {
-	if (str[2] != NULL)
-		return ;
+	while (env)
+	{
+		if (ft_strcmp(env->key, "HOME") == 0)
+			break ;
+		env = env->next;
+	}
+	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
+	{
+		if (chdir(env->content) == -1)
+			return ;
+	}
 	if (chdir(str[1]) == -1)
 		return ;
 }
 
-void	builting(t_parc *parc, t_env *l_env)
+void	pwd(char **str)
+{
+	char	buff[1024];
+	int		i;
+
+	i = 0;
+	if (str[1] != NULL)
+		return (write(2, "pwd: too many arguments\n", 24), (void)i);
+	getcwd(buff, 1024);
+	printf("%s\n", buff);
+}
+
+void	builting(t_parc *parc, t_env *l_env, char	**tenv)
 {
 	if (l_env == NULL || parc->content[0] == NULL)
 		return ;
@@ -452,7 +473,28 @@ void	builting(t_parc *parc, t_env *l_env)
 	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
 		echo(parc->content);
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
-		cd(parc->content);
+		cd(parc->content, l_env);
+	else if (ft_strcmp(parc->content[0], "pwd") == 0)
+		pwd(parc->content);
+	else if (ft_strcmp(parc->content[0], "exit") == 0)
+		exit(0);
 	else
-		execute_cmd(parc, l_env);
+		execute_cmd(parc, l_env, tenv);
+}
+
+void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
+{
+	if (parc->content[0])
+	{
+		if ((ft_strcmp(parc->content[0], "env") == 0
+				|| ft_strcmp(parc->content[0], "export") == 0)
+			&& parc->content[1] == NULL)
+			env(l_env, parc->content[0]);
+		else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
+			add_var(l_env, parc->content);
+		else if (ft_strcmp(parc->content[0], "unset") == 0)
+			unset(l_env, parc->content);
+		else
+			execute_m_cmd(parc, l_env, tenv);
+	}
 }

@@ -36,20 +36,14 @@ int	ft_history(char *str)
 	return (0);
 }
 
-void    ft_joine_word(t_list *tmp)
+void	ft_joine_word(t_list *tmp)
 {
-    char    *str;
-
-    while (tmp)
-    {
-        if (tmp->type == WORD)
-        {
-            str = tmp->content;
-            tmp->content = quotes_remover(tmp->content);
-            free(str);
-        }
-        tmp = tmp->next;
-    }
+	while (tmp)
+	{
+		if (tmp->type == WORD)
+			tmp->content = quotes_remover(tmp->content);
+		tmp = tmp->next;
+	}
 }
 
 int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
@@ -124,11 +118,10 @@ int	main(int ac, char **av, char **env)
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
 			{
-				// printf("%s\n", parc->content[1]);
-				if (parc->next == NULL)
-					builting(parc, envir);
+				// if (parc->next == NULL)
+					builting(parc, envir, env);
 				// else
-					// execut multipel cmd
+					// builting_m_cmd(parc, envir, env);
 			}
 			if (parc != NULL)
 			{
