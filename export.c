@@ -243,7 +243,7 @@ int	node_existences(t_env *env, char *key)
 {
 	while (env != NULL)
 	{
-		if (ft_strcmp(env->key, key/*, ft_strlen(env->key)*/) == 0)
+		if (ft_strncmp(env->key, key, ft_strlen(env->key)) == 0)
 			return (0);
 		env = env->next;
 	}
@@ -284,11 +284,12 @@ int	parsing(char **input)
 		j = 0;
 		if (equal_num(input[i]))
 			return (1);
+		if (ft_isalpha(input[i][0]) == 0)
+			return (1);
 		while (input[i][j] && input[i][j] != '=')
 		{
-			if ((input[i][j] >= 'A' && input[i][j] <= 'Z')
-			|| (input[i][j] >= 'a' && input[i][j] <= 'z')
-				|| input[i][j] == '_' || input[i][j] == '+')
+			if (ft_isalpha(input[i][j]) || input[i][j] == '+' 
+					|| (input[i][j] >= '0' && input[i][j] <= '9'))
 				j++;
 			else
 				return (1);
@@ -313,9 +314,13 @@ void	add_var(t_env *env, char **str)
 	{
 		key = get_chars(str[i], 0);
 		content = get_chars(str[i], 1);
-		if (node_existences(env, key) && ft_strchr(key, '+') == 0)
+		if (node_existences(env, key))
+		{
+			if (ft_strchr(key, '+'))
+				key[ft_strlen(key) - 1] = '\0';
 			lstadd_back_env(&env, ft_lstnew_env(key, content));
-		else if (node_existences(env, key) == 0 || ft_strchr(key, '+'))
+		}
+		else if (node_existences(env, key) == 0 && content != NULL)
 		{
 			if (ft_strchr(key, '+') == 0)
 			{
@@ -370,7 +375,7 @@ void	unset(t_env *env, char **str)
 		i++;
 	}
 	i = 1;
-	while (str[i])
+	while (str[i] && node_existences(env, str[i]) == 0)
 	{
 		head = env;
 		head0 = env;
@@ -399,21 +404,113 @@ void	unset(t_env *env, char **str)
 	}
 }
 
+void	ft_error(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
+}
+
+int	fun(char *input, char c)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] != c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void    echo(char **str)
+{
+    int    i;
+    int    j;
+    int r;
+
+    i = 1;
+    j = 0;
+    r = 0;
+    while (str[i])
+    {
+        j = 0;
+        if (str[i][j] == '-')
+        {
+            j++;
+            if (fun(&str[i][j], 'n'))
+                break ;
+            r++;
+        }
+        else
+            break ;
+        i++;
+    }
+    while (str[i])
+    {
+        printf("%s", str[i++]);
+        if (str[i] != NULL)
+            printf(" ");
+    }
+    if (r == 0)
+        printf("\n");
+}
+
+void	cd(char **str, t_env *env)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, "HOME") == 0)
+			break ;
+		env = env->next;
+	}
+	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
+	{
+		if (chdir(env->content) == -1)
+			return ;
+	}
+	if (chdir(str[1]) == -1)
+		return ;
+}
+
+void	pwd(char **str)
+{
+	char	buff[1024];
+
+	if (str[1] != NULL)
+	{
+		write(2, "pwd: too many arguments\n", 24);
+		return ;
+	}
+	getcwd(buff, 1024);
+	printf("%s\n", buff);
+}
+
 void	builting(t_parc *parc, t_env *l_env, char	**tenv)
 {
-	if (parc->content[0])
-	{
-		if ((ft_strcmp(parc->content[0], "env") == 0
-				|| ft_strcmp(parc->content[0], "export") == 0)
-			&& parc->content[1] == NULL)
-			env(l_env, parc->content[0]);
-		else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-			add_var(l_env, parc->content);
-		else if (ft_strcmp(parc->content[0], "unset") == 0)
-			unset(l_env, parc->content);
-		else
-			execute_cmd(parc, l_env, tenv);
-	}
+	if (l_env == NULL || parc->content[0] == NULL)
+		return ;
+	if ((ft_strcmp(parc->content[0], "env") == 0
+		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
+		env(l_env, parc->content[0]);
+	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
+		add_var(l_env, parc->content);
+	else if (ft_strcmp(parc->content[0], "unset") == 0)
+		unset(l_env, parc->content);
+	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
+		echo(parc->content);
+	else if (ft_strcmp(parc->content[0], "cd") == 0)
+		cd(parc->content, l_env);
+	else if (ft_strcmp(parc->content[0], "pwd") == 0)
+		pwd(parc->content);
+	else if (ft_strcmp(parc->content[0], "exit") == 0)
+		exit(0);
+	else
+		execute_cmd(parc, l_env, tenv);
 }
 
 void	builting1(t_parc *parc, t_env *l_env, char	**tenv)

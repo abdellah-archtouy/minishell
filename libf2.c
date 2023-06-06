@@ -62,6 +62,11 @@ char	*ft_replace_variyabel(char *content, t_env *env)
 	return (free(str), ft_substr(content, i, ft_strlen(content) - i));
 }
 
+int	ft_isalpha(int c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+}
+
 int	ft_get_dolar(char *ptr)
 {
 	int	i;
@@ -71,7 +76,7 @@ int	ft_get_dolar(char *ptr)
 	b = 0;
 	while (ptr[i])
 	{	
-		if (ptr[i] == '$' && ptr[i + 1])
+		if (ptr[i] == '$' && ptr[i + 1] && ft_isalpha(ptr[i + 1]))
 			b++;
 		i++;
 	}
@@ -146,10 +151,10 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	return (str);
 }
 
-t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
+t_parc    *ft_parcnew(char **content, int in, int out, t_env *env)
 {
-	t_parc	*a;
-	int		i;
+    t_parc    *a;
+    int        i;
 
 
 	(void)env;

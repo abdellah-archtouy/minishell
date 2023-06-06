@@ -46,11 +46,9 @@ void	ft_joine_word(t_list *tmp)
 
 int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 {
-	int		i;
 	t_list	*head;
 	char	**str1;
 
-	i = 0;
 	head = NULL;
 	(void)str;
 	if (syntaxe_error(input))
@@ -62,15 +60,6 @@ int	ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env)
 	if (ft_parc(&head, parc, env))
 		return (1);
 	return (0);
-}
-
-void	ft_error(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		write(2, &str[i++], 1);
 }
 
 void	ft_lstclear_par(t_parc **lst)
@@ -110,7 +99,7 @@ int	main(int ac, char **av, char **env)
 	str = NULL;
 	parc = NULL;
 	if (ac != 1)
-		exit(1);
+		return (1);
 	g_flag = 0;
 	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
