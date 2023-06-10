@@ -89,10 +89,12 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 	while (env)
 	{
 		if (ft_strcmp(env->key, "?") == 0)
+		{
+			free (env->content);
 			env->content = ft_itoa(WEXITSTATUS(my.g_exit));
+		}
 		env = env->next;
 	}
-	// printf("status = %d\n", WEXITSTATUS(status));
 }
 
 void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
@@ -147,7 +149,6 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			}
 			env = env->next;
 		}
-		// printf("status = %d\n", WEXITSTATUS(status));
 		while (wait(NULL) != -1)
 			;
 	}

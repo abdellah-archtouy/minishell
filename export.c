@@ -208,6 +208,7 @@ void	envi(char **env, t_env **head)
 		lstadd_back_env(head, ft_lstnew_env(key, content));
 		i++;
 	}
+	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
 }
 
 int	ft_lstsize_env(t_env *lst)
@@ -302,7 +303,7 @@ void	env(t_env *head , char *str)
 	if (ft_strcmp(str, "env") == 0)
 		while (head != NULL)
 		{
-			if (head->content != NULL)
+			if (head->content != NULL && ft_strcmp(head->key, "?"))
 				printf("%s=%s\n", head->key, head->content);
 			head = head->next;
 		}
@@ -312,7 +313,7 @@ void	env(t_env *head , char *str)
 		fexp = exp;
 		while (exp != NULL)
 		{
-			if (ft_strcmp(exp->key, "_"))
+			if (ft_strcmp(exp->key, "_") && ft_strcmp(exp->key, "?"))
 			{
 				if (exp->content != NULL)
 					printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
@@ -327,9 +328,16 @@ void	env(t_env *head , char *str)
 
 int	node_existences(t_env *env, char *key)
 {
+	int	i;
+
+	i = 0;
+	if (ft_strchr(key, '+'))
+		i = ft_strlen(key) - 1;
+	else
+		i = ft_strlen(key);
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(env->key)) == 0)
+		if (ft_strncmp(env->key, key, i) == 0)
 			return (0);
 		env = env->next;
 	}
@@ -424,7 +432,7 @@ void	add_var(t_env *env, char **str)
 			{
 				while (head != NULL)
 				{
-					if (ft_strncmp(head->key, key, ft_strlen(head->key)) == 0)
+					if (ft_strncmp(head->key, key, ft_strlen(key) - 1) == 0)
 						break;
 					head = head->next;
 				}
