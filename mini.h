@@ -30,6 +30,7 @@ typedef struct s_list
 {
 	char			*content;
 	int				type;
+	int				flag;
 	struct s_list	*next;
 }				t_list;
 
@@ -83,7 +84,7 @@ void	lst_clear_env(t_env *env);
 int		ft_lstsize_env(t_env *lst);
 int		tokenizer(char *input, char ***str, t_env **env);
 char	*ft_strjoin_wspace(char *s1, char *s2);
-void	ft_error(char *str);
+void	ft_error(char *str, char *c);
 char	*ft_strjoin_ex(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
@@ -92,9 +93,9 @@ void	builting1(t_parc *parc, t_env	*env, char	**tenv);
 void	execute_m_cmd(t_parc *parcer, t_env *env, char	**tenv);
 char	*quotes_remover(char *input);
 void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv);
-void	ft_error(char *str);
 char	*ft_strjoin_ex(char *s1, char *s2);
 int		ft_isalpha(int c);
 void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv);
+char	*ft_itoa(int n);
 
 #endif

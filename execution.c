@@ -119,6 +119,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 				if (parc->out > 2)
 					dup2(parc->out, 1);
 				builting1(parc, env, tenv);
+				exit(0);
 			}
 			g_flag = 0;
 			parc = parc->next;
@@ -126,6 +127,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			close(old);
 		}
 		close(fd[0]);
+		waitpid(pid, NULL, 0);
 		while (wait(NULL) != -1)
 			;
 	}

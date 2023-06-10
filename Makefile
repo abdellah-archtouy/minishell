@@ -4,7 +4,7 @@ SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c li
  
 OBJ = $(SRC:%.c=%.o)
 
-CFALGS =  -Wall -Wextra -Werror 
+CFALGS =  -Wall -Wextra -Werror #-fsanitize=address
 
 USER := $(shell id -un)
 

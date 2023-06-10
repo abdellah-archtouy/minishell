@@ -12,7 +12,7 @@ int	pipe_syntaxe(char *input)
 			i++;
 			while ((input[i] >= 9 && input[i] <= 13) || input[i] == 32)
 				i++;
-			if (is_special(input[i]))
+			if (input[i] == '|')
 				return (1);
 		}
 		i++;

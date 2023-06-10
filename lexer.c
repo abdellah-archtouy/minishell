@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 void	lexer(char	**str, t_list	**ptr)
@@ -30,6 +29,7 @@ int	tokenizer(char *input, char ***str, t_env **env)
 {
 	int		i;
 	char	**content;
+	// char	*str1;
 
 	i = 0;
 	input = add_space(input);
@@ -46,8 +46,12 @@ int	tokenizer(char *input, char ***str, t_env **env)
 		if (ft_get_dolar(content[i]) > 0)
 			content[i] = ft_check_variabel(content[i],
 					*env, ft_get_dolar(content[i]));
-		if (content[i][0] == '\'')
-			content[i] = ft_substr(content[i], 1, ft_strlen(content[i]) - 2);
+		// if (content[i][0] == '\'')
+		// {
+		// 	str1 = content[i];
+		// 	content[i] = ft_substr(content[i], 1, ft_strlen(content[i]) - 2);
+		// 	free(str1);
+		// }
 		i++;
 	}
 	free(input);

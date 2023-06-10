@@ -15,8 +15,8 @@ void	ft_readline(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else
-		write(1, "\n", 1);
+	// else
+	// 	write(1, "\n", 1);
 }
 
 int	ft_history(char *str)
@@ -39,7 +39,11 @@ void	ft_joine_word(t_list *tmp)
 	while (tmp)
 	{
 		if (tmp->type == WORD)
+		{
+			if (ft_strchr(tmp->content, '\'') || ft_strchr(tmp->content, '\"'))
+				tmp->flag = 1;
 			tmp->content = quotes_remover(tmp->content);
+		}
 		tmp = tmp->next;
 	}
 }
@@ -67,12 +71,12 @@ void	ft_lstclear_par(t_parc **lst)
 	t_parc	*h;
 	int		i;
 
-	i = 0;
 	if (!lst)
 		return ;
 	while (*lst != NULL)
 	{
 		h = (*lst)->next;
+		i = 0;
 		while ((*lst)->content[i])
 			free((*lst)->content[i++]);
 		free((*lst)->content);
@@ -84,7 +88,7 @@ void	ft_lstclear_par(t_parc **lst)
 
 void	my()
 {
-	system("leaks main");
+	system("leaks minishell");
 }
 
 int	main(int ac, char **av, char **env)
@@ -110,7 +114,11 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
-			return (printf("exit"), 0);
+		{
+			printf("\033[11C\033[1Aexit\n");
+			signal(SIGINT, SIG_IGN);
+			exit(1);
+		}
 		if (ft_history(input))
 		{
 			add_history(input);
@@ -124,5 +132,6 @@ int	main(int ac, char **av, char **env)
 		}
 		free(input);
 	}
+
 	return (0);
 }
