@@ -19,6 +19,7 @@
 # define VARIA 6
 
 int	g_flag;
+int	e_flag;
 
 typedef struct s_global
 {

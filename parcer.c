@@ -74,7 +74,7 @@ int	ft_get_fd_doc(char *content)
 	fd = open("/tmp/heredoc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("open"), fd);
-	g_flag = 1;
+	e_flag = 1;
 	while (1)
 	{
 		if (ft_open_doc(input, fd, content) == 1)
@@ -82,7 +82,7 @@ int	ft_get_fd_doc(char *content)
 	}
 	close(fd);
 	fd = open("/tmp/heredoc", O_RDONLY);
-	g_flag = 0;
+	e_flag = 0;
 	return (fd);
 }
 

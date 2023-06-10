@@ -529,35 +529,35 @@ int	fun(char *input, char c)
 
 void    echo(char **str)
 {
-    int    i;
-    int    j;
-    int r;
+	int    i;
+	int    j;
+	int r;
 
-    i = 1;
-    j = 0;
-    r = 0;
-    while (str[i])
-    {
-        j = 0;
-        if (str[i][j] == '-')
-        {
-            j++;
-            if (fun(&str[i][j], 'n'))
-                break ;
-            r++;
-        }
-        else
-            break ;
-        i++;
-    }
-    while (str[i])
-    {
-        printf("%s", str[i++]);
-        if (str[i] != NULL)
-            printf(" ");
-    }
-    if (r == 0)
-        printf("\n");
+	i = 1;
+	j = 0;
+	r = 0;
+	while (str[i])
+	{
+		j = 0;
+		if (str[i][j] == '-')
+		{
+			j++;
+			if (fun(&str[i][j], 'n'))
+				break ;
+			r++;
+		}
+		else
+			break ;
+		i++;
+	}
+	while (str[i])
+	{
+		printf("%s", str[i++]);
+		if (str[i] != NULL)
+			printf(" ");
+	}
+	if (r == 0)
+		printf("\n");
 }
 
 void	cd(char **str, t_env *env)
@@ -633,4 +633,13 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 		return (printf("exit\n"), exit(0));
 	else
 		execute_m_cmd(parc, l_env, tenv);
+	while (l_env)
+	{
+		if (ft_strcmp(l_env->key, "?") == 0)
+		{
+			free(l_env->content);
+			l_env->content = ft_itoa(0);
+		}
+		l_env = l_env->next;
+	}
 }

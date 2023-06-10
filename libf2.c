@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 void	ft_parcadd_back(t_parc **lst, t_parc *new)
@@ -20,7 +19,9 @@ t_parc	*ft_parclast(t_parc *lst)
 
 int	ft_help_variabel(char *content, int *a, char **str, int i)
 {
-	if ((content[*a] >= 'a' && content[*a] <= 'z')
+	if (content[*a] == '?')
+		return (*str = ft_substr(content, i, 1), 0);
+	else if ((content[*a] >= 'a' && content[*a] <= 'z')
 		|| (content[*a] >= 'A' && content[*a] <= 'Z') || content[*a] == '_')
 	{
 		while (content[*a] && ((content[*a] >= 'a' && content[*a] <= 'z')
@@ -97,37 +98,37 @@ int	ft_get_dolar(char *ptr)
 	return (b);
 }
 
-int test(char *str, int i)
+int	test(char *str, int i)
 {
-    int    start;
-    int    end;
-    int    index;
+	int	start;
+	int	end;
+	int	index;
 
-    start = 0;
-    end = 0;
-    index = i;
-    while (index >= 0)
-    {
-        if (str[index] == '\"')
-        {
-            start = -1;
-            break ;
-        }
-        index--;
-    }
-    index = i;
-    while (str[index])
-    {
-        if (str[index] == '\"')
-        {
-            end = -1;
-            break ;
-        }
-        index++;
-    }
-    if (start == -1 && end == -1)
-        return (1);
-    return (0);
+	start = 0;
+	end = 0;
+	index = i;
+	while (index >= 0)
+	{
+		if (str[index] == '\"')
+		{
+			start = -1;
+			break ;
+		}
+		index--;
+	}
+	index = i;
+	while (str[index])
+	{
+		if (str[index] == '\"')
+		{
+			end = -1;
+			break ;
+		}
+		index++;
+	}
+	if (start == -1 && end == -1)
+		return (1);
+	return (0);
 }
 
 char	*ft_check_variabel(char *content, t_env *env, int a)
@@ -200,22 +201,15 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	return (str);
 }
 
-t_parc    *ft_parcnew(char **content, int in, int out, t_env *env)
+t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 {
-    t_parc    *a;
-    int        i;
-
+	t_parc	*a;
 
 	(void)env;
-	i = 0;
 	a = (void *)malloc(sizeof(t_parc));
 	if (a == 0)
 		return (0);
-	// i = 0;
-	// while (content[i])
-	// 	printf("%s\n", content[i++]);
 	a->content = content;
-	i = 0;
 	a->in = in;
 	a->out = out;
 	a->next = 0;

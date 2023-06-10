@@ -73,7 +73,25 @@ char    *quotes_remover(char *input)
     return (str);
 }
 
-int main(int ac, char **av) {
-    printf("%s\n", quotes_remover(av[1]));
+// int main(int ac, char **av) {
+//     printf("%s\n", quotes_remover(av[1]));
+//     return 0;
+// }
+
+#include <stdio.h>
+
+int main() {
+    const char *line = "Name: John Doe";
+
+    // Find the position of the colon character
+    const char *colon = strchr(line, ':');
+    if (colon != NULL) {
+        // Calculate the number of characters to skip (including the colon)
+        int skipCount = colon - line + 1;
+
+        // Print the line, skipping the specified number of characters
+        printf("%*s\n", skipCount, "abdo");
+    }
+
     return 0;
 }
