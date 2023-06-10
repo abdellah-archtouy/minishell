@@ -75,7 +75,9 @@ int	ft_get_dolar(char *ptr)
 	i = 0;
 	b = 0;
 	while (ptr[i])
-	{	
+	{
+		if (ptr[i] == '$' && ptr[i + 1] == '?')
+			i++;
 		if (ptr[i] == '$' && ptr[i + 1] && ft_isalpha(ptr[i + 1]))
 			b++;
 		i++;
@@ -100,6 +102,8 @@ char	*ft_check_variabel(char *content, t_env *env, int a)
 	{
 		if (content[i] == '\'')
 		{
+			if (content[i - 1] == '\"')
+				break ;
 			i++;
 			if (i > 1)
 			{

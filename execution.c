@@ -58,6 +58,7 @@ void	ft_execute(t_parc *parcer, char	**tenv, char **path1, char *str)
 				parcer->content[0]), exit(127));
 	else if (execve(str, parcer->content, tenv) < 0)
 		perror("execve");
+	puts("aa");
 	exit(0);
 }
 
@@ -67,13 +68,15 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 	char	**path1;
 	char	*str;
 	int		i;
+	int		status;
 
 	i = 0;
 	str = parcer->content[0];
-	g_flag = 1;
+	e_flag = 1;
 	id = fork();
 	if (id == 0)
 	{
+		g_flag = 2;
 		if (parcer->out != 1)
 			dup2(parcer->out, 1);
 		if (parcer->in != 0)
@@ -81,8 +84,9 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 		path1 = ft_get_path(env);
 		ft_execute(parcer, tenv, path1, str);
 	}
-	g_flag = 0;
-	waitpid(id, &i, 0);
+	e_flag = 0;
+	waitpid(id, &status, 0);
+	printf("status = %d\n", WEXITSTATUS(status));
 }
 
 void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
@@ -105,7 +109,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			if (pipe(fd) == -1)
 				return (printf("error here\n"), exit(1));
 			pid = fork();
-			g_flag = 1;
+			e_flag = 1;
 			if (pid == 0)
 			{
 				close(fd[0]);
@@ -121,7 +125,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 				builting1(parc, env, tenv);
 				exit(0);
 			}
-			g_flag = 0;
+			e_flag = 0;
 			parc = parc->next;
 			close(fd[1]);
 			close(old);

@@ -429,35 +429,35 @@ int	fun(char *input, char c)
 
 void    echo(char **str)
 {
-    int    i;
-    int    j;
-    int r;
+	int    i;
+	int    j;
+	int r;
 
-    i = 1;
-    j = 0;
-    r = 0;
-    while (str[i])
-    {
-        j = 0;
-        if (str[i][j] == '-')
-        {
-            j++;
-            if (fun(&str[i][j], 'n'))
-                break ;
-            r++;
-        }
-        else
-            break ;
-        i++;
-    }
-    while (str[i])
-    {
-        printf("%s", str[i++]);
-        if (str[i] != NULL)
-            printf(" ");
-    }
-    if (r == 0)
-        printf("\n");
+	i = 1;
+	j = 0;
+	r = 0;
+	while (str[i])
+	{
+		j = 0;
+		if (str[i][j] == '-')
+		{
+			j++;
+			if (fun(&str[i][j], 'n'))
+				break ;
+			r++;
+		}
+		else
+			break ;
+		i++;
+	}
+	while (str[i])
+	{
+		printf("%s", str[i++]);
+		if (str[i] != NULL)
+			printf(" ");
+	}
+	if (r == 0)
+		printf("\n");
 }
 
 void	cd(char **str, t_env *env)
@@ -525,6 +525,14 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 			add_var(l_env, parc->content);
 		else if (ft_strcmp(parc->content[0], "unset") == 0)
 			unset(l_env, parc->content);
+		else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
+			echo(parc->content);
+		else if (ft_strcmp(parc->content[0], "cd") == 0)
+			cd(parc->content, l_env);
+		else if (ft_strcmp(parc->content[0], "pwd") == 0)
+			pwd(parc->content);
+		else if (ft_strcmp(parc->content[0], "exit") == 0)
+			exit(0);
 		else
 			execute_m_cmd(parc, l_env, tenv);
 	}

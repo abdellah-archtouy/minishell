@@ -1,22 +1,24 @@
 #include "mini.h"
 
+int	e_flag;
+
 void	ft_readline(int sig)
 {
 	(void)sig;
-	if (g_flag == 1)
+	if (e_flag == 1)
 	{
 		close(STDIN_FILENO);
-		g_flag = 0;
+		e_flag = 0;
 	}
-	else if (waitpid(-1, NULL, WNOHANG) != 0)
+	else if (e_flag == 1)
+		return ;
+	else if (e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else
-		write(1, "\n", 1);
 }
 
 int	ft_history(char *str)
@@ -67,12 +69,12 @@ void	ft_lstclear_par(t_parc **lst)
 	t_parc	*h;
 	int		i;
 
-	i = 0;
 	if (!lst)
 		return ;
 	while (*lst != NULL)
 	{
 		h = (*lst)->next;
+		i = 0;
 		while ((*lst)->content[i])
 			free((*lst)->content[i++]);
 		free((*lst)->content);
@@ -84,7 +86,7 @@ void	ft_lstclear_par(t_parc **lst)
 
 void	my()
 {
-	system("leaks main");
+	system("leaks minishell");
 }
 
 int	main(int ac, char **av, char **env)
@@ -101,6 +103,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	g_flag = 0;
+	e_flag = 0;
 	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
