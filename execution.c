@@ -1,6 +1,8 @@
 
 #include "mini.h"
 
+extern	struct g_glo my;
+
 char	**ft_get_path(t_env *env)
 {
 	while (env)
@@ -68,15 +70,13 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 	char	**path1;
 	char	*str;
 	int		i;
-	int		status;
 
 	i = 0;
 	str = parcer->content[0];
-	e_flag = 1;
+	my.e_flag = 1;
 	id = fork();
 	if (id == 0)
 	{
-		g_flag = 2;
 		if (parcer->out != 1)
 			dup2(parcer->out, 1);
 		if (parcer->in != 0)
@@ -84,12 +84,12 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 		path1 = ft_get_path(env);
 		ft_execute(parcer, tenv, path1, str);
 	}
-	e_flag = 0;
-	waitpid(id, &status, 0);
+	my.e_flag = 0;
+	waitpid(id, &my.g_exit, 0);
 	while (env)
 	{
 		if (ft_strcmp(env->key, "?") == 0)
-			env->content = ft_itoa(WEXITSTATUS(status));
+			env->content = ft_itoa(WEXITSTATUS(my.g_exit));
 		env = env->next;
 	}
 	// printf("status = %d\n", WEXITSTATUS(status));
@@ -100,7 +100,6 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 	int	fd[2];
 	int	pid;
 	int	old;
-	int	status;
 
 	fd[0] = -1;
 	fd[1] = -1;
@@ -116,7 +115,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			if (pipe(fd) == -1)
 				return (printf("error here\n"), exit(1));
 			pid = fork();
-			e_flag = 1;
+			my.e_flag = 1;
 			if (pid == 0)
 			{
 				close(fd[0]);
@@ -132,19 +131,19 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 				builting1(parc, env, tenv);
 				exit(0);
 			}
-			e_flag = 0;
+			my.e_flag = 0;
 			parc = parc->next;
 			close(fd[1]);
 			close(old);
 		}
 		close(fd[0]);
-		waitpid(pid, &status, 0);
+		waitpid(pid, &my.g_exit, 0);
 		while (env)
 		{
 			if (ft_strcmp(env->key, "?") == 0)
 			{
 				free(env->content);
-				env->content = ft_itoa(WEXITSTATUS(status));
+				env->content = ft_itoa(WEXITSTATUS(my.g_exit));
 			}
 			env = env->next;
 		}

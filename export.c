@@ -626,13 +626,4 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 		return (printf("exit\n"), exit(0));
 	else
 		execute_m_cmd(parc, l_env, tenv);
-	while (l_env)
-	{
-		if (ft_strcmp(l_env->key, "?") == 0)
-		{
-			free(l_env->content);
-			l_env->content = ft_itoa(0);
-		}
-		l_env = l_env->next;
-	}
 }

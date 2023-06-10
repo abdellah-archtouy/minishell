@@ -18,8 +18,12 @@
 # define WORD 5
 # define VARIA 6
 
-int	g_flag;
-int	e_flag;
+typedef struct g_glo
+{
+	int	e_flag;
+	int	g_exit;
+
+}	t_glo;
 
 typedef struct s_global
 {

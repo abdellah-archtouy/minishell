@@ -1,19 +1,23 @@
 #include "mini.h"
 
-int	e_flag;
+struct	g_glo my = {0,0};
 
 void	ft_readline(int sig)
 {
 	(void)sig;
-	if (e_flag == 1)
+	if (my.e_flag == 1)
 	{
 		close(STDIN_FILENO);
-		e_flag = 0;
+		my.e_flag = 0;
 	}
-	else if (e_flag == 1)
-		return ;
-	else if (e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (my.e_flag == 1)
 	{
+		my.g_exit = 130;
+		return ;
+	}
+	else if (my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	{
+		my.g_exit = 1;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -88,10 +92,10 @@ void	ft_lstclear_par(t_parc **lst)
 	*lst = NULL;
 }
 
-void	my()
-{
-	system("leaks minishell");
-}
+// void	my()
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -106,8 +110,7 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		return (1);
-	g_flag = 0;
-	e_flag = 0;
+	my.e_flag = 0;
 	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
