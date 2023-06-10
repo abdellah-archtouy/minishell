@@ -208,6 +208,7 @@ void	envi(char **env, t_env **head)
 		lstadd_back_env(head, ft_lstnew_env(key, content));
 		i++;
 	}
+	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
 }
 
 int	ft_lstsize_env(t_env *lst)
@@ -302,7 +303,7 @@ void	env(t_env *head , char *str)
 	if (ft_strcmp(str, "env") == 0)
 		while (head != NULL)
 		{
-			if (head->content != NULL)
+			if (head->content != NULL && ft_strcmp(head->key, "?"))
 				printf("%s=%s\n", head->key, head->content);
 			head = head->next;
 		}
@@ -312,7 +313,7 @@ void	env(t_env *head , char *str)
 		fexp = exp;
 		while (exp != NULL)
 		{
-			if (ft_strcmp(exp->key, "_"))
+			if (ft_strcmp(exp->key, "_") && ft_strcmp(exp->key, "?"))
 			{
 				if (exp->content != NULL)
 					printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
@@ -633,13 +634,13 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 		return (printf("exit\n"), exit(0));
 	else
 		execute_m_cmd(parc, l_env, tenv);
-	while (l_env)
-	{
-		if (ft_strcmp(l_env->key, "?") == 0)
-		{
-			free(l_env->content);
-			l_env->content = ft_itoa(0);
-		}
-		l_env = l_env->next;
-	}
+	// while (l_env)
+	// {
+	// 	if (ft_strcmp(l_env->key, "?") == 0)
+	// 	{
+	// 		free(l_env->content);
+	// 		l_env->content = ft_itoa(0);
+	// 	}
+	// 	l_env = l_env->next;
+	// }
 }
