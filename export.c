@@ -327,9 +327,16 @@ void	env(t_env *head , char *str)
 
 int	node_existences(t_env *env, char *key)
 {
+	int	i;
+
+	i = 0;
+	if (ft_strchr(key, '+'))
+		i = ft_strlen(key) - 1;
+	else
+		i = ft_strlen(key);
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(env->key)) == 0)
+		if (ft_strncmp(env->key, key, i) == 0)
 			return (0);
 		env = env->next;
 	}
@@ -424,7 +431,7 @@ void	add_var(t_env *env, char **str)
 			{
 				while (head != NULL)
 				{
-					if (ft_strncmp(head->key, key, ft_strlen(head->key)) == 0)
+					if (ft_strncmp(head->key, key, ft_strlen(key) - 1) == 0)
 						break;
 					head = head->next;
 				}
