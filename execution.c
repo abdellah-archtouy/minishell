@@ -86,6 +86,12 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 	}
 	e_flag = 0;
 	waitpid(id, &status, 0);
+	while (env)
+	{
+		if (ft_strcmp(env->key, "?") == 0)
+			env->content = ft
+		env = env->next;
+	}
 	printf("status = %d\n", WEXITSTATUS(status));
 }
 

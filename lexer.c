@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 void	lexer(char	**str, t_list	**ptr)

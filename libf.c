@@ -62,6 +62,7 @@ t_list	*ft_lstnew(char *content, int type)
 	a->content = content;
 	a->type = type;
 	a->next = 0;
+	a->flag = 0;
 	return (a);
 }
 

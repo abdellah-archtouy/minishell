@@ -41,7 +41,11 @@ void	ft_joine_word(t_list *tmp)
 	while (tmp)
 	{
 		if (tmp->type == WORD)
+		{
+			if (ft_strchr(tmp->content, '\'') || ft_strchr(tmp->content, '\"'))
+				tmp->flag = 1;
 			tmp->content = quotes_remover(tmp->content);
+		}
 		tmp = tmp->next;
 	}
 }
@@ -113,7 +117,11 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
-			return (printf("exit"), 0);
+		{
+			printf("\033[11C\033[1Aexit\n");
+			signal(SIGINT, SIG_IGN);
+			exit(1);
+		}
 		if (ft_history(input))
 		{
 			add_history(input);
@@ -127,5 +135,6 @@ int	main(int ac, char **av, char **env)
 		}
 		free(input);
 	}
+
 	return (0);
 }

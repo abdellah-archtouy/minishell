@@ -166,7 +166,8 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		{
 			if ((*ptr)->type == WORD)
 			{
-				rev_char1((*ptr)->content, 1);
+				if ((*ptr)->flag == 1)
+					rev_char1((*ptr)->content, 1);
 				str = ft_strjoin(str, (*ptr)->content);
 				str = ft_strjoin(str, " ");
 			}
