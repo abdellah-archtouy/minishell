@@ -151,6 +151,17 @@ void	rev_char1(char *input, int r)
 			input[i++] *= -1;
 }
 
+int	ft_check_file(t_parc *parc)
+{
+	while (parc)
+	{
+		if (parc->in == -1 || parc->out == -1)
+			return (-1);
+		parc = parc->next;
+	}
+	return (0);
+}
+
 int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
 	char	*str;
@@ -174,8 +185,8 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 				str = ft_strjoin(str, (*ptr)->content);
 				str = ft_strjoin(str, " ");
 			}
-			else if (ft_parc_helper(ptr, &in, &out))
-				return (free((*ptr)->content), free((*ptr)), free(str), -1);
+			else
+				ft_parc_helper(ptr, &in, &out);
 			free((*ptr)->content);
 			free((*ptr));
 			(*ptr) = (*ptr)->next;
@@ -188,5 +199,7 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		if ((*ptr) != NULL)
 			(*ptr) = (*ptr)->next;
 	}
+	if (ft_check_file(*parc) == -1)
+		return (-1);
 	return (0);
 }

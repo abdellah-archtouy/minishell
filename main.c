@@ -5,16 +5,14 @@ struct	g_glo my = {0,0};
 void	ft_readline(int sig)
 {
 	(void)sig;
+	my.g_exit = 130;
 	if (my.e_flag == 1)
 	{
 		close(STDIN_FILENO);
 		my.e_flag = 0;
 	}
 	else if (my.e_flag == 1)
-	{
-		my.g_exit = 130;
 		return ;
-	}
 	else if (my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
 		my.g_exit = 1;

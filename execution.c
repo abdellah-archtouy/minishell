@@ -105,6 +105,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 
 	fd[0] = -1;
 	fd[1] = -1;
+	pid = 0;
 	if (!parc->next)
 	{
 		builting(parc, env, tenv);
@@ -139,17 +140,17 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			close(old);
 		}
 		close(fd[0]);
-		waitpid(pid, &my.g_exit, 0);
-		while (env)
-		{
-			if (ft_strcmp(env->key, "?") == 0)
-			{
-				free(env->content);
-				env->content = ft_itoa(WEXITSTATUS(my.g_exit));
-			}
-			env = env->next;
-		}
 		while (wait(NULL) != -1)
 			;
+	}
+	waitpid(pid, &my.g_exit, 0);
+	while (env)
+	{
+		if (ft_strcmp(env->key, "?") == 0)
+		{
+			free(env->content);
+			env->content = ft_itoa(WEXITSTATUS(my.g_exit));
+		}
+		env = env->next;
 	}
 }
