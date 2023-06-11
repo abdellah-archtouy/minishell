@@ -1,5 +1,7 @@
 #include "mini.h"
 
+extern	t_glo	g_my;
+
 char	**ft_get_path(t_env *env)
 {
 	while (env)
@@ -72,7 +74,9 @@ void	ft_execute(t_parc *parcer, char	**tenv, char **path1, char *str)
 
 void	ft_check_exit(t_env *env, int status)
 {
-	int	exit = 0;
+	int	exit;
+
+	exit = 0;
 	if (WIFEXITED(status))
 		exit = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -98,7 +102,7 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 
 	i = 0;
 	str = parcer->content[0];
-	e_flag = 1;
+	g_my.e_flag = 1;
 	id = fork();
 	if (id == 0)
 	{
@@ -111,7 +115,7 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 			ft_print_error(parcer->content[0]);
 		ft_execute(parcer, tenv, path1, str);
 	}
-	e_flag = 0;
+	g_my.e_flag = 0;
 	waitpid(id, &status, 0);
 	ft_check_exit(env, status);
 }
@@ -138,7 +142,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			if (pipe(fd) == -1)
 				return (printf("error here\n"), exit(1));
 			pid = fork();
-			e_flag = 1;
+			g_my.e_flag = 1;
 			if (pid == 0)
 			{
 				close(fd[0]);
@@ -154,7 +158,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 				builting1(parc, env, tenv);
 				exit(0);
 			}
-			e_flag = 0;
+			g_my.e_flag = 0;
 			parc = parc->next;
 			close(fd[1]);
 			close(old);

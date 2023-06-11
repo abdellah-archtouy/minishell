@@ -1,22 +1,20 @@
 #include "mini.h"
 
-// struct	g_glo my = {0,0};
-int	e_flag;
-int	exitt = 0;
+t_glo g_my;
 
 void	ft_readline(int sig)
 {
 	(void)sig;
-	if (e_flag == 1)
+	if (g_my.e_flag == 1)
 	{
 		close(STDIN_FILENO);
-		e_flag = 0;
+		g_my.e_flag = 0;
 	}
-	else if (e_flag == 1)
+	else if (g_my.e_flag == 1)
 		return ;
-	else if (e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (g_my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
-		exitt = 1;
+		g_my.g_exit = 1;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -111,8 +109,7 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		return (1);
-	// g_flag = 0;
-	e_flag = 0;
+	g_my.e_flag = 0;
 	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
@@ -127,19 +124,19 @@ int	main(int ac, char **av, char **env)
 			signal(SIGINT, SIG_IGN);
 			exit(1);
 		}
-		t_env *tmp = envir;
-		if (exitt)
+		t_env	*tmp = envir;
+		if (g_my.g_exit)
 		{
 			while (tmp)
 			{
 				if (ft_strcmp(tmp->key, "?") == 0)
 				{
-				free (tmp->content);
-				tmp->content = ft_itoa(exitt);
+					free(tmp->content);
+					tmp->content = ft_itoa(1);
 				}
 				tmp = tmp->next;
 			}
-			exitt = 0;
+			g_my.g_exit = 0;
 		}
 		if (ft_history(input))
 		{
@@ -154,6 +151,5 @@ int	main(int ac, char **av, char **env)
 		}
 		free(input);
 	}
-
 	return (0);
 }
