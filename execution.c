@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 char	**ft_get_path(t_env *env)

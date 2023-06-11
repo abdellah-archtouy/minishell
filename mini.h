@@ -40,6 +40,7 @@ typedef struct s_env
 	char			*key;
 	char			*content;
 	struct s_env	*next;
+	int				flag;
 }				t_env;
 
 typedef struct s_parc
@@ -76,7 +77,7 @@ char	*ft_strdup(char *s1);
 int		syntaxe_error(char *input);
 int		ft_strncmp( char *a, char *b, size_t n);
 char	*ft_substr(char *s, size_t start, size_t len);
-void	envi(char **env, t_env **head);
+void	envi(char ***env, t_env **head);
 void	export(t_env **envi, t_parc	*parc);
 int		ft_get_dolar(char *ptr);
 char	*ft_check_variabel(char *content, t_env *env, int a);

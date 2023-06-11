@@ -32,11 +32,8 @@ char	*ft_get_doc(void)
 	{
 		if (access(str, F_OK) != 0)
 			break ;
-		else
-		{
-			tmp[0] = 'a' + i;
-			str = ft_strjoin(str, tmp);
-		}
+		tmp[0] = 'a' + i;
+		str = ft_strjoin(str, tmp);
 		i++;
 	}
 	return (str);
