@@ -33,7 +33,7 @@ int	tokenizer(char *input, char ***str, t_env **env)
 	i = 0;
 	input = add_space(input);
 	if (syntaxe_quotes(input))
-		return (1);
+		return (free(input), 1);
 	rev_char(input);
 	*str = ft_split(input);
 	content = *str;

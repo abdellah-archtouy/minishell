@@ -67,5 +67,6 @@ char	*quotes_remover(char *input)
 		}
 	}
 	str[j] = 0;
+	free(input);
 	return (str);
 }

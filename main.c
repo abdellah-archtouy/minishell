@@ -45,8 +45,10 @@ void	ft_joine_word(t_list *tmp)
 		if (tmp->type == WORD)
 		{
 			if (ft_strchr(tmp->content, '\'') || ft_strchr(tmp->content, '\"'))
+			{
 				tmp->flag = 1;
-			tmp->content = quotes_remover(tmp->content);
+				tmp->content = quotes_remover(tmp->content);
+			}
 		}
 		tmp = tmp->next;
 	}
