@@ -18,6 +18,8 @@
 # define WORD 5
 # define VARIA 6
 
+int	e_flag;
+
 typedef struct g_glo
 {
 	int	e_flag;
@@ -44,6 +46,7 @@ typedef struct s_env
 	char			*key;
 	char			*content;
 	struct s_env	*next;
+	int				flag;
 }				t_env;
 
 typedef struct s_parc
@@ -80,7 +83,7 @@ char	*ft_strdup(char *s1);
 int		syntaxe_error(char *input);
 int		ft_strncmp( char *a, char *b, size_t n);
 char	*ft_substr(char *s, size_t start, size_t len);
-void	envi(char **env, t_env **head);
+void	envi(char ***env, t_env **head);
 void	export(t_env **envi, t_parc	*parc);
 int		ft_get_dolar(char *ptr);
 char	*ft_check_variabel(char *content, t_env *env, int a);
@@ -94,6 +97,8 @@ char	*ft_strjoin_ex(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	ft_readline(int sig);
+void	ft_check_exit(t_env *env, int status);
+void	ft_putstr_fd(char *str, int fd);
 void	builting1(t_parc *parc, t_env	*env, char	**tenv);
 void	execute_m_cmd(t_parc *parcer, t_env *env, char	**tenv);
 char	*quotes_remover(char *input);

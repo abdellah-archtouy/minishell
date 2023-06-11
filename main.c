@@ -1,21 +1,22 @@
 #include "mini.h"
 
-struct	g_glo my = {0,0};
+// struct	g_glo my = {0,0};
+int	e_flag;
+int	exitt = 0;
 
 void	ft_readline(int sig)
 {
 	(void)sig;
-	my.g_exit = 130;
-	if (my.e_flag == 1)
+	if (e_flag == 1)
 	{
 		close(STDIN_FILENO);
-		my.e_flag = 0;
+		e_flag = 0;
 	}
-	else if (my.e_flag == 1)
+	else if (e_flag == 1)
 		return ;
-	else if (my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
-		my.g_exit = 1;
+		exitt = 1;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -110,12 +111,13 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		return (1);
-	my.e_flag = 0;
+	// g_flag = 0;
+	e_flag = 0;
 	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	envi(env, &envir);
+	envi(&env, &envir);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -124,6 +126,20 @@ int	main(int ac, char **av, char **env)
 			printf("\033[11C\033[1Aexit\n");
 			signal(SIGINT, SIG_IGN);
 			exit(1);
+		}
+		t_env *tmp = envir;
+		if (exitt)
+		{
+			while (tmp)
+			{
+				if (ft_strcmp(tmp->key, "?") == 0)
+				{
+				free (tmp->content);
+				tmp->content = ft_itoa(exitt);
+				}
+				tmp = tmp->next;
+			}
+			exitt = 0;
 		}
 		if (ft_history(input))
 		{

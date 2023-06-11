@@ -1,8 +1,5 @@
 #include "mini.h"
 
-extern struct	g_glo my;
-
-
 int	ft_get_fd_out(char *str, int t)
 {
 	int	fd;
@@ -35,11 +32,8 @@ char	*ft_get_doc(void)
 	{
 		if (access(str, F_OK) != 0)
 			break ;
-		else
-		{
-			tmp[0] = 'a' + i;
-			str = ft_strjoin(str, tmp);
-		}
+		tmp[0] = 'a' + i;
+		str = ft_strjoin(str, tmp);
 		i++;
 	}
 	return (str);
@@ -77,7 +71,7 @@ int	ft_get_fd_doc(char *content)
 	fd = open("/tmp/heredoc", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("open"), fd);
-	my.e_flag = 1;
+	e_flag = 1;
 	while (1)
 	{
 		if (ft_open_doc(input, fd, content) == 1)
@@ -85,7 +79,7 @@ int	ft_get_fd_doc(char *content)
 	}
 	close(fd);
 	fd = open("/tmp/heredoc", O_RDONLY);
-	my.e_flag = 0;
+	e_flag = 0;
 	return (fd);
 }
 
