@@ -6,7 +6,7 @@ int	strlen_q(char *input)
 	int j = 0;
 	while (input[i])
 	{
-		if(input[i] == '\'')
+		if (input[i] == '\'')
 		{
 			i++;
 			while (input[i] != '\'')
@@ -38,9 +38,9 @@ int	strlen_q(char *input)
 
 char	*quotes_remover(char *input)
 {
-	int    i;
-	int    j;
-	char *str;
+	int		i;
+	int		j;
+	char	*str;
 
 	i = 0;
 	j = 0;

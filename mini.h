@@ -18,8 +18,13 @@
 # define WORD 5
 # define VARIA 6
 
-int	g_flag;
 int	e_flag;
+
+typedef struct g_glo
+{
+	int	e_flag;
+	int	g_exit;
+}		t_glo;
 
 typedef struct s_global
 {
@@ -39,7 +44,6 @@ typedef struct s_env
 {
 	char			*key;
 	char			*content;
-	int				flag;
 	struct s_env	*next;
 }				t_env;
 
@@ -65,10 +69,16 @@ t_list	*ft_lstnew(char *content, int type);
 int		ft_strcmp(const char *a, const char *b);
 void	lexer(char	**str, t_list	**ptr);
 size_t	ft_strlen(char *str);
+int		ft_help_variabel(char *content, int *a, char **str, int i);
+char	*ft_replace_variyabel(char *content, t_env *env);
 char	*add_space(char *input);
 int		syntaxe_quotes(char *input);
 char	*ft_strjoin_path(char *s1, char *s2);
 void	rev_char(char *input);
+int		ft_get_fd_out(char *str, int t);
+int		ft_open_doc(char *input, int fd, char *content);
+int		ft_ft_get_fd_in(char *content);
+int		ft_get_fd_doc(char *content);
 int		is_special(char c);
 int		ft_parc(t_list **ptr, t_parc **parc, t_env **env);
 int		ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env);
@@ -80,7 +90,7 @@ char	*ft_substr(char *s, size_t start, size_t len);
 void	export(t_env **envi, t_parc	*parc);
 int		ft_get_dolar(char *ptr);
 char	*ft_check_variabel(char *content, t_env *env, int a);
-void	builting(t_parc *parc, t_env **l_env, char	**tenv);
+void	builting(t_parc *parc, t_env **l_env);
 int		tokenizer(char *input, char ***str, t_env **env);
 char	*ft_strjoin_wspace(char *s1, char *s2);
 void	ft_error(char *str, char *c);
@@ -88,19 +98,18 @@ char	*ft_strjoin_ex(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	ft_readline(int sig);
-void	builting1(t_parc *parc, t_env **l_env, char	**tenv);
-void	execute_m_cmd(t_parc *parcer, t_env *env, char	**tenv);
+void	ft_check_exit(t_env *env, int status);
+void	ft_putstr_fd(char *str, int fd);
+void	builting1(t_parc *parc, t_env	**env);
+void	execute_m_cmd(t_parc *parcer, t_env *env);
 char	*quotes_remover(char *input);
-void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv);
-char	*ft_strjoin_ex(char *s1, char *s2);
+void	execute_cmd(t_parc *parcer, t_env *env);
 int		ft_isalpha(int c);
-void	builting_m_cmd(t_parc *parc, t_env	**env, char	**tenv);
+void	builting_m_cmd(t_parc *parc, t_env	**env);
 char	*ft_itoa(int n);
-
 t_env	*ft_lstnew_env(char *key, char *content);
 int		ft_lstsize_env(t_env *lst);
 void	lst_clear_env(t_env *env);
-char	*ft_strchr(char *s, int c);
 char	*ft_strrchr(char *s, int c);
 char	*get_chars(char* string, int index);
 t_env	*ft_lstlast_env(t_env *lst);
@@ -111,7 +120,7 @@ void	envi(char **env, t_env **head);
 int		is_sorted(t_env *exp);
 t_env	*copy_list(t_env *env);
 t_env	*sorted_env(t_env *exp);
-void	env(t_env *head , char *str);
+void	env(t_env *head , char *str, t_parc *parc);
 int		node_existences(t_env *env, char *key);
 int		equal_num(char *input);
 int		parsing(char *input);
@@ -122,6 +131,6 @@ void	ft_putstr_fd(char *s, int fd);
 int		fun(char *input, char c);
 void    echo(t_parc *parc);
 void	cd(char **str, t_env *env);
-void	pwd(char **str);
+void	pwd(char **str, t_parc *parc);
 
 #endif

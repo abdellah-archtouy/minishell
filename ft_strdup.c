@@ -68,6 +68,8 @@ int	ft_strncmp( char *a, char *b, size_t n)
 	i = 0;
 	s1 = (unsigned char *)a;
 	s2 = (unsigned char *)b;
+	if (!a || !b)
+		return (-1);
 	if (n == 0)
 		return (0);
 	while (s1[i] && s2[i] && i < (n - 1) && s1[i] == s2[i])

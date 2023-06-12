@@ -1,19 +1,20 @@
 #include "mini.h"
 
-int	e_flag;
+t_glo g_my;
 
 void	ft_readline(int sig)
 {
 	(void)sig;
-	if (sig == 2 && e_flag == 1)
+	if (g_my.e_flag == 1)
 	{
 		close(STDIN_FILENO);
-		e_flag = 0;
+		g_my.e_flag = 0;
 	}
-	else if (sig == 2 &&e_flag == 1)
+	else if (g_my.e_flag == 1)
 		return ;
-	else if (sig == 2 && e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (g_my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
+		g_my.g_exit = 1;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -90,10 +91,10 @@ void	ft_lstclear_par(t_parc **lst)
 	*lst = NULL;
 }
 
-void	my()
-{
-	system("leaks minishell");
-}
+// void	my()
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -109,8 +110,8 @@ int	main(int ac, char **av, char **env)
 	parc = NULL;
 	if (ac != 1)
 		return (1);
-	g_flag = 0;
-	e_flag = 0;
+	g_my.e_flag = 0;
+	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
@@ -124,11 +125,25 @@ int	main(int ac, char **av, char **env)
 			signal(SIGINT, SIG_IGN);
 			exit(1);
 		}
+		t_env	*tmp = envir;
+		if (g_my.g_exit)
+		{
+			while (tmp)
+			{
+				if (ft_strcmp(tmp->key, "?") == 0)
+				{
+					free(tmp->content);
+					tmp->content = ft_itoa(1);
+				}
+				tmp = tmp->next;
+			}
+			g_my.g_exit = 0;
+		}
 		if (ft_history(input))
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-				builting_m_cmd(parc, &envir, env);
+				builting_m_cmd(parc, &envir);
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);
@@ -137,6 +152,5 @@ int	main(int ac, char **av, char **env)
 		}
 		free(input);
 	}
-
 	return (0);
 }
