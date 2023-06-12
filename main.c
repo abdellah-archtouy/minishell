@@ -112,11 +112,8 @@ int	main(int ac, char **av, char **env)
 	g_flag = 0;
 	e_flag = 0;
 	signal(SIGQUIT, SIG_IGN);
-	// signal(SIGQUIT, ft_readline);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	if (env[0] == NULL)
-		env = env_empty();
 	envi(env, &envir);
 	while (1)
 	{

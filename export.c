@@ -216,9 +216,11 @@ void	envi(char **env, t_env **head)
 	int		l;
 	char	*key = NULL;
 	char	*content = NULL;
-	char	*tmp;
+	// char	*tmp;
 
 	i = 0;
+	if (env[0] == NULL)
+		env = env_empty();
 	while ((env)[i])
 	{
 		key = get_chars((env)[i], 0);
@@ -228,9 +230,8 @@ void	envi(char **env, t_env **head)
 			l = ft_atoi(key);
 			if (l < 0)
 				l = -1;
-			tmp = ft_itoa(l + 1);
 			free(content);
-			content = tmp;
+			content = ft_itoa(l + 1);
 		}
 		lstadd_back_env(head, ft_lstnew_env(key, content));
 		i++;
@@ -251,18 +252,14 @@ int	is_sorted(t_env *exp)
 
 t_env	*copy_list(t_env *env)
 {
-	char	*a;
-	char	*b;
 	int		i;
 	t_env	*exp;
 
 	exp = NULL;
 	while (env != NULL)
 	{
-		a = env->key;
-		b = env->content;
 		i = env->flag;
-		lstadd_back_env(&exp, ft_lstnew_env(a, b));
+		lstadd_back_env(&exp, ft_lstnew_env(env->key, env->content));
 		ft_lstlast_env(exp)->flag = i;
 		env = env->next;
 	}
