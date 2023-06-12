@@ -30,7 +30,7 @@ void	execute_m_cmd(t_parc *parcer, t_env *env, char **tenv)
 		i++;
 	}
 	if (str == NULL)
-		return (printf("commende not found : %s\n",
+		return (printf("command not found : %s\n",
 				parcer->content[0]), exit(127));
 	else if (execve(str, parcer->content, tenv) < 0)
 		perror("execve");
@@ -53,7 +53,7 @@ void	ft_execute(t_parc *parcer, char	**tenv, char **path1, char *str)
 		i++;
 	}
 	if (str == NULL)
-		return (printf("commende not found : %s\n",
+		return (printf("command not found : %s\n",
 				parcer->content[0]), exit(127));
 	else if (execve(str, parcer->content, tenv) < 0)
 		perror("execve");
@@ -96,13 +96,15 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 	}
 }
 
-void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
+void	builting_m_cmd(t_parc *parc, t_env	**env, char	**tenv)
 {
 	int	fd[2];
 	int	pid;
 	int	old;
 	int	status;
+	t_env	*h;
 
+	h = *env;
 	fd[0] = -1;
 	fd[1] = -1;
 	if (!parc->next)
@@ -140,14 +142,14 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 		}
 		close(fd[0]);
 		waitpid(pid, &status, 0);
-		while (env)
+		while (h)
 		{
-			if (ft_strcmp(env->key, "?") == 0)
+			if (ft_strcmp(h->key, "?") == 0)
 			{
-				free(env->content);
-				env->content = ft_itoa(WEXITSTATUS(status));
+				free(h->content);
+				h->content = ft_itoa(WEXITSTATUS(status));
 			}
-			env = env->next;
+			h = h->next;
 		}
 		while (wait(NULL) != -1)
 			;

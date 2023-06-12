@@ -39,8 +39,8 @@ typedef struct s_env
 {
 	char			*key;
 	char			*content;
-	struct s_env	*next;
 	int				flag;
+	struct s_env	*next;
 }				t_env;
 
 typedef struct s_parc
@@ -77,13 +77,10 @@ char	*ft_strdup(char *s1);
 int		syntaxe_error(char *input);
 int		ft_strncmp( char *a, char *b, size_t n);
 char	*ft_substr(char *s, size_t start, size_t len);
-void	envi(char ***env, t_env **head);
 void	export(t_env **envi, t_parc	*parc);
 int		ft_get_dolar(char *ptr);
 char	*ft_check_variabel(char *content, t_env *env, int a);
-void	builting(t_parc *parc, t_env *l_env, char	**tenv);
-void	lst_clear_env(t_env *env);
-int		ft_lstsize_env(t_env *lst);
+void	builting(t_parc *parc, t_env **l_env, char	**tenv);
 int		tokenizer(char *input, char ***str, t_env **env);
 char	*ft_strjoin_wspace(char *s1, char *s2);
 void	ft_error(char *str, char *c);
@@ -91,13 +88,40 @@ char	*ft_strjoin_ex(char *s1, char *s2);
 void	ft_readline(int sig);
 char	*ft_strchr(char *s, int c);
 void	ft_readline(int sig);
-void	builting1(t_parc *parc, t_env	*env, char	**tenv);
+void	builting1(t_parc *parc, t_env **l_env, char	**tenv);
 void	execute_m_cmd(t_parc *parcer, t_env *env, char	**tenv);
 char	*quotes_remover(char *input);
 void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv);
 char	*ft_strjoin_ex(char *s1, char *s2);
 int		ft_isalpha(int c);
-void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv);
+void	builting_m_cmd(t_parc *parc, t_env	**env, char	**tenv);
 char	*ft_itoa(int n);
+
+t_env	*ft_lstnew_env(char *key, char *content);
+int		ft_lstsize_env(t_env *lst);
+void	lst_clear_env(t_env *env);
+char	*ft_strchr(char *s, int c);
+char	*ft_strrchr(char *s, int c);
+char	*get_chars(char* string, int index);
+t_env	*ft_lstlast_env(t_env *lst);
+void	lstadd_back_env(t_env **lst, t_env *new);
+int		ft_atoi(const char *str);
+char	**env_empty(void);
+void	envi(char **env, t_env **head);
+int		is_sorted(t_env *exp);
+t_env	*copy_list(t_env *env);
+t_env	*sorted_env(t_env *exp);
+void	env(t_env *head , char *str);
+int		node_existences(t_env *env, char *key);
+int		equal_num(char *input);
+int		parsing(char *input);
+void	add_var(t_env *env, char **str);
+void	unset(t_env **env, char **str);
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
+int		fun(char *input, char c);
+void    echo(t_parc *parc);
+void	cd(char **str, t_env *env);
+void	pwd(char **str);
 
 #endif

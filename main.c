@@ -5,14 +5,14 @@ int	e_flag;
 void	ft_readline(int sig)
 {
 	(void)sig;
-	if (e_flag == 1)
+	if (sig == 2 && e_flag == 1)
 	{
 		close(STDIN_FILENO);
 		e_flag = 0;
 	}
-	else if (e_flag == 1)
+	else if (sig == 2 &&e_flag == 1)
 		return ;
-	else if (e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (sig == 2 && e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
@@ -43,8 +43,10 @@ void	ft_joine_word(t_list *tmp)
 		if (tmp->type == WORD)
 		{
 			if (ft_strchr(tmp->content, '\'') || ft_strchr(tmp->content, '\"'))
+			{
 				tmp->flag = 1;
-			tmp->content = quotes_remover(tmp->content);
+				tmp->content = quotes_remover(tmp->content);
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -95,6 +97,7 @@ void	my()
 
 int	main(int ac, char **av, char **env)
 {
+	// atexit(my);
 	char	*input;
 	char	**str;
 	t_parc	*parc;
@@ -108,11 +111,13 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	g_flag = 0;
 	e_flag = 0;
-	// atexit(my);
 	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGQUIT, ft_readline);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	envi(&env, &envir);
+	if (env[0] == NULL)
+		env = env_empty();
+	envi(env, &envir);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -126,7 +131,7 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-				builting_m_cmd(parc, envir, env);
+				builting_m_cmd(parc, &envir, env);
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);

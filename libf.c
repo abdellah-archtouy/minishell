@@ -76,6 +76,8 @@ int	ft_strcmp(const char *a, const char *b)
 	s1 = (unsigned char *)a;
 	s2 = (unsigned char *)b;
 
+	if (!s1 || !s2)
+		return (-1);
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	if ((s1[i] - s2[i]) == 0)
