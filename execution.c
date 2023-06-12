@@ -22,11 +22,30 @@ void	ft_print_error(char *str, char *str1)
 	exit(127);
 }
 
-void	execute_m_cmd(t_parc *parcer, t_env *env, char **tenv)
+char	**ft_get_env(t_env	*env)
+{
+	char	**envp;
+	int		i;
+
+	i = 0;
+	envp = malloc((ft_lstsize_env(env) + 1) * 8);
+	while (env)
+	{
+		envp[i] = ft_strjoin(env->key, "=");
+		envp[i] = ft_strjoin(envp[i], env->content);
+		i++;
+		env = env->next;
+	}
+	envp[i] = NULL;
+	return (envp);
+}
+
+void	execute_m_cmd(t_parc *parcer, t_env *env)
 {
 	char	**path1;
 	char	*str;
 	int		i;
+	char	**envp;
 
 	i = 0;
 	path1 = ft_get_path(env);
@@ -46,14 +65,16 @@ void	execute_m_cmd(t_parc *parcer, t_env *env, char **tenv)
 	if (str == NULL)
 		return (ft_print_error(parcer->content[0],
 				": command not found\n"), exit(127));
-	else if (execve(str, parcer->content, tenv) < 0)
+	envp = ft_get_env(env);
+	if (execve(str, parcer->content, envp) < 0)
 		perror("execve");
 	exit(0);
 }
 
-void	ft_execute(t_parc *parcer, char	**tenv, char **path1, char *str)
+void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
 {
-	int	i;
+	int		i;
+	char	**envp;
 
 	i = 0;
 	while (path1[i])
@@ -69,7 +90,8 @@ void	ft_execute(t_parc *parcer, char	**tenv, char **path1, char *str)
 	if (str == NULL)
 		return (ft_print_error(parcer->content[0],
 				": command not found\n"), exit(127));
-	else if (execve(str, parcer->content, tenv) < 0)
+	envp = ft_get_env(env);
+	if (execve(str, parcer->content, envp) < 0)
 		perror("execve");
 	exit(1);
 }
@@ -94,7 +116,7 @@ void	ft_check_exit(t_env *env, int status)
 	}
 }
 
-void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
+void	execute_cmd(t_parc *parcer, t_env *env)
 {
 	pid_t	id;
 	char	**path1;
@@ -116,7 +138,7 @@ void	execute_cmd(t_parc *parcer, t_env *env, char	**tenv)
 		if (!path1)
 			ft_print_error(parcer->content[0],
 				": No such file or directory\n");
-		ft_execute(parcer, tenv, path1, str);
+		ft_execute(parcer, env, path1, str);
 	}
 	g_my.e_flag = 0;
 	waitpid(id, &status, 0);
@@ -148,7 +170,7 @@ void	ft_dup(t_parc *parc, int *fd, int *old)
 	}
 }
 
-void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
+void	builting_m_cmd(t_parc *parc, t_env	*env)
 {
 	int	fd[2];
 	int	pid;
@@ -163,7 +185,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 	status = 0;
 	if (!parc->next)
 	{
-		builting(parc, env, tenv);
+		builting(parc, env);
 	}
 	else
 	{
@@ -177,7 +199,7 @@ void	builting_m_cmd(t_parc *parc, t_env	*env, char	**tenv)
 			if (pid == 0)
 			{
 				ft_dup(parc, fd, &old);
-				builting1(parc, env, tenv);
+				builting1(parc, env);
 			}
 			g_my.e_flag = 0;
 			if (parc->in > 2)

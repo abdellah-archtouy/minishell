@@ -14,6 +14,19 @@ t_env	*ft_lstnew_env(char *key, char *content)
 	return (a);
 }
 
+int    ft_lstsize_env(t_env *lst)
+{
+    int    count;
+
+    count = 0;
+    while (lst != NULL)
+    {
+        count++;
+        lst = lst -> next;
+    }
+    return (count);
+}
+
 char	*ft_strchr(char *s, int c)
 {
 	char	*c1;
@@ -237,19 +250,6 @@ void	envi(char ***env, t_env **head)
 		}
 	}
 	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
-}
-
-int	ft_lstsize_env(t_env *lst)
-{
-	int	len;
-
-	len = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		len++;
-	}
-	return (len);
 }
 
 int	is_sorted(t_env *exp)
@@ -642,7 +642,7 @@ void	pwd(char **str)
 	printf("%s\n", buff);
 }
 
-void	builting(t_parc *parc, t_env *l_env, char	**tenv)
+void	builting(t_parc *parc, t_env *l_env)
 {
 	static int	i;
 
@@ -665,10 +665,10 @@ void	builting(t_parc *parc, t_env *l_env, char	**tenv)
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
 		return (printf("exit\n"), exit(0));
 	else
-		execute_cmd(parc, l_env, tenv);
+		execute_cmd(parc, l_env);
 }
 
-void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
+void	builting1(t_parc *parc, t_env *l_env)
 {
 	if (parc->content[0] == NULL)
 		return ;
@@ -688,6 +688,6 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
 		return (printf("exit\n"), exit(0));
 	else
-		execute_m_cmd(parc, l_env, tenv);
+		execute_m_cmd(parc, l_env);
 	exit(1);
 }

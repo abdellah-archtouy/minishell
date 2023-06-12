@@ -142,7 +142,7 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-				builting_m_cmd(parc, envir, env);
+				builting_m_cmd(parc, envir);
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);
