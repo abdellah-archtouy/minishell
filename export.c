@@ -689,4 +689,5 @@ void	builting1(t_parc *parc, t_env *l_env, char	**tenv)
 		return (printf("exit\n"), exit(0));
 	else
 		execute_m_cmd(parc, l_env, tenv);
+	exit(1);
 }
