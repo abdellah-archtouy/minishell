@@ -1,46 +1,42 @@
-total 1200
-drwxr-xr-x  45 aarchtou  candidate    1530 Jun 12 14:33 .
-drwxr-xr-x   6 aarchtou  candidate     204 Jun 10 21:26 ..
-drwxr-xr-x  15 aarchtou  candidate     510 Jun 12 12:07 .git
-drwxr-xr-x   3 aarchtou  candidate     102 Jun 11 15:32 .vscode
--rw-r--r--   1 aarchtou  candidate     666 Jun 12 14:27 Makefile
--rw-r--r--   1 aarchtou  candidate     109 Jun 10 21:26 TODO
--rw-r--r--   1 aarchtou  candidate       0 Jun 12 14:33 a
--rw-r--r--@  1 aarchtou  candidate    3709 Jun 12 14:01 execution.c
--rw-r--r--   1 aarchtou  candidate    5244 Jun 12 14:30 execution.o
--rw-r--r--   1 aarchtou  candidate    1554 Jun 12 14:29 expand.c
--rw-r--r--   1 aarchtou  candidate    2596 Jun 12 14:30 expand.o
--rw-r--r--   1 aarchtou  candidate   11494 Jun 12 14:00 export.c
--rw-r--r--   1 aarchtou  candidate   14340 Jun 12 14:30 export.o
--rw-r--r--   1 aarchtou  candidate    1167 Jun 10 21:26 ft_split1.c
--rw-r--r--   1 aarchtou  candidate    2036 Jun 12 14:30 ft_split1.o
--rw-r--r--   1 aarchtou  candidate    1254 Jun 11 16:40 ft_strdup.c
--rw-r--r--   1 aarchtou  candidate    2084 Jun 12 14:30 ft_strdup.o
--rw-r--r--   1 aarchtou  candidate    1595 Jun 10 21:26 ft_strjoin.c
--rw-r--r--   1 aarchtou  candidate    2700 Jun 12 14:30 ft_strjoin.o
--rw-r--r--   1 aarchtou  candidate    1910 Jun 11 16:45 lexer.c
--rw-r--r--   1 aarchtou  candidate    3340 Jun 12 14:30 lexer.o
--rw-r--r--   1 aarchtou  candidate    1299 Jun 10 21:26 libf.c
--rw-r--r--   1 aarchtou  candidate    2356 Jun 12 14:30 libf.o
--rw-r--r--   1 aarchtou  candidate    1823 Jun 12 14:30 libf2.c
--rw-r--r--   1 aarchtou  candidate    2640 Jun 12 14:30 libf2.o
--rw-r--r--   1 aarchtou  candidate    2418 Jun 12 14:01 main.c
--rw-r--r--   1 aarchtou  candidate    3740 Jun 12 14:30 main.o
--rw-r--r--   1 aarchtou  candidate    3123 Jun 12 14:28 mini.h
--rwxr-xr-x   1 aarchtou  candidate   71856 Jun 12 14:33 minishell
-drwxr-xr-x   3 aarchtou  candidate     102 Jun 12 12:38 minishell.dSYM
--rw-r--r--   1 aarchtou  candidate    1453 Jun 12 14:26 opne_files.c
--rw-r--r--   1 aarchtou  candidate    2696 Jun 12 14:30 opne_files.o
--rw-r--r--   1 aarchtou  candidate   94813 Jun 10 21:26 our_path.tldr
--rw-r--r--   1 aarchtou  candidate    1560 Jun 12 14:33 parcer.c
--rw-r--r--   1 aarchtou  candidate    2508 Jun 12 14:33 parcer.o
--rw-r--r--   1 aarchtou  candidate     995 Jun 11 12:34 parsing_utils.c
--rw-r--r--   1 aarchtou  candidate    1732 Jun 12 14:30 parsing_utils.o
--rw-r--r--   1 aarchtou  candidate    1271 Jun 10 21:26 split.c
--rw-r--r--   1 aarchtou  candidate    2576 Jun 12 14:30 split.o
--rw-r--r--   1 aarchtou  candidate    1644 Jun 10 21:26 syntaxe_error.c
--rw-r--r--   1 aarchtou  candidate    2836 Jun 12 14:30 syntaxe_error.o
--rw-r--r--   1 aarchtou  candidate    1990 Jun 11 15:37 test.c
--rw-r--r--   1 aarchtou  candidate  270180 Jun 10 21:26 tkhrbi9.tldr
--rw-r--r--   1 aarchtou  candidate     791 Jun 10 21:26 utils.c
--rw-r--r--   1 aarchtou  candidate    1724 Jun 12 14:30 utils.o
+Makefile
+TODO
+a
+execution.c
+execution.o
+expand.c
+expand.o
+export.c
+export.o
+ft_split1.c
+ft_split1.o
+ft_strdup.c
+ft_strdup.o
+ft_strjoin.c
+ft_strjoin.o
+lexer.c
+lexer.o
+libf.c
+libf.o
+libf1.c
+libf1.o
+libf2.c
+libf2.o
+main.c
+main.o
+mini.h
+minishell
+minishell.dSYM
+opne_files.c
+opne_files.o
+our_path.tldr
+parcer.c
+parcer.o
+parsing_utils.c
+parsing_utils.o
+split.c
+split.o
+syntaxe_error.c
+syntaxe_error.o
+tkhrbi9.tldr
+utils.c
+utils.o

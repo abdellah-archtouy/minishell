@@ -4,15 +4,14 @@ t_glo g_my;
 
 void	ft_readline(int sig)
 {
-	(void)sig;
-	if (g_my.e_flag == 1)
+	if (sig == 2 && g_my.e_flag == 1)
 	{
 		close(STDIN_FILENO);
 		g_my.e_flag = 0;
 	}
-	else if (g_my.e_flag == 1)
+	else if (sig == 2 && g_my.e_flag == 1)
 		return ;
-	else if (g_my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
+	else if (sig == 2 && g_my.e_flag == 0 && waitpid(-1, NULL, WNOHANG) != 0)
 	{
 		g_my.g_exit = 1;
 		write(1, "\n", 1);
@@ -118,6 +117,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		input = readline("minishell$ ");
+		// ft_expand(input, envir);
+		// exit(0);
 		if (input == NULL)
 		{
 			printf("\033[11C\033[1Aexit\n");

@@ -24,6 +24,7 @@ typedef struct g_glo
 {
 	int	e_flag;
 	int	g_exit;
+	int	g_flag;
 
 }	t_glo;
 
@@ -57,6 +58,7 @@ typedef struct s_parc
 	struct s_parc	*next;
 }				t_parc;
 
+// void	ft_expand(char *input, t_env *envp);
 t_parc	*ft_parcnew(char **content, int in, int out, t_env *env);
 t_parc	*ft_parclast(t_parc *lst);
 void	ft_parcadd_back(t_parc **lst, t_parc *new);

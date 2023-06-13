@@ -80,7 +80,11 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
 		free(str);
 		if ((*ptr) != NULL)
+		{
+			free((*ptr)->content);
+			free((*ptr));
 			(*ptr) = (*ptr)->next;
+		}
 	}
 	return (0);
 }

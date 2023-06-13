@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c libf1.c ft_strjoin.c ft_strdup.c ft_split1.c execution.c parsing_utils.c opne_files.c expand.c
+SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c libf1.c ft_strjoin.c ft_strdup.c ft_split1.c execution.c parsing_utils.c opne_files.c expand.c# test.c
  
 OBJ = $(SRC:%.c=%.o)
 
