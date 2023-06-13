@@ -175,7 +175,7 @@ void	ft_dup(t_parc *parc, int *fd, int *old)
 	}
 }
 
-void	builting_m_cmd(t_parc *parc, t_env	*env)
+void	builting_m_cmd(t_parc *parc, t_env	**env)
 {
 	int	fd[2];
 	int	pid;
@@ -223,6 +223,6 @@ void	builting_m_cmd(t_parc *parc, t_env	*env)
 				break ;
 			id = wait(&status);
 		}
-		ft_check_exit(env, status);
+		ft_check_exit(*env, status);
 	}
 }

@@ -62,7 +62,7 @@ char	*ft_strrchr(char *s, int c)
 	return (0);
 }
 
-char* get_chars(char* string, int index)
+char	*get_chars(char* string, int index)
 {
 	char	*found;
 	char	*returned = NULL;
@@ -202,7 +202,7 @@ char	**env_empty(void)
 	char	**str;
 	str = malloc(6 * 8);
 	str[0] = ft_strdup("PWD=/Users/tmiftah/Desktop/minishell");
-	str[1] = ft_strdup("SHLVL=1");
+	str[1] = ft_strdup("SHLVL=0");
 	str[2] = ft_strdup("_=/usr/bin/env");
 	str[3] = ft_strdup("OLDPWD");
 	str[4] = ft_strdup("PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
@@ -210,44 +210,33 @@ char	**env_empty(void)
 	return (str);
 }
 
-void	envi(char ***env, t_env **head)
+void	envi(char **env, t_env **head)
 {
 	int		i;
 	int		l;
 	char	*key = NULL;
 	char	*content = NULL;
-	char	*tmp;
 
 	i = 0;
-	if ((*env)[0] != NULL)
-		while ((*env)[i])
-		{
-			if (ft_strncmp((*env)[i], "SHLVL", 5) == 0)
-			{
-				l = ft_atoi(&(*env)[i][6]);
-				if (l == 999)
-					l = 0;
-				tmp = ft_itoa(l + 1);
-				(*env)[i] = ft_strjoin(ft_strdup("SHLVL="), tmp);
-				free(tmp);
-			}
-			key = get_chars((*env)[i], 0);
-			content = get_chars((*env)[i], 1);
-			lstadd_back_env(head, ft_lstnew_env(key, content));
-			i++;
-		}
-	else
+	if (env[0] == NULL)
 	{
-		(*env) = env_empty();
-		while ((*env)[i])
+		env = env_empty();
+		lstch_env(*head, "PATH")->flag = 1;
+	}
+	while ((env)[i])
+	{
+		key = get_chars((env)[i], 0);
+		content = get_chars((env)[i], 1);
+		if (ft_strcmp(key, "SHLVL") == 0)
 		{
-			key = get_chars((*env)[i], 0);
-			content = get_chars((*env)[i], 1);
-			lstadd_back_env(head, ft_lstnew_env(key, content));
-			if (ft_strcmp(key, "PATH") == 0)
-				ft_lstlast_env(*head)->flag = 1;
-			i++;
+			l = ft_atoi(key);
+			if (l < 0)
+				l = -1;
+			free(content);
+			content = ft_itoa(l + 1);
 		}
+		lstadd_back_env(head, ft_lstnew_env(key, content));
+		i++;
 	}
 	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
 }
@@ -265,19 +254,12 @@ int	is_sorted(t_env *exp)
 
 t_env	*copy_list(t_env *env)
 {
-	char	*a;
-	char	*b;
-	int		i;
 	t_env	*exp;
 
 	exp = NULL;
 	while (env != NULL)
 	{
-		a = env->key;
-		b = env->content;
-		i = env->flag;
-		lstadd_back_env(&exp, ft_lstnew_env(a, b));
-		ft_lstlast_env(exp)->flag = i;
+		lstadd_back_env(&exp, ft_lstnew_env(env->key, env->content));
 		env = env->next;
 	}
 	return (exp);
@@ -286,14 +268,12 @@ t_env	*copy_list(t_env *env)
 t_env	*sorted_env(t_env *exp)
 {
 	char	*a;
-	char	*b;
+	// char	*b;
 	t_env	*tmp;
 	t_env	*save;
-	int		i;
 
 	tmp = copy_list(exp);
 	save = tmp;
-	i = 0;
 	while (is_sorted(save) == 0)
 	{
 		tmp = save;
@@ -302,14 +282,11 @@ t_env	*sorted_env(t_env *exp)
 			if ((ft_strcmp(tmp->key, tmp->next->key) > 0))
 			{
 				a = tmp->key;
-				b = tmp->content;
-				i = tmp->flag;
 				tmp->key = tmp->next->key;
-				tmp->content = tmp->next->content;
-				tmp->flag = tmp->next->flag;
 				tmp->next->key = a;
-				tmp->next->content = b;
-				tmp->next->flag = i;
+				a = tmp->content;
+				tmp->content = tmp->next->content;
+				tmp->next->content = a;
 			}
 			tmp = tmp->next;
 		}
@@ -330,32 +307,61 @@ void	lst_clear_env(t_env *env)
 	env = NULL;
 }
 
-void	env(t_env *head , char *str)
+void	print_env(t_parc *parc, t_env *head, int index)
+{
+	if (index == 0 && head->flag == 0)
+	{
+		ft_putstr_fd(head->key, parc->out);
+		ft_putstr_fd("=", parc->out);
+		ft_putstr_fd(head->content, parc->out);
+		ft_putstr_fd("\n", parc->out);
+	}
+	else if (index == 1 && head->flag == 0)
+	{
+		ft_putstr_fd("declare -x ", parc->out);
+		ft_putstr_fd(head->key, parc->out);
+		ft_putstr_fd("=", parc->out);
+		ft_putstr_fd("\"", parc->out);
+		ft_putstr_fd(head->content, parc->out);
+		ft_putstr_fd("\"", parc->out);
+		ft_putstr_fd("\n", parc->out);
+	}
+	else if (index == 2 && head->flag == 0)
+	{
+		ft_putstr_fd("declare -x ", parc->out);
+		ft_putstr_fd(head->key, parc->out);
+		ft_putstr_fd("\n", parc->out);
+	}
+}
+
+void	env(t_env *head , char *str, t_parc *parc)
 {
 	t_env	*exp;
 	t_env	*fexp;
 
 	exp = NULL;
 	if (ft_strcmp(str, "env") == 0)
+	{
 		while (head != NULL)
 		{
 			if (head->content != NULL && ft_strcmp(head->key, "OLDPWD")
-				&& head->flag == 0 && ft_strcmp(head->key, "?"))
-				printf("%s=%s\n", head->key, head->content);
+				&& ft_strcmp(head->key, "?"))
+				print_env(parc, head, 0);
 			head = head->next;
 		}
+	}
 	else if (ft_strcmp(str, "export") == 0)
 	{
 		exp = sorted_env(head);
 		fexp = exp;
 		while (exp != NULL)
 		{
-			if (ft_strcmp(exp->key, "_") && ft_strcmp(exp->key, "?") && exp->flag == 0)
+			if (ft_strcmp(exp->key, "_") && ft_strcmp(exp->key, "?"))
 			{
 				if (exp->content != NULL)
-					printf("declare -x %s=\"%s\"\n", exp->key, exp->content);
+					print_env(parc, exp, 1);
 				else if (exp->content == NULL)
-					printf("declare -x %s\n", exp->key);
+					print_env(parc, exp, 2);
 			}
 			exp = exp->next;
 		}
@@ -369,14 +375,23 @@ int	node_existences(t_env *env, char *key)
 
 	i = 0;
 	if (ft_strchr(key, '+'))
-		i = ft_strlen(key) - 1;
-	else
-		i = ft_strlen(key);
-	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, key, i) == 0)
-			return (0);
-		env = env->next;
+		i = ft_strlen(key) - 1;
+		while (env != NULL)
+		{
+			if (ft_strncmp(env->key, key, i) == 0)
+				return (0);
+			env = env->next;
+		}
+	}
+	else
+	{
+		while (env != NULL)
+		{
+			if (ft_strcmp(env->key, key) == 0)
+				return (0);
+			env = env->next;
+		}
 	}
 	return (1);
 }
@@ -420,20 +435,20 @@ int	parsing(char *input)
 					|| (input[i] >= '0' && input[i] <= '9'))
 				i++;
 			else
-				return (ft_error("export: ", input), 1);
+				return (1);
 		}
 	}
 	return (0);
 }
 
-void	add_var(t_env *env, char **str)
+void	add_var(t_env **env, char **str)
 {
 	int		i;
 	char	*content;
 	char	*key;
 	t_env	*head;
 
-	head = env;
+	head = *env;
 	i = 1;
 	while (str[i])
 	{
@@ -444,13 +459,13 @@ void	add_var(t_env *env, char **str)
 		}
 		key = get_chars(str[i], 0);
 		content = get_chars(str[i], 1);
-		if (node_existences(env, key))
+		if (node_existences(*env, key))
 		{
 			if (ft_strchr(key, '+'))
 				key[ft_strlen(key) - 1] = '\0';
-			lstadd_back_env(&env, ft_lstnew_env(key, content));
+			lstadd_back_env(env, ft_lstnew_env(key, content));
 		}
-		else if (node_existences(env, key) == 0 && content != NULL)
+		else if (node_existences(*env, key) == 0 && content != NULL)
 		{
 			if (ft_strchr(key, '+') == 0)
 			{
@@ -463,7 +478,7 @@ void	add_var(t_env *env, char **str)
 				free(key);
 				free(head->content);
 				head->content = content;
-			}
+			} 
 			else if (ft_strchr(key, '+'))
 			{
 				while (head != NULL)
@@ -481,54 +496,58 @@ void	add_var(t_env *env, char **str)
 	}
 }
 
-void	unset(t_env *env, char **str)
+void	unset(t_env **env, char **str)
 {
 	int		i;
 	int		j;
 	t_env	*head;
 	t_env	*head0;
 
-	i = 0;
-	j = 0;
-	head = env;
-	head0 = env;
-	while (str[i])
-	{
-		j = 0;
-		while(str[i][j])
-			if ((str[i][j] >= 'A' && str[i][j] <= 'Z')
-			|| (str[i][j] >= 'a' && str[i][j] <= 'z')
-				|| str[i][j] == '_')
-				j++;
-			else
-				return ;
-		i++;
-	}
 	i = 1;
-	while (str[i] && node_existences(env, str[i]) == 0)
+	j = 0;
+	head = *env;
+	head0 = *env;
+	while (str && str[i])
 	{
-		head = env;
-		head0 = env;
+		if (parsing(str[i]) || node_existences(*env, str[i]))
+		{
+			i++;
+			continue ;
+		}
+		head = *env;
+		head0 = *env;
 		while (head != NULL)
 		{
 			if (ft_strcmp(head->key, str[i]) == 0)
 				break;
 			head = head->next;
 		}
-		if (head == env)
+		if (head == *env)
 		{
-			env = env->next;
-			free (head);
+			head = (*env)->next;
+			if (((*env)->key))
+				free((*env)->key);
+			if (((*env)->content))
+				free((*env)->content);
+			free((*env));
+			*env = head;
 		}
-		while (head0 != NULL && head != env)
+		else
 		{
-			if (head0->next == head)
+			while (head0->next != NULL && head != *env)
 			{
-				head0->next = head->next;
-				free(head);
-				break ;
+				if (head0->next == head)
+				{
+					head0->next = head->next;
+					if ((head->key))
+						free(head->key);
+					if ((head->content))
+						free(head->content);
+					free(head);
+					break ;
+				}
+				head0 = head0->next;
 			}
-			head0 = head0->next;
 		}
 		i++;
 	}
@@ -574,6 +593,10 @@ int	fun(char *input, char c)
 	int	i;
 
 	i = 0;
+	if (input[i] == '-' && input[i + 1] == 0)
+		return (1);
+	if (input[i] == '-')
+		i++;
 	while (input[i])
 	{
 		if (input[i] != c)
@@ -597,7 +620,6 @@ void    echo(t_parc *parc)
 		j = 0;
 		if (parc->content[i][j] == '-')
 		{
-			j++;
 			if (fun(&parc->content[i][j], 'n'))
 				break ;
 			r++;
@@ -616,42 +638,64 @@ void    echo(t_parc *parc)
 		ft_putstr_fd("\n", parc->out);
 }
 
-void	cd(char **str, t_env *env)
+t_env	*lstch_env(t_env *head, char *key)
 {
-	while (env)
+	while (head)
 	{
-		if (ft_strcmp(env->key, "HOME") == 0)
+		if (ft_strcmp(head->key, key) == 0)
 			break ;
-		env = env->next;
+		head = head->next;
 	}
-	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
-	{
-		if (chdir(env->content) == -1)
-			return ;
-	}
-	if (chdir(str[1]) == -1)
-		return ;
+	return (head);
 }
 
-void	pwd(char **str)
+void	cd(char **str, t_env **env)
+{
+	char	buff[1024];
+	char	*tmp;
+
+	getcwd(buff, 1024);
+	tmp = str[1];
+	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
+		tmp = lstch_env(*env, "HOME")->content;
+	if (chdir(tmp) == -1)
+	{
+		if (lstch_env(*env, "?")->content)
+			free(lstch_env(*env, "?")->content);
+		lstch_env(*env, "?")->content = ft_strdup("1");
+		return ;
+	}
+	if (lstch_env(*env, "OLDPWD")->content)
+		free(lstch_env(*env, "OLDPWD")->content);
+	lstch_env(*env, "OLDPWD")->content = ft_strdup(buff);
+	getcwd(buff, 1024);
+	if (lstch_env(*env, "PWD")->content)
+		free(lstch_env(*env, "PWD")->content);
+	lstch_env(*env, "PWD")->content = ft_strdup(buff);
+}
+
+void	pwd(char **str, t_parc *parc)
 {
 	char	buff[1024];
 	(void)str;
 
-	getcwd(buff, 1024);
-	printf("%s\n", buff);
+	if (getcwd(buff, 1024) != NULL)
+	{
+	 	ft_putstr_fd(buff, parc->out);
+	 	ft_putstr_fd("\n", parc->out);
+	}
 }
 
-void	builting(t_parc *parc, t_env *l_env)
+void	builting(t_parc *parc, t_env **l_env)
 {
-	static int	i;
-
-	++i;
-	if (parc->content[0] == NULL)
+	if (lstch_env(*l_env, "?")->content)
+		free(lstch_env(*l_env, "?")->content);
+	lstch_env(*l_env, "?")->content = ft_strdup("0");
+	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
-		env(l_env, parc->content[0]);
+		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
 		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
@@ -661,20 +705,23 @@ void	builting(t_parc *parc, t_env *l_env)
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
 		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
-		pwd(parc->content);
+		pwd(parc->content, parc);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
 		return (printf("exit\n"), exit(0));
 	else
-		execute_cmd(parc, l_env);
+		execute_cmd(parc, *l_env);
 }
 
-void	builting1(t_parc *parc, t_env *l_env)
+void	builting1(t_parc *parc, t_env **l_env)
 {
-	if (parc->content[0] == NULL)
+	if (lstch_env(*l_env, "?")->content)
+		free(lstch_env(*l_env, "?")->content);
+	lstch_env(*l_env, "?")->content = ft_strdup("0");
+	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
-		env(l_env, parc->content[0]);
+		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
 		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
@@ -684,10 +731,10 @@ void	builting1(t_parc *parc, t_env *l_env)
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
 		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
-		pwd(parc->content);
+		pwd(parc->content, parc);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
 		return (printf("exit\n"), exit(0));
 	else
-		execute_m_cmd(parc, l_env);
+		execute_m_cmd(parc, *l_env);
 	exit(1);
 }

@@ -97,6 +97,7 @@ void	ft_lstclear_par(t_parc **lst)
 
 int	main(int ac, char **av, char **env)
 {
+	// atexit(my);
 	char	*input;
 	char	**str;
 	t_parc	*parc;
@@ -113,16 +114,13 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_readline);
 	rl_catch_signals = 0;
-	envi(&env, &envir);
+	envi(env, &envir);
 	while (1)
 	{
 		input = readline("minishell$ ");
-		// ft_expand(input, envir);
-		// exit(0);
 		if (input == NULL)
 		{
 			printf("\033[11C\033[1Aexit\n");
-			signal(SIGINT, SIG_IGN);
 			exit(1);
 		}
 		t_env	*tmp = envir;
@@ -143,7 +141,7 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(input);
 			if (ft_parcing(input, &str, &parc, &envir) == 0)
-				builting_m_cmd(parc, envir);
+				builting_m_cmd(parc, &envir);
 			if (parc != NULL)
 			{
 				ft_lstclear_par(&parc);
