@@ -214,14 +214,16 @@ void	envi(char **env, t_env **head)
 {
 	int		i;
 	int		l;
+	int		r;
 	char	*key = NULL;
 	char	*content = NULL;
 
 	i = 0;
+	r = 0;
 	if (env[0] == NULL)
 	{
 		env = env_empty();
-		lstch_env(*head, "PATH")->flag = 1;
+		r++;
 	}
 	while ((env)[i])
 	{
@@ -229,7 +231,7 @@ void	envi(char **env, t_env **head)
 		content = get_chars((env)[i], 1);
 		if (ft_strcmp(key, "SHLVL") == 0)
 		{
-			l = ft_atoi(key);
+			l = ft_atoi(content);
 			if (l < 0)
 				l = -1;
 			free(content);
@@ -239,6 +241,8 @@ void	envi(char **env, t_env **head)
 		i++;
 	}
 	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
+	if (r > 0)
+		lstch_env(*head, "PATH")->flag = 1;
 }
 
 int	is_sorted(t_env *exp)
@@ -260,6 +264,7 @@ t_env	*copy_list(t_env *env)
 	while (env != NULL)
 	{
 		lstadd_back_env(&exp, ft_lstnew_env(env->key, env->content));
+		ft_lstlast_env(exp)->flag = env->flag;
 		env = env->next;
 	}
 	return (exp);
@@ -268,7 +273,7 @@ t_env	*copy_list(t_env *env)
 t_env	*sorted_env(t_env *exp)
 {
 	char	*a;
-	// char	*b;
+	int		i;
 	t_env	*tmp;
 	t_env	*save;
 
@@ -287,6 +292,9 @@ t_env	*sorted_env(t_env *exp)
 				a = tmp->content;
 				tmp->content = tmp->next->content;
 				tmp->next->content = a;
+				i = tmp->flag;
+				tmp->flag = tmp->next->flag;
+				tmp->next->flag = i;
 			}
 			tmp = tmp->next;
 		}
@@ -345,7 +353,7 @@ void	env(t_env *head , char *str, t_parc *parc)
 		while (head != NULL)
 		{
 			if (head->content != NULL && ft_strcmp(head->key, "OLDPWD")
-				&& ft_strcmp(head->key, "?"))
+				&& ft_strcmp(head->key, "?") && head->flag == 0)
 				print_env(parc, head, 0);
 			head = head->next;
 		}
@@ -358,9 +366,9 @@ void	env(t_env *head , char *str, t_parc *parc)
 		{
 			if (ft_strcmp(exp->key, "_") && ft_strcmp(exp->key, "?"))
 			{
-				if (exp->content != NULL)
+				if (exp->content != NULL && exp->flag == 0)
 					print_env(parc, exp, 1);
-				else if (exp->content == NULL)
+				else if (exp->content == NULL && exp->flag == 0)
 					print_env(parc, exp, 2);
 			}
 			exp = exp->next;

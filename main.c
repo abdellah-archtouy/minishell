@@ -122,8 +122,7 @@ int	main(int ac, char **av, char **env)
 		if (input == NULL)
 		{
 			printf("\033[11C\033[1Aexit\n");
-			signal(SIGINT, SIG_IGN);
-			exit(1);
+			exit(0);
 		}
 		t_env	*tmp = envir;
 		if (g_my.g_exit)
