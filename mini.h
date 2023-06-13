@@ -26,12 +26,6 @@ typedef struct g_glo
 	int	g_exit;
 }		t_glo;
 
-typedef struct s_global
-{
-	int	dup;
-	int	flag;
-}		t_globa;
-
 typedef struct s_list
 {
 	char			*content;
@@ -44,6 +38,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*content;
+	int				flag;
 	struct s_env	*next;
 }				t_env;
 
@@ -124,13 +119,14 @@ void	env(t_env *head , char *str, t_parc *parc);
 int		node_existences(t_env *env, char *key);
 int		equal_num(char *input);
 int		parsing(char *input);
-void	add_var(t_env *env, char **str);
+void	add_var(t_env **env, char **str);
 void	unset(t_env **env, char **str);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 int		fun(char *input, char c);
 void    echo(t_parc *parc);
-void	cd(char **str, t_env *env);
+void	cd(char **str, t_env **env);
 void	pwd(char **str, t_parc *parc);
+t_env	*lstch_env(t_env *head, char *key);
 
 #endif

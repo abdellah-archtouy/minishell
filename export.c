@@ -9,6 +9,7 @@ t_env	*ft_lstnew_env(char *key, char *content)
 		return (0);
 	a->content = content;
 	a->key = key;
+	a->flag = 0;
 	a->next = NULL;
 	return (a);
 }
@@ -215,11 +216,13 @@ void	envi(char **env, t_env **head)
 	int		l;
 	char	*key = NULL;
 	char	*content = NULL;
-	// char	*tmp;
 
 	i = 0;
 	if (env[0] == NULL)
+	{
 		env = env_empty();
+		lstch_env(*head, "PATH")->flag = 1;
+	}
 	while ((env)[i])
 	{
 		key = get_chars((env)[i], 0);
@@ -265,7 +268,7 @@ t_env	*copy_list(t_env *env)
 t_env	*sorted_env(t_env *exp)
 {
 	char	*a;
-	char	*b;
+	// char	*b;
 	t_env	*tmp;
 	t_env	*save;
 
@@ -279,11 +282,11 @@ t_env	*sorted_env(t_env *exp)
 			if ((ft_strcmp(tmp->key, tmp->next->key) > 0))
 			{
 				a = tmp->key;
-				b = tmp->content;
 				tmp->key = tmp->next->key;
-				tmp->content = tmp->next->content;
 				tmp->next->key = a;
-				tmp->next->content = b;
+				a = tmp->content;
+				tmp->content = tmp->next->content;
+				tmp->next->content = a;
 			}
 			tmp = tmp->next;
 		}
@@ -306,23 +309,24 @@ void	lst_clear_env(t_env *env)
 
 void	print_env(t_parc *parc, t_env *head, int index)
 {
-	if (index == 0)
+	if (index == 0 && head->flag == 0)
 	{
 		ft_putstr_fd(head->key, parc->out);
 		ft_putstr_fd("=", parc->out);
 		ft_putstr_fd(head->content, parc->out);
 		ft_putstr_fd("\n", parc->out);
 	}
-	else if (index == 1)
+	else if (index == 1 && head->flag == 0)
 	{
 		ft_putstr_fd("declare -x ", parc->out);
 		ft_putstr_fd(head->key, parc->out);
+		ft_putstr_fd("=", parc->out);
 		ft_putstr_fd("\"", parc->out);
 		ft_putstr_fd(head->content, parc->out);
 		ft_putstr_fd("\"", parc->out);
 		ft_putstr_fd("\n", parc->out);
 	}
-	else if (index == 2)
+	else if (index == 2 && head->flag == 0)
 	{
 		ft_putstr_fd("declare -x ", parc->out);
 		ft_putstr_fd(head->key, parc->out);
@@ -437,14 +441,14 @@ int	parsing(char *input)
 	return (0);
 }
 
-void	add_var(t_env *env, char **str)
+void	add_var(t_env **env, char **str)
 {
 	int		i;
 	char	*content;
 	char	*key;
 	t_env	*head;
 
-	head = env;
+	head = *env;
 	i = 1;
 	while (str[i])
 	{
@@ -455,13 +459,13 @@ void	add_var(t_env *env, char **str)
 		}
 		key = get_chars(str[i], 0);
 		content = get_chars(str[i], 1);
-		if (node_existences(env, key))
+		if (node_existences(*env, key))
 		{
 			if (ft_strchr(key, '+'))
 				key[ft_strlen(key) - 1] = '\0';
-			lstadd_back_env(&env, ft_lstnew_env(key, content));
+			lstadd_back_env(env, ft_lstnew_env(key, content));
 		}
-		else if (node_existences(env, key) == 0 && content != NULL)
+		else if (node_existences(*env, key) == 0 && content != NULL)
 		{
 			if (ft_strchr(key, '+') == 0)
 			{
@@ -474,7 +478,7 @@ void	add_var(t_env *env, char **str)
 				free(key);
 				free(head->content);
 				head->content = content;
-			}
+			} 
 			else if (ft_strchr(key, '+'))
 			{
 				while (head != NULL)
@@ -634,21 +638,40 @@ void    echo(t_parc *parc)
 		ft_putstr_fd("\n", parc->out);
 }
 
-void	cd(char **str, t_env *env)
+t_env	*lstch_env(t_env *head, char *key)
 {
-	while (env)
+	while (head)
 	{
-		if (ft_strcmp(env->key, "HOME") == 0)
+		if (ft_strcmp(head->key, key) == 0)
 			break ;
-		env = env->next;
+		head = head->next;
 	}
+	return (head);
+}
+
+void	cd(char **str, t_env **env)
+{
+	char	buff[1024];
+	char	*tmp;
+
+	getcwd(buff, 1024);
+	tmp = str[1];
 	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
+		tmp = lstch_env(*env, "HOME")->content;
+	if (chdir(tmp) == -1)
 	{
-		if (chdir(env->content) == -1)
-			return ;
-	}
-	if (chdir(str[1]) == -1)
+		if (lstch_env(*env, "?")->content)
+			free(lstch_env(*env, "?")->content);
+		lstch_env(*env, "?")->content = ft_strdup("1");
 		return ;
+	}
+	if (lstch_env(*env, "OLDPWD")->content)
+		free(lstch_env(*env, "OLDPWD")->content);
+	lstch_env(*env, "OLDPWD")->content = ft_strdup(buff);
+	getcwd(buff, 1024);
+	if (lstch_env(*env, "PWD")->content)
+		free(lstch_env(*env, "PWD")->content);
+	lstch_env(*env, "PWD")->content = ft_strdup(buff);
 }
 
 void	pwd(char **str, t_parc *parc)
@@ -657,24 +680,30 @@ void	pwd(char **str, t_parc *parc)
 	(void)str;
 
 	if (getcwd(buff, 1024) != NULL)
-		ft_putstr_fd(buff, parc->out);
+	{
+	 	ft_putstr_fd(buff, parc->out);
+	 	ft_putstr_fd("\n", parc->out);
+	}
 }
 
 void	builting(t_parc *parc, t_env **l_env)
 {
+	if (lstch_env(*l_env, "?")->content)
+		free(lstch_env(*l_env, "?")->content);
+	lstch_env(*l_env, "?")->content = ft_strdup("0");
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
 		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-		add_var(*l_env, parc->content);
+		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
 		echo(parc);
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
-		cd(parc->content, *l_env);
+		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
 		pwd(parc->content, parc);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
@@ -685,19 +714,22 @@ void	builting(t_parc *parc, t_env **l_env)
 
 void	builting1(t_parc *parc, t_env **l_env)
 {
+	if (lstch_env(*l_env, "?")->content)
+		free(lstch_env(*l_env, "?")->content);
+	lstch_env(*l_env, "?")->content = ft_strdup("0");
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
 		|| ft_strcmp(parc->content[0], "export") == 0) && parc->content[1] == NULL)
 		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-		add_var(*l_env, parc->content);
+		add_var(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
 		echo(parc);
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
-		cd(parc->content, *l_env);
+		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
 		pwd(parc->content, parc);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
