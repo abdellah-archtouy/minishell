@@ -232,7 +232,7 @@ void	envi(char **env, t_env **head)
 		if (ft_strcmp(key, "SHLVL") == 0)
 		{
 			l = ft_atoi(content);
-			if (l < 0)
+			if (l < 0 && r == 0)
 				l = -1;
 			free(content);
 			content = ft_itoa(l + 1);
