@@ -49,10 +49,10 @@ void	execute_m_cmd(t_parc *parcer, t_env *env)
 
 	i = 0;
 	path1 = ft_get_path(env);
-	if (!path1)
+	if (!path1 && ft_strchr(parcer->content[0], '/') == 0)
 		ft_print_error(parcer->content[0],
 			": No such file or directory\n");
-	while (path1[i])
+	while (path1 && path1[i])
 	{
 		if (ft_strchr(parcer->content[0], '/') == 0)
 			str = ft_strjoin_path(path1[i], parcer->content[0]);
@@ -62,6 +62,8 @@ void	execute_m_cmd(t_parc *parcer, t_env *env)
 		str = NULL;
 		i++;
 	}
+	if (ft_strchr(parcer->content[0], '/') != 0)
+		str = ft_strdup(parcer->content[0]);
 	if (str == NULL)
 		return (ft_print_error(parcer->content[0],
 				": command not found\n"), exit(127));
@@ -77,7 +79,7 @@ void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
 	char	**envp;
 
 	i = 0;
-	while (path1[i])
+	while (path1 && path1[i])
 	{
 		if (ft_strchr(parcer->content[0], '/') == 0)
 			str = ft_strjoin_path(path1[i], parcer->content[0]);
@@ -87,6 +89,8 @@ void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
 		str = NULL;
 		i++;
 	}
+	if (!path1 && ft_strchr(parcer->content[0], '/') != 0)
+		str = ft_strdup(parcer->content[0]);
 	if (str == NULL)
 		return (ft_print_error(parcer->content[0],
 				": command not found\n"), exit(127));
@@ -130,12 +134,13 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 	id = fork();
 	if (id == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		if (parcer->out != 1)
 			dup2(parcer->out, 1);
 		if (parcer->in != 0)
 			dup2(parcer->in, 0);
 		path1 = ft_get_path(env);
-		if (!path1)
+		if (!path1 && ft_strchr(parcer->content[0], '/') == 0)
 			ft_print_error(parcer->content[0],
 				": No such file or directory\n");
 		ft_execute(parcer, env, path1, str);
@@ -198,6 +203,7 @@ void	builting_m_cmd(t_parc *parc, t_env	**env)
 			g_my.e_flag = 1;
 			if (pid == 0)
 			{
+				signal(SIGQUIT, SIG_DFL);
 				ft_dup(parc, fd, &old);
 				builting1(parc, env);
 			}
