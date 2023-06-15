@@ -20,7 +20,7 @@ t_parc	*ft_parclast(t_parc *lst)
 int	ft_help_variabel(char *content, int *a, char **str, int i)
 {
 	if (content[*a] == '?')
-		return (*str = ft_substr(content, i, 1), 0);
+		return (*str = ft_substr(content, i, 1), (*a)++, 0);
 	else if ((content[*a] >= 'a' && content[*a] <= 'z')
 		|| (content[*a] >= 'A' && content[*a] <= 'Z') || content[*a] == '_')
 	{

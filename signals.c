@@ -71,3 +71,23 @@ void	ft_exite_status(t_env *envir)
 		g_my.g_exit = 0;
 	}
 }
+
+void	ft_check_exit(t_env *env, int status)
+{
+	int	exit;
+
+	exit = 0;
+	if (WIFEXITED(status))
+		exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		exit = WTERMSIG(status) + 128;
+	while (env)
+	{
+		if (ft_strcmp(env->key, "?") == 0)
+		{
+			free (env->content);
+			env->content = ft_itoa(exit);
+		}
+		env = env->next;
+	}
+}

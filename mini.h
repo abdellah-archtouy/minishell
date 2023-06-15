@@ -51,7 +51,11 @@ typedef struct s_parc
 }				t_parc;
 
 void	ft_exite_status(t_env *envir);
+void	ft_print_error(char *str);
+char	**ft_get_env(t_env	*env);
+char	**ft_get_path(t_env *env);
 int		ft_history(char *str);
+void	ft_check_exit(t_env *env, int status);
 void	ft_joine_word(t_list *tmp);
 char	*ft_get_char(char *str, char c);
 char	*ft_expand(char *input, t_env *envp);
