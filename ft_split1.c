@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 static int	chek_word(char const *a, char c)

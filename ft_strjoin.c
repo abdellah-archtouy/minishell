@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -19,13 +18,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (ptr == NULL)
 		return (NULL);
 	while (s1[i])
-	{
 		ptr[l++] = s1[i++];
-	}
 	while (s2[t])
-	{
 		ptr[l++] = s2[t++];
-	}
 	ptr[l] = '\0';
 	free(s1);
 	return (ptr);

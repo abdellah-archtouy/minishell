@@ -42,9 +42,7 @@ int	tokenizer(char *input, char ***str, t_env **env)
 	i = 0;
 	while (content[i])
 	{
-		if (ft_get_dolar(content[i]) > 0)
-			content[i] = ft_check_variabel(content[i],
-					*env, ft_get_dolar(content[i]));
+		content[i] = ft_expand(content[i], *env);
 		i++;
 	}
 	free(input);

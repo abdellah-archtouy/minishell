@@ -50,6 +50,11 @@ typedef struct s_parc
 	struct s_parc	*next;
 }				t_parc;
 
+void	ft_exite_status(t_env *envir);
+int		ft_history(char *str);
+void	ft_joine_word(t_list *tmp);
+char	*ft_get_char(char *str, char c);
+char	*ft_expand(char *input, t_env *envp);
 t_parc	*ft_parcnew(char **content, int in, int out, t_env *env);
 t_parc	*ft_parclast(t_parc *lst);
 void	ft_parcadd_back(t_parc **lst, t_parc *new);

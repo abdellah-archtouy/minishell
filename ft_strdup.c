@@ -1,4 +1,3 @@
-
 #include "mini.h"
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -31,7 +30,6 @@ char	*ft_strdup(char *s1)
 	ft_memcpy(s2, s1, ft_strlen(s1) + 1);
 	return (s2);
 }
-
 
 char	*ft_substr(char *s, size_t start, size_t len)
 {

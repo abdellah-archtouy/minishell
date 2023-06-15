@@ -175,54 +175,111 @@ void	ft_dup(t_parc *parc, int *fd, int *old)
 	}
 }
 
-void	builting_m_cmd(t_parc *parc, t_env	**env)
+// void	ft_hh(int **fd, t_parc *parc, int *pid, t_env **env)
+// {
+// 	int	old;
+
+// 	old = *fd[0];
+// 	if (pipe(fd) == -1)
+// 		return (printf("error here\n"), exit(1));
+// 	*pid = fork();
+// 	g_my.e_flag = 1;
+// 	if (pid == 0)
+// 	{
+// 		signal(SIGQUIT, SIG_DFL);
+// 		ft_dup(parc, fd, &old);
+// 		builting1(parc, env);
+// 	}
+// 	g_my.e_flag = 0;
+// 	if (parc->in > 2)
+// 		close(parc->in);
+// 	if (parc->out > 2)
+// 		close(parc->out);
+// 	close(fd[1]);
+// 	close(old);
+// }
+
+void	ft_exec1(t_parc *parc, t_env **env)
 {
+	int	status;
+	int	old;
 	int	fd[2];
 	int	pid;
 	int	id;
-	int	old;
-	int	status;
 
 	fd[0] = -1;
 	fd[1] = -1;
-	pid = 0;
-	id = 0;
-	status = 0;
+	while (parc)
+	{
+		old = fd[0];
+		if (pipe(fd) == -1)
+			return (printf("error here\n"), exit(1));
+		pid = fork();
+		g_my.e_flag = 1;
+		if (pid == 0)
+		{
+			signal(SIGQUIT, SIG_DFL);
+			ft_dup(parc, fd, &old);
+			builting1(parc, env);
+		}
+		g_my.e_flag = 0;
+		if (parc->in > 2)
+			close(parc->in);
+		if (parc->out > 2)
+			close(parc->out);
+		close(fd[1]);
+		close(old);
+		// ft_hh(&fd, parc, &pid, env);
+		parc = parc->next;
+	}
+	close(fd[0]);
+	while (wait(&status) != -1)
+	{
+		if (id == pid)
+			break ;
+		id = wait(&status);
+	}
+	ft_check_exit(*env, status);
+}
+
+void	builting_m_cmd(t_parc *parc, t_env	**env)
+{
 	if (!parc->next)
 	{
 		builting(parc, env);
 	}
 	else
 	{
-		while (parc)
-		{
-			old = fd[0];
-			if (pipe(fd) == -1)
-				return (printf("error here\n"), exit(1));
-			pid = fork();
-			g_my.e_flag = 1;
-			if (pid == 0)
-			{
-				signal(SIGQUIT, SIG_DFL);
-				ft_dup(parc, fd, &old);
-				builting1(parc, env);
-			}
-			g_my.e_flag = 0;
-			if (parc->in > 2)
-				close(parc->in);
-			if (parc->out > 2)
-				close(parc->out);
-			close(fd[1]);
-			close(old);
-			parc = parc->next;
-		}
-		close(fd[0]);
-		while (wait(&status) != -1)
-		{
-			if (id == pid)
-				break ;
-			id = wait(&status);
-		}
-		ft_check_exit(*env, status);
+		// while (parc)
+		// {
+		// 	old = fd[0];
+		// 	if (pipe(fd) == -1)
+		// 		return (printf("error here\n"), exit(1));
+		// 	pid = fork();
+		// 	g_my.e_flag = 1;
+		// 	if (pid == 0)
+		// 	{
+		// 		signal(SIGQUIT, SIG_DFL);
+		// 		ft_dup(parc, fd, &old);
+		// 		builting1(parc, env);
+		// 	}
+		// 	g_my.e_flag = 0;
+		// 	if (parc->in > 2)
+		// 		close(parc->in);
+		// 	if (parc->out > 2)
+		// 		close(parc->out);
+		// 	close(fd[1]);
+		// 	close(old);
+		// 	parc = parc->next;
+		// }
+		// close(fd[0]);
+		ft_exec1(parc, env);
+		// while (wait(&status) != -1)
+		// {
+		// 	if (id == pid)
+		// 		break ;
+		// 	id = wait(&status);
+		// }
+		// ft_check_exit(*env, status);
 	}
 }
