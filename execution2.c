@@ -25,6 +25,8 @@ void	ft_dup(t_parc *parc, int *fd, int *old)
 		dup2(*old, 0);
 		close(*old);
 	}
+	if (parc->content[0] == NULL)
+		exit(0);
 }
 
 void	ft_exec2(t_env **env, t_parc *parc, int *fd, int old)
@@ -36,7 +38,7 @@ void	ft_exec2(t_env **env, t_parc *parc, int *fd, int old)
 
 void	ft_close(t_parc *parc, int *fd, int old)
 {
-	if (parc->in > 2)
+	if (parc->in > 2 )
 		close(parc->in);
 	if (parc->out > 2)
 		close(parc->out);

@@ -37,7 +37,7 @@ void	execute_m_cmd(t_parc *parcer, t_env *env)
 	envp = ft_get_env(env);
 	if (execve(str, parcer->content, envp) < 0)
 		perror("execve");
-	exit(0);
+	exit(1);
 }
 
 void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
@@ -75,6 +75,8 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 	int		status;
 
 	i = 0;
+	if (!parcer->content)
+		exit(0);
 	str = parcer->content[0];
 	g_my.e_flag = 1;
 	id = fork();
