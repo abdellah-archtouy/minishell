@@ -1,7 +1,32 @@
 NAME = minishell
 
-SRC = main.c libf.c split.c utils.c lexer.c syntaxe_error.c export.c parcer.c libf2.c libf1.c ft_strjoin.c ft_strdup.c ft_split1.c execution.c parsing_utils.c opne_files.c expand.c# test.c
- 
+SRC =	environment/env.c \
+		environment/env_utils.c \
+		environment/export.c \
+		environment/unset.c \
+		environment/add_var.c \
+		environment/builtins.c \
+		environment/builtins_pwd.c \
+		execution.c \
+		expand.c \
+		expand2.c \
+		ft_split1.c \
+		ft_strdup.c \
+		ft_strjoin.c \
+		lexer.c \
+		libf.c \
+		libf1.c \
+		libf2.c \
+		main.c \
+		opne_files.c \
+		parcer.c \
+		parsing_utils.c \
+		signals.c \
+		split.c \
+		ft_aitoia.c \
+		syntaxe_error.c \
+		utils.c 
+
 OBJ = $(SRC:%.c=%.o)
 
 CFALGS =  -Wall -Wextra -Werror

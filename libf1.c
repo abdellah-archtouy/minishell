@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libf1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:17:43 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/16 15:17:44 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 t_list	*ft_lstnew(char *content, int type)
@@ -23,7 +35,6 @@ int	ft_strcmp(const char *a, const char *b)
 	i = 0;
 	s1 = (unsigned char *)a;
 	s2 = (unsigned char *)b;
-
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	if ((s1[i] - s2[i]) == 0)

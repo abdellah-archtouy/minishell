@@ -1,140 +1,121 @@
 #include "mini.h"
 
-
-int	ft_isalpha(int c)
+char	*ft_get_qout(char *input, int *i)
 {
-	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
-}
-
-int	ft_get_dolar(char *ptr)
-{
-	int	i;
-	int	b;
-	int	r;
-
-	i = 0;
-	r = 1;
-	b = 0;
-	while (ptr[i])
-	{
-		if (ptr[i] == '\'' || ptr[i] == '\"' || ptr[i] == '$')
-			i++;
-		else
-		{
-			r = 0;
-			break ;
-		}
-	}
-	if (r == 0)
-		i = 0;
-	while (ptr[i])
-	{
-		if (ptr[i] == '$')
-			b++;
-		i++;
-	}
-	return (b);
-}
-
-int	test(char *str, int i)
-{
-	int	start;
-	int	end;
-	int	index;
-
-	start = 0;
-	end = 0;
-	index = i;
-	while (index >= 0)
-	{
-		if (str[index] == '\"')
-		{
-			start = -1;
-			break ;
-		}
-		index--;
-	}
-	index = i;
-	while (str[index])
-	{
-		if (str[index] == '\"')
-		{
-			end = -1;
-			break ;
-		}
-		index++;
-	}
-	if (start == -1 && end == -1)
-		return (1);
-	return (0);
-}
-
-char	*ft_check_variabel(char *content, t_env *env, int a)
-{
-	int		i;
-	int		b;
-	int		l;
-	char	**ptr;
 	char	*str;
 	char	*str1;
 
-	i = 0;
-	b = 0;
-	l = 0;
 	str = ft_strdup("");
-	while (content[i])
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	free(str1);
+	(*i)++;
+	while (input[*i] && input[*i] != '\'')
 	{
-		if (content[i] == '\'')
-		{
-			if (test(content, i))
-				break ;
-			i++;
-			if (i > 1)
-			{
-				free(str);
-				str = ft_substr(content, 0, i - 1);
-				if (ft_get_dolar(str) > 0)
-					str = ft_check_variabel(str, env, ft_get_dolar(str));
-			}
-			l = i -1;
-			while (content[i] && content[i] != '\'')
-				i++;
-			b = i + 1;
-		}
-		i++;
-	}
-	i = 0;
-	if (b != 0)
-	{
-		str1 = ft_substr(content, l, b - l);
+		str1 = ft_get_char(NULL, input[*i]);
 		str = ft_strjoin(str, str1);
 		free(str1);
-		ptr = ft_split1(&content[b], '$');
+		(*i)++;
 	}
-	else
-	{
-		ptr = ft_split1(content, '$');
-		if (content[0] != '$')
-		{
-			free(str);
-			str = ft_strdup(ptr[0]);
-			i++;
-		}
-	}
-	while (a-- > 0)
-	{
-		while (ptr[i])
-		{
-			str1 = ft_replace_variyabel(ptr[i], env);
-			str = ft_strjoin(str, str1);
-			free(str1);
-			i++;
-		}
-	}
-	i = 0;
-	while (ptr[i])
-		free(ptr[i++]);
-	free(ptr);
-	free(content);
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	free(str1);
+	if (input[*i] != '\0')
+		(*i)++;
 	return (str);
+}
+
+char	*ft_get_var(char *input, int *i, t_env	*env)
+{
+	char	*str;
+
+	(*i)++;
+	if (input[*i] == 0)
+		return (ft_strdup("$"));
+	if (ft_help_variabel(input, i, &str, *i))
+		return (ft_strdup(""));
+	while (env)
+	{
+		if (ft_strcmp(env->key, str) == 0)
+		{
+			if (env->content)
+				return (free(str), ft_strdup(env->content));
+			if (!env->content)
+				return (free(str), ft_strdup(""));
+		}
+		env = env->next;
+	}
+	return (ft_strdup(""));
+}
+
+char	*ft_get_dobel(char	*input, int *i, t_env	*envp)
+{
+	char	*str;
+	char	*str1;
+
+	str = ft_strdup("");
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	(*i)++;
+	free(str1);
+	while (input[*i] && input[*i] != '\"')
+	{
+		if (input[*i] == '$' && input[*i + 1] != '\"')
+		{
+			str1 = ft_get_var(input, i, envp);
+			str = ft_strjoin(str, str1);
+		}
+		else
+		{
+			str1 = ft_get_char(NULL, input[*i]);
+			str = ft_strjoin(str, str1);
+			(*i)++;
+		}
+		free(str1);
+	}
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	free(str1);
+	if (input[*i] != '\0')
+		(*i)++;
+	return (str);
+}
+
+void	ft_get_str(t_list *list, char **str)
+{
+	while (list)
+	{
+		*str = ft_strjoin(*str, list->content);
+		free(list->content);
+		free(list);
+		list = list->next;
+	}
+	free(list);
+}
+
+char	*ft_expand(char *input, t_env *envp)
+{
+	int		i;
+	t_list	*list;
+	char	*str;
+
+	i = 0;
+	list = NULL;
+	str = ft_strdup("");
+	while (input[i])
+	{
+		if (input[i] == '$')
+			ft_lstadd_back(&list, ft_lstnew(ft_get_var(input, &i, envp), 5));
+		if (input[i] == '\'')
+			ft_lstadd_back(&list, ft_lstnew(ft_get_qout(input, &i), 5));
+		if (input[i] == '\"')
+			ft_lstadd_back(&list, ft_lstnew(ft_get_dobel(input, &i, envp), 5));
+		if (input[i] && input[i] != '\"' && input[i] != '\'' && input[i] != '$')
+		{
+			ft_lstadd_back(&list, ft_lstnew(ft_get_char(NULL, input[i]), 5));
+			i++;
+		}
+	}
+	ft_get_str(list, &str);
+	return (free(input), str);
 }
