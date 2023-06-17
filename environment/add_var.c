@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:06 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/15 20:55:08 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/16 15:53:19 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	equal_num(char *input)
 	return (0);
 }
 
-int	parsing(char *input)
+int	parsing(char *input, t_env *env)
 {
 	int	i;
 
@@ -51,7 +51,12 @@ int	parsing(char *input)
 				|| (input[i] >= '0' && input[i] <= '9'))
 				i++;
 			else
+			{
+				if (lstch_env(env, "?")->content)
+					free(lstch_env(env, "?")->content);
+				lstch_env(env, "?")->content = ft_itoa(1);
 				return (1);
+			}
 		}
 	}
 	return (0);
@@ -101,7 +106,7 @@ void	add_var(t_env **env, char **str)
 	i = 1;
 	while (str[i])
 	{
-		if (parsing(str[i]))
+		if (parsing(str[i], *env))
 		{
 			i++;
 			continue ;

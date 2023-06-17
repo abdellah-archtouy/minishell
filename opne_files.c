@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:18:41 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:18:42 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 14:26:36 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	ft_open_doc(char *input, int fd, char *content)
 	int	i;
 
 	i = 0;
-	signal(SIGINT, ft_readline);
+	signal(SIGINT, ft_signal);
 	input = readline(">");
 	if (isatty(STDIN_FILENO) == 0)
 		dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
@@ -79,7 +79,6 @@ int	ft_get_fd_doc(char *content)
 	input = NULL;
 	tmp = ft_get_doc();
 	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	free (tmp);
 	if (fd == -1)
 		return (perror("open"), fd);
 	g_my.e_flag = 1;
@@ -89,7 +88,8 @@ int	ft_get_fd_doc(char *content)
 			break ;
 	}
 	close(fd);
-	fd = open("/tmp/heredoc", O_RDONLY);
+	fd = open(tmp, O_RDONLY);
+	free (tmp);
 	g_my.e_flag = 0;
 	return (fd);
 }

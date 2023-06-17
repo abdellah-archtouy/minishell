@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:14 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/15 20:56:59 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 14:56:49 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ void	cd(char **str, t_env **env)
 		tmp = lstch_env(*env, "HOME")->content;
 	if (chdir(tmp) == -1)
 	{
-		if (lstch_env(*env, "?")->content)
-			free(lstch_env(*env, "?")->content);
-		lstch_env(*env, "?")->content = ft_strdup("1");
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(tmp, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		exit_stat_update(env, 1);
 		return ;
 	}
 	if (lstch_env(*env, "OLDPWD")->content)
@@ -75,7 +76,7 @@ void	cd(char **str, t_env **env)
 	lstch_env(*env, "PWD")->content = ft_strdup(buff);
 }
 
-void	pwd(char **str, t_parc *parc)
+void	pwd(char **str, t_parc *parc, t_env *env)
 {
 	char	buff[1024];
 
@@ -83,6 +84,11 @@ void	pwd(char **str, t_parc *parc)
 	if (getcwd(buff, 1024) != NULL)
 	{
 		ft_putstr_fd(buff, parc->out);
+		ft_putstr_fd("\n", parc->out);
+	}
+	else
+	{
+		ft_putstr_fd(lstch_env(env, "PWD")->content, parc->out);
 		ft_putstr_fd("\n", parc->out);
 	}
 }

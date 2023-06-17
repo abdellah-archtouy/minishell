@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:20 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/15 20:55:21 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 16:09:11 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	**env_empty(int *r)
 	char	**str;
 
 	str = malloc(6 * 8);
+	if (!str)
+		return (NULL);
 	str[0] = ft_strdup("PWD=/Users/tmiftah/Desktop/minishell");
 	str[1] = ft_strdup("SHLVL=0");
 	str[2] = ft_strdup("_=/usr/bin/env");
@@ -92,9 +94,9 @@ void	builtins(t_parc *parc, t_env **l_env)
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
 		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
-		pwd(parc->content, parc);
+		pwd(parc->content, parc, *l_env);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
-		return (printf("exit\n"), exit(0));
+		return (printf("exit\n"), exit_t(parc->content));
 	else
 		execute_cmd(parc, *l_env);
 }
@@ -119,9 +121,9 @@ void	builtins1(t_parc *parc, t_env **l_env)
 	else if (ft_strcmp(parc->content[0], "cd") == 0)
 		cd(parc->content, l_env);
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
-		pwd(parc->content, parc);
+		pwd(parc->content, parc, *l_env);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
-		return (printf("exit\n"), exit(0));
+		return (printf("exit\n"), exit_t(parc->content));
 	else
 		execute_m_cmd(parc, *l_env);
 	exit(1);

@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 21:45:01 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/15 21:45:02 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/16 21:00:19 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern t_glo	g_my;
 
-void	ft_readline(int sig)
+void	ft_signal(int sig)
 {
 	if (sig == 2 && g_my.e_flag == 1)
 	{
@@ -81,5 +81,25 @@ void	ft_exite_status(t_env *envir)
 			tmp = tmp->next;
 		}
 		g_my.g_exit = 0;
+	}
+}
+
+void	ft_check_exit(t_env *env, int status)
+{
+	int	exit;
+
+	exit = 0;
+	if (WIFEXITED(status))
+		exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		exit = WTERMSIG(status) + 128;
+	while (env)
+	{
+		if (ft_strcmp(env->key, "?") == 0)
+		{
+			free (env->content);
+			env->content = ft_itoa(exit);
+		}
+		env = env->next;
 	}
 }

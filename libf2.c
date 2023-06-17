@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:17:50 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:17:51 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 15:14:49 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_parc	*ft_parclast(t_parc *lst)
 int	ft_help_variabel(char *content, int *a, char **str, int i)
 {
 	if (content[*a] == '?')
-		return (*str = ft_substr(content, i, 1), 0);
+		return (*str = ft_substr(content, i, 1), (*a)++, 0);
 	else if ((content[*a] >= 'a' && content[*a] <= 'z')
 		|| (content[*a] >= 'A' && content[*a] <= 'Z') || content[*a] == '_')
 	{
@@ -81,8 +81,8 @@ t_parc	*ft_parcnew(char **content, int in, int out, t_env *env)
 
 	(void)env;
 	a = (void *)malloc(sizeof(t_parc));
-	if (a == 0)
-		return (0);
+	if (!a)
+		return (NULL);
 	a->content = content;
 	a->in = in;
 	a->out = out;

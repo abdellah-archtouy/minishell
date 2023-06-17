@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:17:22 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:17:23 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 15:13:50 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ char	**ft_split1(char const *s, char c)
 
 	if (s == 0)
 		return (0);
+	strings = NULL;
 	words_count = chek_word(s, c);
 	strings = (char **)malloc(sizeof(char *) * (words_count + 1));
-	if (strings == 0)
+	if (!strings)
 		return (0);
 	ft_chek(s, c, strings, words_count);
 	return (strings);

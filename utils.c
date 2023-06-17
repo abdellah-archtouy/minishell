@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:38:20 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:38:21 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 15:15:28 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ char	*add_space(char *input)
 	i = 0;
 	j = 0;
 	str = malloc(ft_strlen(input) * 2);
+	if (!str)
+		return (NULL);
 	while (input[i])
 	{
 		add_space1(&i, &j, str, input);
