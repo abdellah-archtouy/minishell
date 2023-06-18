@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 12:03:14 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 14:33:57 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 20:12:00 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	execute_m_cmd(t_parc *parcer, t_env *env)
 	char	**envp;
 
 	i = 0;
+	if (parcer->out < 1)
+		exit(1);
 	path1 = ft_get_path(env);
 	if (!path1 && ft_strchr(parcer->content[0], '/') == 0)
 		ft_print_error(parcer->content[0]);
@@ -80,6 +82,10 @@ void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
 
 void	exec_norm(t_parc *parcer, t_env *env, char **path1, char *str)
 {
+	if (!parcer->content)
+		exit(0);
+	if (parcer->out < 1)
+		exit(1);
 	signal(SIGQUIT, SIG_DFL);
 	if (parcer->out != 1)
 		dup2(parcer->out, 1);
@@ -101,8 +107,6 @@ void	execute_cmd(t_parc *parcer, t_env *env)
 
 	i = 0;
 	path1 = NULL;
-	if (!parcer->content)
-		exit(0);
 	str = parcer->content[0];
 	g_my.e_flag = 1;
 	id = fork();

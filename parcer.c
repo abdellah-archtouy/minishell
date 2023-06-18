@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:19:11 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:19:12 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 21:23:26 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,34 @@ void	rev_char1(char *input, int r)
 			input[i++] *= -1;
 }
 
-char	*ft_parc2(int *i, int *in, int *out, t_list **ptr)
+int	ft_word_count(t_list *head)
 {
-	char	*str;
+	int	i;
+
+	i = 0;
+	while (head && head->type != PIPE)
+	{
+		if (head->type == WORD)
+			i++;
+		head = head->next;
+	}
+	return (i);
+}
+
+char	**ft_parc2(int *i, int *in, int *out, t_list **ptr)
+{
+	char	**str;
 
 	*i = 0;
 	*in = 0;
 	*out = 1;
-	str = ft_strdup("");
+	str = malloc((ft_word_count((*ptr)) + 1) * 8);
 	while ((*ptr) != NULL && (*ptr)->type != PIPE)
 	{
 		if ((*ptr)->type == WORD)
 		{
-			if ((*ptr)->flag == 1)
-				rev_char1((*ptr)->content, 1);
-			str = ft_strjoin(str, (*ptr)->content);
-			str = ft_strjoin(str, " ");
+			str[*i] = ft_strdup((*ptr)->content);
+			(*i)++;
 		}
 		else
 			ft_parc_helper(ptr, in, out);
@@ -72,12 +84,12 @@ char	*ft_parc2(int *i, int *in, int *out, t_list **ptr)
 		free((*ptr));
 		(*ptr) = (*ptr)->next;
 	}
+	str[*i] = NULL;
 	return (str);
 }
 
 int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
-	char	*str;
 	char	**str1;
 	int		i;
 	int		in;
@@ -85,12 +97,8 @@ int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 
 	while ((*ptr) != NULL)
 	{
-		str = ft_parc2(&i, &in, &out, ptr);
-		str1 = ft_split(str);
-		while (str1[i])
-			rev_char1(str1[i++], 0);
+		str1 = ft_parc2(&i, &in, &out, ptr);
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
-		free(str);
 		if ((*ptr) != NULL)
 		{
 			free((*ptr)->content);

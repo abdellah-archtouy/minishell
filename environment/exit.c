@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 16:08:54 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 16:10:25 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 18:08:09 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,23 @@ void	exit_t(char **str)
 	unsigned char	exi;
 
 	i = 1;
-	(void)env;
-	if (ft_int(str[i]) && str[i + 1] != NULL)
+	if (str[i] && ft_int(str[i]) && str[i + 1] != NULL)
 	{
-		puts("hhh");
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(str[i], 2);
 		ft_putstr_fd(": too many arguments\n", 2);
 	}
-	else if (ft_int(str[i]))
+	else if (str[i] && ft_int(str[i]))
 	{
 		exi = ft_atoi(str[i]);
 		r = (int)exi;
 		exit(r);
 	}
-	else if (ft_int(str[i]) == 0)
+	else if (str[i] && ft_int(str[i]) == 0)
 	{
-		puts("hhh1");
 		printf("minishell: %s: numeric argument required\n", str[i]);
 		exit(0);
 	}
+	else
+		exit(0);
 }

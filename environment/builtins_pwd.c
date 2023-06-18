@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:14 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 14:56:49 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 18:08:54 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	cd(char **str, t_env **env)
 
 	getcwd(buff, 1024);
 	tmp = str[1];
-	if ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL)
+	if (lstch_env(*env, "HOME")
+		&& ((str[1] && ft_strcmp(str[1], "~") == 0) || str[1] == NULL))
 		tmp = lstch_env(*env, "HOME")->content;
 	if (chdir(tmp) == -1)
 	{

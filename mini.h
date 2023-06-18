@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:12:08 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 16:09:57 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 18:27:08 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,6 @@ void	dobel_norm(char	*input, int	*i, char **str, t_env *envp);
 char	*ft_get_dobel(char	*input, int *i, t_env	*envp);
 void	exit_stat_update(t_env **env, int i);
 void	exit_t(char **str);
+void	print_unset_error(char *str, int i);
 
 #endif

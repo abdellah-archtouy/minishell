@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:19:30 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 15:12:59 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 18:26:43 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,20 @@ char	*ft_get_char(char *str, char c)
 	str1[i++] = c;
 	str1[i] = '\0';
 	return (str1);
+}
+
+void	print_unset_error(char *str, int i)
+{
+	if (i == 0)
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+	}
+	if (i == 1)
+	{
+		ft_putstr_fd("minishell: unset: `", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+	}
 }

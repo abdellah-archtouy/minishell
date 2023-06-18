@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:18:41 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 14:26:36 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 20:06:22 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	ft_get_fd_out(char *str, int t)
 	int	fd;
 
 	fd = 0;
+	if (str[0] == '\0')
+		return (write(2, "ambiguous redirect\n", 23), -1);
 	if (t == 1)
 		fd = open(str, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else if (t == 2)

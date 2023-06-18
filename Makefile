@@ -40,7 +40,7 @@ CPPFLAGS="-I/goinfre/$(USER)/homebrew/opt/readline/include"
 
 LDFLAGS="-L/goinfre/$(USER)/homebrew/opt/readline/lib" -lreadline
 
-VAR= $(CPPFLAGS) $(LDFLAGS) -fsanitize=address -g
+VAR= $(CPPFLAGS) $(LDFLAGS) #-fsanitize=address -g
 
 CC = cc 
 

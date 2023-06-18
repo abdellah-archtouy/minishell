@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:37 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:53:08 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 18:31:09 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,12 @@ void	unset(t_env **env, char **str)
 	while (str && str[i])
 	{
 		head0 = *env;
-		if (parsing(str[i], *env) || node_existences(*env, str[i]))
+		if (parsing(str[i], *env) || node_existences(*env, str[i])
+			|| (ft_strchr(str[i], '=') && ft_strlen(str[i]) == 1))
 		{
+			if (parsing(str[i], *env)
+				|| (ft_strchr(str[i], '=') && ft_strlen(str[i]) == 1))
+				print_unset_error(str[i], 1);
 			i++;
 			continue ;
 		}

@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:38:20 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 15:15:28 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/17 17:05:44 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,5 @@ void	ft_putstr_fd(char *s, int fd)
 		i++;
 	}
 }
+//export d = 10
+// unset HOME      => cd
