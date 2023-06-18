@@ -80,7 +80,7 @@ int		syntaxe_quotes(char *input);
 char	*ft_strjoin_path(char *s1, char *s2);
 void	rev_char(char *input);
 int		ft_get_fd_out(char *str, int t);
-int		ft_open_doc(char *input, int fd, char *content);
+int		ft_open_doc(char *input, int *fd, char *content);
 int		ft_ft_get_fd_in(char *content);
 int		ft_get_fd_doc(char *content);
 int		is_special(char c);

@@ -56,9 +56,21 @@ char	*ft_parc2(int *i, int *in, int *out, t_list **ptr)
 		}
 		else
 			ft_parc_helper(ptr, in, out);
-		free((*ptr)->content);
-		free((*ptr));
-		(*ptr) = (*ptr)->next;
+		if (*in < 0 || *out < 0)
+		{
+			while ((*ptr) && (*ptr)->type != PIPE)
+			{
+				free((*ptr)->content);
+				free((*ptr));
+				(*ptr) = (*ptr)->next;
+			}
+		}
+		else
+		{
+			free((*ptr)->content);
+			free((*ptr));
+			(*ptr) = (*ptr)->next;
+		}
 	}
 	return (str);
 }

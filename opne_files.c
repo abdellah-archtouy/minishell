@@ -35,7 +35,7 @@ char	*ft_get_doc(void)
 	return (str);
 }
 
-int	ft_open_doc(char *input, int fd, char *content)
+int	ft_open_doc(char *input, int *fd, char *content)
 {
 	int	i;
 
@@ -43,7 +43,11 @@ int	ft_open_doc(char *input, int fd, char *content)
 	signal(SIGINT, ft_readline);
 	input = readline(">");
 	if (isatty(STDIN_FILENO) == 0)
+	{
+		*fd = -1;
 		dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
+		return (1);
+	}
 	if (input == NULL || ft_strcmp(input, content) == 0)
 	{
 		free(input);
@@ -51,8 +55,8 @@ int	ft_open_doc(char *input, int fd, char *content)
 	}
 	i = 0;
 	while (input[i])
-		write(fd, &input[i++], 1);
-	write(fd, "\n", 1);
+		write(*fd, &input[i++], 1);
+	write(*fd, "\n", 1);
 	free(input);
 	return (0);
 }
@@ -70,11 +74,12 @@ int	ft_get_fd_doc(char *content)
 	g_my.e_flag = 1;
 	while (1)
 	{
-		if (ft_open_doc(input, fd, content) == 1)
+		if (ft_open_doc(input, &fd, content) == 1)
 			break ;
 	}
 	close(fd);
-	fd = open("/tmp/heredoc", O_RDONLY);
+	if (fd != -1)
+		fd = open("/tmp/heredoc", O_RDONLY);
 	g_my.e_flag = 0;
 	return (fd);
 }
