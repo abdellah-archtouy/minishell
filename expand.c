@@ -30,6 +30,8 @@ char	*ft_get_var(char *input, int *i, t_env	*env)
 		return (ft_strdup(""));
 	while (env)
 	{
+		if (str[1] == '$')
+			return (str);
 		if (ft_strcmp(env->key, str) == 0)
 		{
 			if (env->content)

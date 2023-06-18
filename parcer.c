@@ -49,8 +49,8 @@ char	*ft_parc2(int *i, int *in, int *out, t_list **ptr)
 	{
 		if ((*ptr)->type == WORD)
 		{
-			if ((*ptr)->flag == 1)
-				rev_char1((*ptr)->content, 1);
+			// if ((*ptr)->flag == 1)
+			// 	rev_char1((*ptr)->content, 1);
 			str = ft_strjoin(str, (*ptr)->content);
 			str = ft_strjoin(str, " ");
 		}
