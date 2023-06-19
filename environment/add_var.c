@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:06 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 18:28:58 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:01:55 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	parsing(char *input, t_env *env)
 			return (1);
 		while (input[i] && input[i] != '=')
 		{
-			if (ft_isalpha(input[i]) || input[i] == '+'
+			if (ft_isalpha(input[i])
+				|| (input[i] == '+' && ft_strchr(input, '='))
 				|| (input[i] >= '0' && input[i] <= '9'))
 				i++;
 			else
@@ -95,30 +96,34 @@ void	add_noexisted_var(char **key, char **content, t_env **env)
 	lstadd_back_env(env, ft_lstnew_env(*key, *content));
 }
 
-void	add_var(t_env **env, char **str)
+void	add_var(t_env **env, char **str, int i)
 {
-	int		i;
 	char	*content;
 	char	*key;
 	t_env	*head;
 
 	head = *env;
-	i = 1;
 	while (str[i])
 	{
-		if (parsing(str[i], *env)
-			|| (ft_strchr(str[i], '=') && ft_strlen(str[i]) == 1))
+		key = get_chars(str[i], 0);
+		content = get_chars(str[i], 1);
+		if (parsing(str[i], *env) || ft_strlen(key) == 0)
 		{
-			print_unset_error(str[i], 0);
+			if (content)
+				free(content);
+			if (key)
+				free(key);
+			print_env_error(str[i], 0);
+			exit_stat_update(env, 1);
 			i++;
 			continue ;
 		}
-		key = get_chars(str[i], 0);
-		content = get_chars(str[i], 1);
 		if (node_existences(*env, key))
 			add_noexisted_var(&key, &content, env);
 		else if (node_existences(*env, key) == 0 && content != NULL)
 			add_var_helper(key, content, env);
+		else if (node_existences(*env, key) == 0 && !content)
+			free(key);
 		i++;
 	}
 }

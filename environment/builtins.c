@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:20 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 16:09:11 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:49:12 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	envi(char **env, t_env **head)
 	if (r > 0)
 		lstch_env(*head, "PATH")->flag = 1;
 	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
+	if (!lstch_env(*head, "OLDPWD"))
+		lstadd_back_env(head, ft_lstnew_env(ft_strdup("OLDPWD"), NULL));
 }
 
 int	fun(char *input, char c)
@@ -76,9 +78,10 @@ int	fun(char *input, char c)
 
 void	builtins(t_parc *parc, t_env **l_env)
 {
-	if (lstch_env(*l_env, "?")->content)
-		free(lstch_env(*l_env, "?")->content);
-	lstch_env(*l_env, "?")->content = ft_strdup("0");
+	// if (lstch_env(*l_env, "?")->content)
+	// 	free(lstch_env(*l_env, "?")->content);
+	// lstch_env(*l_env, "?")->content = ft_strdup("0");
+	exit_stat_update(l_env, 0);
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
@@ -86,7 +89,7 @@ void	builtins(t_parc *parc, t_env **l_env)
 		&& parc->content[1] == NULL)
 		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-		add_var(l_env, parc->content);
+		add_var(l_env, parc->content, 1);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
@@ -96,16 +99,17 @@ void	builtins(t_parc *parc, t_env **l_env)
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
 		pwd(parc->content, parc, *l_env);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
-		return (printf("exit\n"), exit_t(parc->content));
+		return (printf("exit\n"), exit_t(parc->content, l_env));
 	else
 		execute_cmd(parc, *l_env);
 }
 
 void	builtins1(t_parc *parc, t_env **l_env)
 {
-	if (lstch_env(*l_env, "?")->content)
-		free(lstch_env(*l_env, "?")->content);
-	lstch_env(*l_env, "?")->content = ft_strdup("0");
+	// if (lstch_env(*l_env, "?")->content)
+	// 	free(lstch_env(*l_env, "?")->content);
+	// lstch_env(*l_env, "?")->content = ft_strdup("0");
+	exit_stat_update(l_env, 0);
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
 	if ((ft_strcmp(parc->content[0], "env") == 0
@@ -113,7 +117,7 @@ void	builtins1(t_parc *parc, t_env **l_env)
 		&& parc->content[1] == NULL)
 		env(*l_env, parc->content[0], parc);
 	else if (ft_strcmp(parc->content[0], "export") == 0 && parc->content[1])
-		add_var(l_env, parc->content);
+		add_var(l_env, parc->content, 1);
 	else if (ft_strcmp(parc->content[0], "unset") == 0)
 		unset(l_env, parc->content);
 	else if (ft_strcmp(parc->content[0], "echo") == 0 && parc->content[1])
@@ -123,8 +127,8 @@ void	builtins1(t_parc *parc, t_env **l_env)
 	else if (ft_strcmp(parc->content[0], "pwd") == 0)
 		pwd(parc->content, parc, *l_env);
 	else if (ft_strcmp(parc->content[0], "exit") == 0)
-		return (printf("exit\n"), exit_t(parc->content));
+		return (printf("exit\n"), exit_t(parc->content, l_env));
 	else
 		execute_m_cmd(parc, *l_env);
-	exit(1);
+	exit(0);
 }

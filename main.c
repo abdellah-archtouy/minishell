@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 21:08:14 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 20:58:05 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 14:52:51 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	g_my.e_flag = 0;
+	g_my.quit = 0;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_signal);
 	rl_catch_signals = 0;

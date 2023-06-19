@@ -1,9 +1,0 @@
- << ls ls > ok cat => the command
->
-ls: cat: No such file or directory
-
-
-
-
-create file in built in
-cd > 88

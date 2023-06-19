@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:18:41 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 20:06:22 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 14:51:59 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,36 @@ char	*ft_get_doc(void)
 	return (tmp);
 }
 
-int	ft_open_doc(char *input, int fd, char *content)
+int	ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env)
 {
 	int	i;
 
 	i = 0;
 	signal(SIGINT, ft_signal);
 	input = readline(">");
+	if (ptr->flag == 0 && input)
+		input = ft_expand(input, env);
 	if (isatty(STDIN_FILENO) == 0)
+	{
+		*fd = -1;
+		g_my.quit = 1;
 		dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
-	if (input == NULL || ft_strcmp(input, content) == 0)
+		return (1);
+	}
+	if (input == NULL || ft_strcmp(input, ptr->content) == 0)
 	{
 		free(input);
 		return (1);
 	}
 	i = 0;
 	while (input[i])
-		write(fd, &input[i++], 1);
-	write(fd, "\n", 1);
+		write(*fd, &input[i++], 1);
+	write(*fd, "\n", 1);
 	free(input);
 	return (0);
 }
 
-int	ft_get_fd_doc(char *content)
+int	ft_get_fd_doc(t_list *ptr, t_env *env)
 {
 	int		fd;
 	char	*input;
@@ -86,11 +93,12 @@ int	ft_get_fd_doc(char *content)
 	g_my.e_flag = 1;
 	while (1)
 	{
-		if (ft_open_doc(input, fd, content) == 1)
+		if (ft_open_doc(input, &fd, ptr, env) == 1)
 			break ;
 	}
 	close(fd);
-	fd = open(tmp, O_RDONLY);
+	if (fd != -1)
+		fd = open(tmp, O_RDONLY);
 	free (tmp);
 	g_my.e_flag = 0;
 	return (fd);

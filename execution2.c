@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 12:03:51 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 14:33:28 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 14:59:39 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,19 @@ extern t_glo	g_my;
 
 void	ft_dup(t_parc *parc, int *fd, int *old)
 {
+
 	close(fd[0]);
+	if (parc->in < 0 || parc->out < 0)
+		exit(1);
 	if (parc->out > 2)
-	{
 		dup2(parc->out, 1);
-		close(parc->out);
-	}
 	else if (parc->next)
 	{
 		dup2(fd[1], 1);
 		close(fd[1]);
 	}
 	if (parc->in > 2)
-	{
 		dup2(parc->in, 0);
-		close(parc->in);
-	}
 	else if (*old != -1)
 	{
 		dup2(*old, 0);
@@ -88,12 +85,21 @@ void	ft_exec1(t_parc *parc, t_env **env, int *fd)
 	ft_check_exit(*env, status);
 }
 
-void	builtins_m_cmd(t_parc *parc, t_env	**env)
+void	builtins_m_cmd(t_parc *parc, t_env **env)
 {
-	int	fd[2];
+	int		fd[2];
+	t_parc	*par;
 
 	fd[0] = -1;
 	fd[1] = -1;
+	par = parc;
+	if (g_my.quit == 1)
+	{
+		g_my.g_exit = 1;
+		ft_exite_status(*env);
+		g_my.g_exit = 0;
+		return ;
+	}
 	if (!parc->next)
 		builtins(parc, env);
 	else

@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 16:08:54 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 18:08:09 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 13:54:33 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,29 @@ int	ft_int(char *str)
 	int	i;
 
 	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
 	while (str[i])
 	{
 		if (str[i] >= '0' && str[i] <= '9')
 			i++;
 		else
 			return (0);
-		i++;
 	}
 	return (1);
 }
 
-void	exit_t(char **str)
+void	exit_norm(char *str)
 {
-	int				r;
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+}
+
+void	exit_t(char **str, t_env **env)
+{
 	int				i;
+	long long		r;
 	unsigned char	exi;
 
 	i = 1;
@@ -47,6 +55,7 @@ void	exit_t(char **str)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(str[i], 2);
 		ft_putstr_fd(": too many arguments\n", 2);
+		exit_stat_update(env, 1);
 	}
 	else if (str[i] && ft_int(str[i]))
 	{
@@ -56,8 +65,8 @@ void	exit_t(char **str)
 	}
 	else if (str[i] && ft_int(str[i]) == 0)
 	{
-		printf("minishell: %s: numeric argument required\n", str[i]);
-		exit(0);
+		exit_norm(str[i]);
+		exit(255);
 	}
 	else
 		exit(0);

@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 21:44:09 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/16 15:16:00 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/18 22:38:13 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	ft_atoi(const char *str)
 		result *= 10;
 		result += (*str - '0');
 		if (result > 9223372036854775807 && sign == -1)
-			return (0);
+			return (result * -1);
 		else if (result > 9223372036854775807)
 			return (-1);
 		str++;

@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:12:08 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 18:27:08 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 14:51:43 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct g_glo
 {
 	int	e_flag;
 	int	g_exit;
+	int	quit;
 }		t_glo;
 
 typedef struct s_list
@@ -91,9 +92,7 @@ int		syntaxe_quotes(char *input);
 char	*ft_strjoin_path(char *s1, char *s2);
 void	rev_char(char *input);
 int		ft_get_fd_out(char *str, int t);
-int		ft_open_doc(char *input, int fd, char *content);
 int		ft_ft_get_fd_in(char *content);
-int		ft_get_fd_doc(char *content);
 int		is_special(char c);
 int		ft_parc(t_list **ptr, t_parc **parc, t_env **env);
 int		ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env);
@@ -135,7 +134,7 @@ void	env(t_env *head, char *str, t_parc *parc);
 int		node_existences(t_env *env, char *key);
 int		equal_num(char *input);
 int		parsing(char *input, t_env *env);
-void	add_var(t_env **env, char **str);
+void	add_var(t_env **env, char **str, int i);
 void	unset(t_env **env, char **str);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
@@ -160,7 +159,10 @@ char	*ft_get_qout(char *input, int *i);
 void	dobel_norm(char	*input, int	*i, char **str, t_env *envp);
 char	*ft_get_dobel(char	*input, int *i, t_env	*envp);
 void	exit_stat_update(t_env **env, int i);
-void	exit_t(char **str);
-void	print_unset_error(char *str, int i);
+void	exit_t(char **str, t_env **env);
+void	print_env_error(char *str, int i);
+int		ft_parc_helper(t_list **ptr, int *in, int *out, t_env *env);
+int		ft_get_fd_doc(t_list *ptr, t_env *env);
+int		ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env);
 
 #endif

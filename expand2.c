@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:19:30 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 18:26:43 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/18 15:12:49 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_get_char(char *str, char c)
 	return (str1);
 }
 
-void	print_unset_error(char *str, int i)
+void	print_env_error(char *str, int i)
 {
 	if (i == 0)
 	{
