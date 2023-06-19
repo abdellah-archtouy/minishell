@@ -9,6 +9,7 @@ SRC =	environment/env.c \
 		environment/builtins.c \
 		environment/builtins_pwd.c \
 		execution.c \
+		parcer3.c \
 		execution2.c \
 		expand.c \
 		ft_error.c \

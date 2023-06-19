@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:19:11 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 15:17:11 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 18:14:25 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,27 +66,6 @@ void	ft_word_count_helper(char *input, int *a, int *i)
 	}
 }
 
-int	ft_word_count(t_list *head)
-{
-	int	i;
-	int	a;
-
-	i = 0;
-	a = 0;
-	while (head && head->type != PIPE)
-	{
-		if (head->type == WORD)
-		{
-			if (head->flag == 0)
-				ft_word_count_helper(head->content, &a, &i);
-			else
-				i++;
-		}
-		head = head->next;
-	}
-	return (i);
-}
-
 char	**ft_parc2(int *in, t_env *env, int *out, t_list **ptr)
 {
 	char	**str;
@@ -102,35 +81,13 @@ char	**ft_parc2(int *in, t_env *env, int *out, t_list **ptr)
 	while ((*ptr) != NULL && (*ptr)->type != PIPE)
 	{
 		if ((*ptr)->type == WORD)
-		{
-			if ((*ptr)->flag == 0)
-			{
-				a = 0;
-				str1 = ft_split((*ptr)->content);
-				while (str1[a] != NULL)
-					str[i++] = str1[a++];
-				free(str1);
-			}
-			else
-				str[i++] = ft_strdup((*ptr)->content);
-		}
+			ft_parc_norm2(ptr, &i, &str, &str1);
 		else
 			ft_parc_helper(ptr, in, out, env);
 		if (*in < 0 || *out < 0)
-		{
-			while ((*ptr) && (*ptr)->type != PIPE)
-			{
-				free((*ptr)->content);
-				free((*ptr));
-				(*ptr) = (*ptr)->next;
-			}
-		}
+			ft_parc_norm1(ptr, 0);
 		else
-		{
-			free((*ptr)->content);
-			free((*ptr));
-			(*ptr) = (*ptr)->next;
-		}
+			ft_parc_norm1(ptr, 1);
 	}
 	str[i] = NULL;
 	return (str);

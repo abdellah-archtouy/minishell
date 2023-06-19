@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:12:08 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 15:10:09 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 18:15:03 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,5 +166,10 @@ int		ft_get_fd_doc(t_list *ptr, t_env *env);
 int		ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env);
 void	unset_norm(char *str, t_env **env);
 void	add_var_norm(char *content, char *key);
+void	ft_parc_norm2(t_list **ptr, int *i, char ***str, char ***str1);
+void	ft_parc_norm1(t_list **ptr, int i);
+int		ft_word_count(t_list *head);
+void	ft_word_count_helper(char *input, int *a, int *i);
+void	function(int r, t_env **head, char **env);
 
 #endif
