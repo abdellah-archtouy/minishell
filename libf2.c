@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libf2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:17:50 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/17 15:14:49 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 22:39:27 by aarchtou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,8 @@ t_parc	*ft_parclast(t_parc *lst)
 
 int	ft_help_variabel(char *content, int *a, char **str, int i)
 {
-	int l;
-
-	l = 1;
 	if (content[*a] == '?')
 		return (*str = ft_substr(content, i, 1), (*a)++, 0);
-	else if (content[*a] == '$')
-	{
-		while (content[*a] && content[*a] == '$')
-		{
-			l++;
-			(*a)++;
-		}
-		if ((l % 2) == 0)
-			return (*str = ft_substr(content, i - 1, *a - i + 1), 0);
-		else
-			return (*str = ft_substr(content, i - 1, *a - i), (*a)--, 0);
-	}
 	else if ((content[*a] >= 'a' && content[*a] <= 'z')
 		|| (content[*a] >= 'A' && content[*a] <= 'Z') || content[*a] == '_')
 	{
