@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:12:08 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 14:51:43 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:10:09 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,7 @@ void	print_env_error(char *str, int i);
 int		ft_parc_helper(t_list **ptr, int *in, int *out, t_env *env);
 int		ft_get_fd_doc(t_list *ptr, t_env *env);
 int		ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env);
+void	unset_norm(char *str, t_env **env);
+void	add_var_norm(char *content, char *key);
 
 #endif

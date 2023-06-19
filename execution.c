@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 12:03:14 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 13:31:58 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:11:52 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	execute_m_cmd(t_parc *parcer, t_env *env)
 		return (ft_print_error(parcer->content[0]), exit(127));
 	envp = ft_get_env(env);
 	if (execve(str, parcer->content, envp) < 0)
-		return(perror("execve"), exit(126));
+		return (perror("execve"), exit(126));
 	exit(1);
 }
 
@@ -76,7 +76,7 @@ void	ft_execute(t_parc *parcer, t_env *env, char **path1, char *str)
 		return (ft_print_error(parcer->content[0]), exit(127));
 	envp = ft_get_env(env);
 	if (execve(str, parcer->content, envp) < 0)
-		return(perror("execve"), exit(126));
+		return (perror("execve"), exit(126));
 	exit(1);
 }
 

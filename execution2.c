@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 12:03:51 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 14:59:39 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:12:14 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ extern t_glo	g_my;
 
 void	ft_dup(t_parc *parc, int *fd, int *old)
 {
-
 	close(fd[0]);
 	if (parc->in < 0 || parc->out < 0)
 		exit(1);

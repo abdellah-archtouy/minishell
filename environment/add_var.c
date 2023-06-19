@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:06 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 13:01:55 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:10:17 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,7 @@ void	add_var(t_env **env, char **str, int i)
 		content = get_chars(str[i], 1);
 		if (parsing(str[i], *env) || ft_strlen(key) == 0)
 		{
-			if (content)
-				free(content);
-			if (key)
-				free(key);
+			add_var_norm(content, key);
 			print_env_error(str[i], 0);
 			exit_stat_update(env, 1);
 			i++;

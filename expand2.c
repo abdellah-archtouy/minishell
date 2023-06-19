@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:19:30 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/18 15:12:49 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:10:30 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,18 @@ void	print_env_error(char *str, int i)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
 	}
+}
+
+void	unset_norm(char *str, t_env **env)
+{
+	print_env_error(str, 1);
+	exit_stat_update(env, 1);
+}
+
+void	add_var_norm(char *content, char *key)
+{
+	if (content)
+		free(content);
+	if (key)
+		free(key);
 }

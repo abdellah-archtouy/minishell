@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:19:11 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 14:53:42 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:17:11 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,23 @@ void	rev_char1(char *input, int r)
 			input[i++] *= -1;
 }
 
+void	ft_word_count_helper(char *input, int *a, int *i)
+{
+	*a = 0;
+	(*i)++;
+	while (input[(*a)])
+	{
+		if (input[(*a)] == ' ' || input[(*a)] == '\t')
+		{
+			while (input[(*a)] && (input[(*a)] == ' ' || input[(*a)] == '\t'))
+				(*a)++;
+			if (input[(*a)] != '\0')
+				(*i)++;
+		}
+		(*a)++;
+	}
+}
+
 int	ft_word_count(t_list *head)
 {
 	int	i;
@@ -61,21 +78,7 @@ int	ft_word_count(t_list *head)
 		if (head->type == WORD)
 		{
 			if (head->flag == 0)
-			{
-				a = 0;
-				i++;
-				while (head->content[a])
-				{
-					if (head->content[a] == ' ' || head->content[a] == '\t')
-					{
-						while (head->content[a] && (head->content[a] == ' ' || head->content[a] == '\t'))
-							a++;
-						if (head->content[a] != '\0')
-							i++;
-					}
-					a++;
-				}
-			}
+				ft_word_count_helper(head->content, &a, &i);
 			else
 				i++;
 		}

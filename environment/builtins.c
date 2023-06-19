@@ -6,7 +6,7 @@
 /*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 20:55:20 by tmiftah           #+#    #+#             */
-/*   Updated: 2023/06/19 13:49:12 by tmiftah          ###   ########.fr       */
+/*   Updated: 2023/06/19 17:37:25 by tmiftah          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,23 @@ char	**env_empty(int *r)
 	str[5] = NULL;
 	(*r)++;
 	return (str);
+}
+
+void	function(int r, t_env **head, char **env)
+{
+	int	i;
+
+	i = 0;
+	if (r > 0)
+	{
+		lstch_env(*head, "PATH")->flag = 1;
+		while (env[i])
+			free(env[i++]);
+		free(env);
+	}
+	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
+	if (!lstch_env(*head, "OLDPWD"))
+		lstadd_back_env(head, ft_lstnew_env(ft_strdup("OLDPWD"), NULL));
 }
 
 void	envi(char **env, t_env **head)
@@ -51,11 +68,7 @@ void	envi(char **env, t_env **head)
 		lstadd_back_env(head, ft_lstnew_env(key, content));
 		i++;
 	}
-	if (r > 0)
-		lstch_env(*head, "PATH")->flag = 1;
-	lstadd_back_env(head, ft_lstnew_env(ft_strdup("?"), ft_strdup("0")));
-	if (!lstch_env(*head, "OLDPWD"))
-		lstadd_back_env(head, ft_lstnew_env(ft_strdup("OLDPWD"), NULL));
+	function(r, head, env);
 }
 
 int	fun(char *input, char c)
@@ -78,9 +91,6 @@ int	fun(char *input, char c)
 
 void	builtins(t_parc *parc, t_env **l_env)
 {
-	// if (lstch_env(*l_env, "?")->content)
-	// 	free(lstch_env(*l_env, "?")->content);
-	// lstch_env(*l_env, "?")->content = ft_strdup("0");
 	exit_stat_update(l_env, 0);
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
@@ -106,9 +116,6 @@ void	builtins(t_parc *parc, t_env **l_env)
 
 void	builtins1(t_parc *parc, t_env **l_env)
 {
-	// if (lstch_env(*l_env, "?")->content)
-	// 	free(lstch_env(*l_env, "?")->content);
-	// lstch_env(*l_env, "?")->content = ft_strdup("0");
 	exit_stat_update(l_env, 0);
 	if (parc->content[0] == NULL || l_env == NULL)
 		return ;
