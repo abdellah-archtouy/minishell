@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mini.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 17:12:08 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/19 20:10:12 by aarchtou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINI_H
 # define MINI_H
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <signal.h>
@@ -18,12 +31,11 @@
 # define WORD 5
 # define VARIA 6
 
-int	e_flag;
-
 typedef struct g_glo
 {
 	int	e_flag;
 	int	g_exit;
+	int	quit;
 }		t_glo;
 
 typedef struct s_list
@@ -80,9 +92,7 @@ int		syntaxe_quotes(char *input);
 char	*ft_strjoin_path(char *s1, char *s2);
 void	rev_char(char *input);
 int		ft_get_fd_out(char *str, int t);
-int		ft_open_doc(char *input, int *fd, char *content);
 int		ft_ft_get_fd_in(char *content);
-int		ft_get_fd_doc(char *content);
 int		is_special(char c);
 int		ft_parc(t_list **ptr, t_parc **parc, t_env **env);
 int		ft_parcing(char *input, char ***str, t_parc	**parc, t_env **env);
@@ -92,24 +102,20 @@ int		syntaxe_error(char *input);
 int		ft_strncmp( char *a, char *b, size_t n);
 char	*ft_substr(char *s, size_t start, size_t len);
 void	export(t_env **envi, t_parc	*parc);
-int		ft_get_dolar(char *ptr);
-char	*ft_check_variabel(char *content, t_env *env, int a);
-void	builting(t_parc *parc, t_env **l_env);
+void	builtins(t_parc *parc, t_env **l_env);
 int		tokenizer(char *input, char ***str, t_env **env);
 char	*ft_strjoin_wspace(char *s1, char *s2);
-void	ft_error(char *str, char *c);
 char	*ft_strjoin_ex(char *s1, char *s2);
-void	ft_readline(int sig);
+void	ft_signal(int sig);
 char	*ft_strchr(char *s, int c);
-void	ft_readline(int sig);
 void	ft_check_exit(t_env *env, int status);
 void	ft_putstr_fd(char *str, int fd);
-void	builting1(t_parc *parc, t_env	**env);
+void	builtins1(t_parc *parc, t_env	**env);
 void	execute_m_cmd(t_parc *parcer, t_env *env);
 char	*quotes_remover(char *input);
 void	execute_cmd(t_parc *parcer, t_env *env);
 int		ft_isalpha(int c);
-void	builting_m_cmd(t_parc *parc, t_env	**env);
+void	builtins_m_cmd(t_parc *parc, t_env	**env);
 char	*ft_itoa(int n);
 t_env	*ft_lstnew_env(char *key, char *content);
 int		ft_lstsize_env(t_env *lst);
@@ -119,7 +125,7 @@ char	*get_chars(char *string, int index);
 t_env	*ft_lstlast_env(t_env *lst);
 void	lstadd_back_env(t_env **lst, t_env *new);
 int		ft_atoi(const char *str);
-char	**env_empty(void);
+char	**env_empty(int *r);
 void	envi(char **env, t_env **head);
 int		is_sorted(t_env *exp);
 t_env	*copy_list(t_env *env);
@@ -127,15 +133,43 @@ t_env	*sorted_env(t_env *exp);
 void	env(t_env *head, char *str, t_parc *parc);
 int		node_existences(t_env *env, char *key);
 int		equal_num(char *input);
-int		parsing(char *input);
-void	add_var(t_env **env, char **str);
+int		parsing(char *input, t_env *env);
+void	add_var(t_env **env, char **str, int i);
 void	unset(t_env **env, char **str);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 int		fun(char *input, char c);
 void	echo(t_parc *parc);
 void	cd(char **str, t_env **env);
-void	pwd(char **str, t_parc *parc);
+void	pwd(char **str, t_parc *parc, t_env *env);
+void	get_key(char *string, char **returned, char *found);
+void	get_content(char *string, char **returned, char *found);
+void	update_shell_level(char **content, int r);
+void	swap_nodes(t_env **tmp);
+void	print_env(t_parc *parc, t_env *head, int index);
+void	p_env(t_env *head, t_parc *parc);
+void	add_var_helper(char *key, char *content, t_env **env);
+void	add_noexisted_var(char **key, char **content, t_env **env);
+void	unset_clear_node(t_env **h);
+void	unset_helper(t_env *head, t_env *head0, t_env **env);
+void	echo_flag(char **content, int *r, int *i);
 t_env	*lstch_env(t_env *head, char *key);
+char	*ft_get_var(char *input, int *i, t_env	*env);
+char	*ft_get_qout(char *input, int *i);
+void	dobel_norm(char	*input, int	*i, char **str, t_env *envp);
+char	*ft_get_dobel(char	*input, int *i, t_env	*envp);
+void	exit_stat_update(t_env **env, int i);
+void	exit_t(char **str, t_env **env);
+void	print_env_error(char *str, int i);
+int		ft_parc_helper(t_list **ptr, int *in, int *out, t_env *env);
+int		ft_get_fd_doc(t_list *ptr, t_env *env);
+int		ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env);
+void	unset_norm(char *str, t_env **env);
+void	add_var_norm(char *content, char *key);
+void	ft_parc_norm2(t_list **ptr, int *i, char ***str, char ***str1);
+void	ft_parc_norm1(t_list **ptr, int i);
+int		ft_word_count(t_list *head);
+void	ft_word_count_helper(char *input, int *a, int *i);
+void	function(int r, t_env **head, char **env);
 
 #endif

@@ -1,11 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 12:03:51 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/19 20:09:48 by aarchtou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
-extern	t_glo	g_my;
+extern t_glo	g_my;
 
 void	ft_dup(t_parc *parc, int *fd, int *old)
 {
 
 	close(fd[0]);
+	if (parc->in < 0 || parc->out < 0)
+		exit(1);
 	if (parc->out > 2)
 		dup2(parc->out, 1);
 	else if (parc->next)
@@ -28,7 +42,7 @@ void	ft_exec2(t_env **env, t_parc *parc, int *fd, int old)
 {
 	signal(SIGQUIT, SIG_DFL);
 	ft_dup(parc, fd, &old);
-	builting1(parc, env);
+	builtins1(parc, env);
 }
 
 void	ft_close(t_parc *parc, int *fd, int old)
@@ -55,6 +69,9 @@ void	ft_exec1(t_parc *parc, t_env **env, int *fd)
 		if (pipe(fd) == -1)
 			return (write(2, "PIPE\n", 5), exit(1));
 		pid = fork();
+		if (pid == -1)
+			return (ft_putstr_fd
+				("minishell: fork: Resource temporarily unavailable\n", 2));
 		g_my.e_flag = 1;
 		if (pid == 0)
 			ft_exec2(env, parc, fd, old);
@@ -63,12 +80,12 @@ void	ft_exec1(t_parc *parc, t_env **env, int *fd)
 		parc = parc->next;
 	}
 	waitpid(pid, &status, 0);
-	while (wait(&status) != -1)
+	while (wait(NULL) != -1)
 		;
 	ft_check_exit(*env, status);
 }
 
-void	builting_m_cmd(t_parc *parc, t_env	**env)
+void	builtins_m_cmd(t_parc *parc, t_env **env)
 {
 	int		fd[2];
 	t_parc	*par;
@@ -76,19 +93,15 @@ void	builting_m_cmd(t_parc *parc, t_env	**env)
 	fd[0] = -1;
 	fd[1] = -1;
 	par = parc;
-	while (par)
+	if (g_my.quit == 1)
 	{
-		if (par->in < 0 || par->out < 0)
-		{
-			g_my.g_exit = 1;
-			ft_exite_status(*env);
-			g_my.g_exit = 0;
-			return ;
-		}
-		par = par->next;
+		g_my.g_exit = 1;
+		ft_exite_status(*env);
+		g_my.g_exit = 0;
+		return ;
 	}
 	if (!parc->next)
-		builting(parc, env);
+		builtins(parc, env);
 	else
 		ft_exec1(parc, env, fd);
 }

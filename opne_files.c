@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   opne_files.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:18:41 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/19 20:10:18 by aarchtou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 extern t_glo	g_my;
@@ -7,6 +19,8 @@ int	ft_get_fd_out(char *str, int t)
 	int	fd;
 
 	fd = 0;
+	if (str[0] == '\0')
+		return (write(2, "ambiguous redirect\n", 23), -1);
 	if (t == 1)
 		fd = open(str, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else if (t == 2)
@@ -18,37 +32,40 @@ int	ft_get_fd_out(char *str, int t)
 
 char	*ft_get_doc(void)
 {
-	char	*str;
-	char	tmp[1];
-	int		i;
+	static char	*str;
+	static int	i;
+	char		*tmp;
 
-	i = 0;
-	str = ft_strdup("/tmp/her_doc");
 	while (1)
 	{
-		if (access(str, F_OK) != 0)
+		str = ft_itoa(i);
+		tmp = ft_strjoin(ft_strdup("/tmp/"), str);
+		free(str);
+		if (access(tmp, F_OK) != 0)
 			break ;
-		tmp[0] = 'a' + i;
-		str = ft_strjoin(str, tmp);
+		free(tmp);
 		i++;
 	}
-	return (str);
+	return (tmp);
 }
 
-int	ft_open_doc(char *input, int *fd, char *content)
+int	ft_open_doc(char *input, int *fd, t_list *ptr, t_env *env)
 {
 	int	i;
 
 	i = 0;
-	signal(SIGINT, ft_readline);
+	signal(SIGINT, ft_signal);
 	input = readline(">");
+	if (ptr->flag == 0 && input)
+		input = ft_expand(input, env);
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		*fd = -1;
+		g_my.quit = 1;
 		dup2(STDIN_FILENO, open(ttyname(1), O_RDONLY, 0644));
 		return (1);
 	}
-	if (input == NULL || ft_strcmp(input, content) == 0)
+	if (input == NULL || ft_strcmp(input, ptr->content) == 0)
 	{
 		free(input);
 		return (1);
@@ -61,25 +78,28 @@ int	ft_open_doc(char *input, int *fd, char *content)
 	return (0);
 }
 
-int	ft_get_fd_doc(char *content)
+int	ft_get_fd_doc(t_list *ptr, t_env *env)
 {
 	int		fd;
 	char	*input;
+	char	*tmp;
 
 	fd = 0;
 	input = NULL;
-	fd = open("/tmp/heredoc", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	tmp = ft_get_doc();
+	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("open"), fd);
 	g_my.e_flag = 1;
 	while (1)
 	{
-		if (ft_open_doc(input, &fd, content) == 1)
+		if (ft_open_doc(input, &fd, ptr, env) == 1)
 			break ;
 	}
 	close(fd);
 	if (fd != -1)
-		fd = open("/tmp/heredoc", O_RDONLY);
+		fd = open(tmp, O_RDONLY);
+	free (tmp);
 	g_my.e_flag = 0;
 	return (fd);
 }

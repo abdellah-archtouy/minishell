@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parcer.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:19:11 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/19 20:10:21 by aarchtou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
-int	ft_parc_helper(t_list **ptr, int *in, int *out)
+int	ft_parc_helper(t_list **ptr, int *in, int *out, t_env *env)
 {
 	if ((*ptr)->type == RINPUT)
 		*in = ft_ft_get_fd_in((*ptr)->next->content);
@@ -9,7 +21,7 @@ int	ft_parc_helper(t_list **ptr, int *in, int *out)
 	else if ((*ptr)->type == APAND)
 		*out = ft_get_fd_out((*ptr)->next->content, 2);
 	else if ((*ptr)->type == HEREDOC)
-		*in = ft_get_fd_doc((*ptr)->next->content);
+		*in = ft_get_fd_doc((*ptr)->next, env);
 	else
 		return (0);
 	free((*ptr)->content);
@@ -37,60 +49,60 @@ void	rev_char1(char *input, int r)
 			input[i++] *= -1;
 }
 
-char	*ft_parc2(int *i, int *in, int *out, t_list **ptr)
+void	ft_word_count_helper(char *input, int *a, int *i)
 {
-	char	*str;
+	*a = 0;
+	(*i)++;
+	while (input[(*a)])
+	{
+		if (input[(*a)] == ' ' || input[(*a)] == '\t')
+		{
+			while (input[(*a)] && (input[(*a)] == ' ' || input[(*a)] == '\t'))
+				(*a)++;
+			if (input[(*a)] != '\0')
+				(*i)++;
+		}
+		(*a)++;
+	}
+}
 
-	*i = 0;
+char	**ft_parc2(int *in, t_env *env, int *out, t_list **ptr)
+{
+	char	**str;
+	char	**str1;
+	int		i;
+	int		a;
+
+	i = 0;
+	a = 0;
 	*in = 0;
 	*out = 1;
-	str = ft_strdup("");
+	str = malloc((ft_word_count((*ptr)) + 1) * 8);
 	while ((*ptr) != NULL && (*ptr)->type != PIPE)
 	{
 		if ((*ptr)->type == WORD)
-		{
-			// if ((*ptr)->flag == 1)
-			// 	rev_char1((*ptr)->content, 1);
-			str = ft_strjoin(str, (*ptr)->content);
-			str = ft_strjoin(str, " ");
-		}
+			ft_parc_norm2(ptr, &i, &str, &str1);
 		else
-			ft_parc_helper(ptr, in, out);
+			ft_parc_helper(ptr, in, out, env);
 		if (*in < 0 || *out < 0)
-		{
-			while ((*ptr) && (*ptr)->type != PIPE)
-			{
-				free((*ptr)->content);
-				free((*ptr));
-				(*ptr) = (*ptr)->next;
-			}
-		}
+			ft_parc_norm1(ptr, 0);
 		else
-		{
-			free((*ptr)->content);
-			free((*ptr));
-			(*ptr) = (*ptr)->next;
-		}
+			ft_parc_norm1(ptr, 1);
 	}
+	str[i] = NULL;
 	return (str);
 }
 
 int	ft_parc(t_list **ptr, t_parc **parc, t_env	**env)
 {
-	char	*str;
 	char	**str1;
-	int		i;
 	int		in;
 	int		out;
 
 	while ((*ptr) != NULL)
 	{
-		str = ft_parc2(&i, &in, &out, ptr);
-		str1 = ft_split(str);
-		while (str1[i])
-			rev_char1(str1[i++], 0);
+		str1 = ft_parc2(&in, *env, &out, ptr);
 		ft_parcadd_back(parc, ft_parcnew(str1, in, out, *env));
-		free(str);
 		if ((*ptr) != NULL)
 		{
 			free((*ptr)->content);

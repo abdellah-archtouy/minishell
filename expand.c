@@ -1,23 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 13:25:11 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/18 22:05:26 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
-
-char	*ft_get_qout(char *input, int *i)
-{
-	char	*str;
-	char	*str1;
-
-	(*i)++;
-	str = ft_strdup("");
-	while (input[*i] && input[*i] != '\'')
-	{
-		str1 = ft_get_char(NULL, input[*i]);
-		str = ft_strjoin(str, str1);
-		free(str1);
-		(*i)++;
-	}
-	if (input[*i] != '\0')
-		(*i)++;
-	return (str);
-}
 
 char	*ft_get_var(char *input, int *i, t_env	*env)
 {
@@ -44,28 +37,41 @@ char	*ft_get_var(char *input, int *i, t_env	*env)
 	return (ft_strdup(""));
 }
 
+void	dobel_norm(char	*input, int	*i, char **str, t_env *envp)
+{
+	char	*str1;
+
+	while (input[*i] && input[*i] != '\"')
+	{
+		if (input[*i] == '$' && input[*i + 1] != '\"' && input[*i + 1] != ' ')
+		{
+			str1 = ft_get_var(input, i, envp);
+			*str = ft_strjoin(*str, str1);
+		}
+		else
+		{
+			str1 = ft_get_char(NULL, input[*i]);
+			*str = ft_strjoin(*str, str1);
+			(*i)++;
+		}
+		free(str1);
+	}
+}
+
 char	*ft_get_dobel(char	*input, int *i, t_env	*envp)
 {
 	char	*str;
 	char	*str1;
 
-	(*i)++;
 	str = ft_strdup("");
-	while (input[*i] && input[*i] != '\"')
-	{
-		if (input[*i] == '$' && input[*i + 1] != '\"')
-		{
-			str1 = ft_get_var(input, i, envp);
-			str = ft_strjoin(str, str1);
-		}
-		else
-		{
-			str1 = ft_get_char(NULL, input[*i]);
-			str = ft_strjoin(str, str1);
-			(*i)++;
-		}
-		free(str1);
-	}
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	(*i)++;
+	free(str1);
+	dobel_norm(input, i, &str, envp);
+	str1 = ft_get_char(NULL, input[*i]);
+	str = ft_strjoin(str, str1);
+	free(str1);
 	if (input[*i] != '\0')
 		(*i)++;
 	return (str);

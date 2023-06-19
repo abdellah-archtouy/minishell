@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:17:34 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/18 19:34:34 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 void	lexer(char	**str, t_list	**ptr)
@@ -25,6 +37,15 @@ void	lexer(char	**str, t_list	**ptr)
 	free(str);
 }
 
+int	herd(char *input, int i)
+{
+	if (i == 0)
+		return (0);
+	if (ft_strcmp(input, "<<") == 0)
+		return (1);
+	return (0);
+}
+
 int	tokenizer(char *input, char ***str, t_env **env)
 {
 	int		i;
@@ -42,7 +63,8 @@ int	tokenizer(char *input, char ***str, t_env **env)
 	i = 0;
 	while (content[i])
 	{
-		content[i] = ft_expand(content[i], *env);
+		if (herd(content[i - 1], i) == 0)
+			content[i] = ft_expand(content[i], *env);
 		i++;
 	}
 	free(input);

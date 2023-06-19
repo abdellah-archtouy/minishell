@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 17:19:37 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/17 15:13:20 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 void	ft_print_error(char *str)
@@ -30,6 +42,8 @@ char	**ft_get_env(t_env	*env)
 
 	i = 0;
 	envp = malloc((ft_lstsize_env(env) + 1) * 8);
+	if (!envp)
+		return (NULL);
 	while (env)
 	{
 		envp[i] = ft_strjoin(env->key, "=");

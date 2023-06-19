@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:17:28 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/17 21:04:47 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -25,8 +37,8 @@ char	*ft_strdup(char *s1)
 	char	*s2;
 
 	s2 = (char *)malloc(ft_strlen(s1) + 1);
-	if (s2 == NULL)
-		return (0);
+	if (!s2)
+		return (NULL);
 	ft_memcpy(s2, s1, ft_strlen(s1) + 1);
 	return (s2);
 }
@@ -46,7 +58,7 @@ char	*ft_substr(char *s, size_t start, size_t len)
 		len = ft_strlen(s);
 	index = 0;
 	ptr = (char *)malloc(sizeof(char) * (len + 1));
-	if (ptr == NULL)
+	if (!ptr)
 		return (NULL);
 	while (len && tmp[start])
 	{

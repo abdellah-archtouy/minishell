@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libf1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmiftah <tmiftah@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 15:17:43 by tmiftah           #+#    #+#             */
+/*   Updated: 2023/06/17 15:14:38 by tmiftah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 t_list	*ft_lstnew(char *content, int type)
@@ -5,8 +17,8 @@ t_list	*ft_lstnew(char *content, int type)
 	t_list	*a;
 
 	a = (void *)malloc(sizeof(t_list));
-	if (a == 0)
-		return (0);
+	if (!a)
+		return (NULL);
 	a->content = content;
 	a->type = type;
 	a->next = 0;
